@@ -3,3 +3,5 @@
 wasm-pack.log
 build/
 .env
+# Supabase
+.supabase
