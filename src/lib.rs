@@ -1,7 +1,7 @@
 use ::regex::Regex;
 use postgrest::Postgrest;
 use reqwest;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::collections::HashMap;
 use worker::*;
@@ -11,6 +11,11 @@ mod utils;
 #[derive(Deserialize)]
 struct DataRequest {
     slug: String,
+}
+
+#[derive(Serialize)]
+struct DataResponse {
+    count: i32,
 }
 
 #[derive(Deserialize)]
@@ -244,12 +249,16 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 .await
             {
                 Ok(res) => res,
-                Err(_) => panic!("This didn't happen in the dry run!"),
+                Err(_) => return Response::error("Error retrieving like count", 400),
             };
+            let count: i32;
             match get_count_from_supabase_response_header(response.headers()) {
-                Some(count) => Response::ok(count.to_string()),
-                None => Response::error("Error retrieving like count", 400),
-            }
+                // Some(count) => Response::ok(count.to_string()),
+                Some(value) => count = value,
+                None => return Response::error("Error retrieving like count", 400),
+            };
+            let data: DataResponse = DataResponse { count: count };
+            Response::ok(serde_json::to_string(&data).unwrap())
         })
         .post_async("/post/like", |mut req, ctx| async move {
             let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
@@ -329,6 +338,10 @@ fn test_get_count_from_supabase_response_header() {
         get_count_from_supabase_response_header(&headers),
         Some(3573458)
     );
+
+    let mut headers = reqwest::header::HeaderMap::new();
+    headers.insert(reqwest::header::CONTENT_RANGE, "*/0".parse().unwrap());
+    assert_eq!(get_count_from_supabase_response_header(&headers), Some(0));
 
     let mut headers = reqwest::header::HeaderMap::new();
     headers.insert(reqwest::header::RANGE, "0-24".parse().unwrap());
