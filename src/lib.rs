@@ -8,6 +8,37 @@ use worker::*;
 
 mod utils;
 
+#[derive(Deserialize)]
+struct DataRequest {
+    slug: String,
+}
+
+#[derive(Deserialize)]
+struct LikeRequest {
+    slug: String,
+    // unlike: bool,
+}
+
+#[derive(Deserialize)]
+struct PostCreateRequest {
+    slug: String,
+    title: String,
+}
+
+#[derive(Deserialize)]
+struct IdResponse {
+    id: i32,
+}
+
+#[derive(Deserialize)]
+struct HcaptchaResponse {
+    success: bool,
+    challenge_ts: String, // timestamp
+    hostname: String,
+    credit: bool,
+    // error-codes: [String],
+}
+
 fn log_request(req: &Request) {
     console_log!(
         "{} - [{}], located at: {:?}, within: {}",
@@ -16,6 +47,31 @@ fn log_request(req: &Request) {
         req.cf().coordinates().unwrap_or_default(),
         req.cf().region().unwrap_or("unknown region".into())
     );
+}
+
+fn get_count_from_supabase_response_header(headers: &reqwest::header::HeaderMap) -> Option<i32> {
+    if headers.contains_key(reqwest::header::CONTENT_RANGE) {
+        match headers[reqwest::header::CONTENT_RANGE]
+            .to_str()
+            .unwrap()
+            .split("/")
+            .nth(1)
+        {
+            Some(count) => return Some(count.parse::<i32>().unwrap()),
+            None => return None,
+        }
+    } else if headers.contains_key(reqwest::header::RANGE) {
+        match headers[reqwest::header::RANGE]
+            .to_str()
+            .unwrap()
+            .split("-")
+            .nth(1)
+        {
+            Some(count) => return Some(count.parse::<i32>().unwrap()),
+            None => return None,
+        }
+    }
+    None
 }
 
 fn get_supabase_client(supabase_url: &str, api_key: &str) -> Result<Postgrest> {
@@ -27,22 +83,31 @@ fn get_supabase_client(supabase_url: &str, api_key: &str) -> Result<Postgrest> {
     Ok(client)
 }
 
+// consider parsing the i32 and if successful returning it as a string
 async fn slug_exists(client: &Postgrest, slug: &str) -> Option<i32> {
     let response = match client
-        .from("Posts")
+        .from("Post")
         .eq("slug", slug)
         .select("id")
+        .single()
         .execute()
         .await
     {
         Ok(res) => res,
         Err(_) => return None,
     };
+    // todo(rodneylab): try converting this to parse json instead of text
+    // Called .text() on an HTTP body which does not appear to be text. The body's Content-Type is "application/x-www-form-urlencoded". The result will probably be corrupted. Consider checking the Content-Type header before interpreting entities as text.
+    let body = match response.text().await {
+        Ok(res) => res,
+        Err(_) => return None,
+    };
 
-    match response.json::<IdResponse>().await {
-        Ok(res) => Some(res.id),
-        Err(_) => None,
-    }
+    let data: IdResponse = match serde_json::from_str(&body) {
+        Ok(res) => res,
+        Err(_) => return None,
+    };
+    Some(data.id)
 }
 
 fn slug_valid(slug: &str) -> bool {
@@ -81,37 +146,6 @@ async fn verify_captcha(client_response: &str, secret: &str, sitekey: &str) -> O
         Ok(res) => Some(res.success),
         Err(_) => return None,
     }
-}
-
-#[derive(Deserialize)]
-struct DataRequest {
-    slug: String,
-}
-
-#[derive(Deserialize)]
-struct LikeRequest {
-    slug: String,
-    // unlike: bool,
-}
-
-#[derive(Deserialize)]
-struct PostCreateRequest {
-    slug: String,
-    title: String,
-}
-
-#[derive(Deserialize)]
-struct IdResponse {
-    id: i32,
-}
-
-#[derive(Deserialize)]
-struct HcaptchaResponse {
-    success: bool,
-    challenge_ts: String, // timestamp
-    hostname: String,
-    credit: bool,
-    // error-codes: [String],
 }
 
 #[event(fetch)]
@@ -179,30 +213,32 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Ok(res) => res,
                 Err(_) => return Response::error("Error creating post", 400),
             };
-            let response_body = match response.text().await {
-                Ok(res) => res,
-                Err(_) => return Response::error("Error creating post", 400),
-            };
-            println!("Creating new post: {}", response_body);
-            Response::ok("post created. Thankee!")
+            match response.text().await {
+                Ok(_) => Response::ok("Post created. Thankee!"),
+                Err(_) => Response::error("Error creating post", 400),
+            }
         })
         .post_async("/post/data", |mut req, ctx| async move {
             let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
             let api_key = ctx.var("SUPABASE_SERVICE_API_KEY")?.to_string();
             let client = match get_supabase_client(&supabase_url, &api_key) {
                 Ok(res) => res,
-                Err(_) => panic!("Error creating postgrest supabase client"),
+                Err(_) => return Response::error("Error creating PostgREST Supabase client", 400),
             };
             let data: DataRequest;
             match req.json().await {
                 Ok(res) => data = res,
-                Err(_) => panic!("Error deserialising JSON"),
+                Err(_) => return Response::error("Bad request", 400),
             }
             let slug = &data.slug;
+            let post_id = match slug_exists(&client, &slug).await {
+                Some(res) => res,
+                None => return Response::error("Bad request", 400),
+            };
             let response = match client
-                .from("Likes")
-                .eq("slug", slug)
-                .select("*")
+                .from("Like")
+                .eq("postId", post_id.to_string())
+                .select("id")
                 .estimated_count()
                 .execute()
                 .await
@@ -210,19 +246,17 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Ok(res) => res,
                 Err(_) => panic!("This didn't happen in the dry run!"),
             };
-
-            let body = match response.text().await {
-                Ok(res) => res,
-                Err(_) => panic!("What can I say?"),
-            };
-            Response::ok(body)
+            match get_count_from_supabase_response_header(response.headers()) {
+                Some(count) => Response::ok(count.to_string()),
+                None => Response::error("Error retrieving like count", 400),
+            }
         })
         .post_async("/post/like", |mut req, ctx| async move {
             let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
             let api_key = ctx.var("SUPABASE_SERVICE_API_KEY")?.to_string();
             let client = match get_supabase_client(&supabase_url, &api_key) {
                 Ok(res) => res,
-                Err(_) => panic!("Error creating postgrest supabase client"),
+                Err(_) => panic!("Error creating PostgREST Supabase client"),
             };
             let data: LikeRequest;
             match req.json().await {
@@ -237,11 +271,8 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Some(res) => res,
                 None => return Response::error("Bad request", 400),
             };
-            let insert_query = format!(
-                "[{{ \"slug\": \"{}\", \"postId\": \"{}\" }}]",
-                slug, post_id
-            );
-            match client.from("Likes").insert(insert_query).execute().await {
+            let insert_query = format!("[{{ \"postId\": \"{}\" }}]", post_id.to_string());
+            match client.from("Like").insert(insert_query).execute().await {
                 Ok(res) => res,
                 Err(_) => panic!("Sorry about this!"),
             };
@@ -285,6 +316,23 @@ fn test_slug_valid() {
     for element in &invalid_slugs {
         assert!(!slug_valid(element));
     }
+}
+
+#[test]
+fn test_get_count_from_supabase_response_header() {
+    let mut headers = reqwest::header::HeaderMap::new();
+    headers.insert(
+        reqwest::header::CONTENT_RANGE,
+        "0-24/3573458".parse().unwrap(),
+    );
+    assert_eq!(
+        get_count_from_supabase_response_header(&headers),
+        Some(3573458)
+    );
+
+    let mut headers = reqwest::header::HeaderMap::new();
+    headers.insert(reqwest::header::RANGE, "0-24".parse().unwrap());
+    assert_eq!(get_count_from_supabase_response_header(&headers), Some(24));
 }
 
 #[test]

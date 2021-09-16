@@ -1,7 +1,10 @@
-/target
-**/*.rs.bk
-wasm-pack.log
-build/
+node_modules
+# Keep environment variables out of version control
 .env
+
 # Supabase
 .supabase
+
+
+# Workers
+target/**
