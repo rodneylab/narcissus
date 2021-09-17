@@ -17,10 +17,10 @@ specifiers:
   husky: ^7.0.2
   mdsvex: ^0.9.8
   object-hash: ^2.2.0
-  prettier: ~2.3.2
+  prettier: 2.4.1
   prettier-plugin-svelte: ^2.4.0
   reading-time: 1.4.0
-  sass: ^1.41.0
+  sass: ^1.41.1
   sharp: ^0.29.1
   stylelint: ^13.13.1
   stylelint-a11y: ^1.2.3
@@ -53,10 +53,10 @@ devDependencies:
   husky: 7.0.2
   mdsvex: 0.9.8_svelte@3.42.6
   object-hash: 2.2.0
-  prettier: 2.3.2
-  prettier-plugin-svelte: 2.4.0_prettier@2.3.2+svelte@3.42.6
+  prettier: 2.4.1
+  prettier-plugin-svelte: 2.4.0_prettier@2.4.1+svelte@3.42.6
   reading-time: 1.4.0
-  sass: 1.41.0
+  sass: 1.41.1
   sharp: 0.29.1
   stylelint: 13.13.1
   stylelint-a11y: 1.2.3_stylelint@13.13.1
@@ -65,9 +65,9 @@ devDependencies:
   stylelint-scss: 3.21.0_stylelint@13.13.1
   svelte: 3.42.6
   svelte-awesome: 2.3.2
-  svelte-check: 2.2.6_sass@1.41.0+svelte@3.42.6
+  svelte-check: 2.2.6_sass@1.41.1+svelte@3.42.6
   svelte-feather-icons: 3.5.0
-  svelte-preprocess: 4.9.4_sass@1.41.0+svelte@3.42.6
+  svelte-preprocess: 4.9.4_sass@1.41.1+svelte@3.42.6
   svelte-preprocess-import-assets: 0.1.3_svelte@3.42.6
   vanilla-lazyload: 17.4.0
   vite-imagetools: 3.6.8
@@ -2154,18 +2154,18 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier-plugin-svelte/2.4.0_prettier@2.3.2+svelte@3.42.6:
+  /prettier-plugin-svelte/2.4.0_prettier@2.4.1+svelte@3.42.6:
     resolution: {integrity: sha512-JwJ9bOz4XHLQtiLnX4mTSSDUdhu12WH8sTwy/XTDCSyPlah6IcV7NWeYBZscPEcceu2YnW8Y9sJCP40Z2UH9GA==}
     peerDependencies:
       prettier: ^1.16.4 || ^2.0.0
       svelte: ^3.2.0
     dependencies:
-      prettier: 2.3.2
+      prettier: 2.4.1
       svelte: 3.42.6
     dev: true
 
-  /prettier/2.3.2:
-    resolution: {integrity: sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==}
+  /prettier/2.4.1:
+    resolution: {integrity: sha512-9fbDAXSBcc6Bs1mZrDYb3XKzDLm4EXXL9sC1LqKP5rZkT6KRr/rf9amVUcODVXgguK/isJz0d0hP72WeaKWsvA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
@@ -2394,8 +2394,8 @@ packages:
       rimraf: 2.7.1
     dev: true
 
-  /sass/1.41.0:
-    resolution: {integrity: sha512-wb8nT60cjo9ZZMcHzG7TzdbFtCAmHEKWrH+zAdScPb4ZxL64WQBnGdbp5nwlenW5wJPcHva1JWmVa0h6iqA5eg==}
+  /sass/1.41.1:
+    resolution: {integrity: sha512-vIjX7izRxw3Wsiez7SX7D+j76v7tenfO18P59nonjr/nzCkZuoHuF7I/Fo0ZRZPKr88v29ivIdE9BqGDgQD/Nw==}
     engines: {node: '>=8.9.0'}
     hasBin: true
     dependencies:
@@ -2773,7 +2773,7 @@ packages:
       svelte: 3.42.6
     dev: true
 
-  /svelte-check/2.2.6_sass@1.41.0+svelte@3.42.6:
+  /svelte-check/2.2.6_sass@1.41.1+svelte@3.42.6:
     resolution: {integrity: sha512-oJux/afbmcZO+N+ADXB88h6XANLie8Y2rh2qBlhgfkpr2c3t/q/T0w2JWrHqagaDL8zeNwO8a8RVFBkrRox8gg==}
     hasBin: true
     peerDependencies:
@@ -2787,7 +2787,7 @@ packages:
       sade: 1.7.4
       source-map: 0.7.3
       svelte: 3.42.6
-      svelte-preprocess: 4.9.4_9493159d4f4ad9e3e8deb8d577a9601b
+      svelte-preprocess: 4.9.4_b172ce52e03abc70908bb2e09eae78a1
       typescript: 4.4.3
     transitivePeerDependencies:
       - '@babel/core'
@@ -2825,7 +2825,7 @@ packages:
       svelte: 3.42.6
     dev: true
 
-  /svelte-preprocess/4.9.4_9493159d4f4ad9e3e8deb8d577a9601b:
+  /svelte-preprocess/4.9.4_b172ce52e03abc70908bb2e09eae78a1:
     resolution: {integrity: sha512-Z0mUQBGtE+ZZSv/HerRSHe7ukJokxjiPeHe7iPOIXseEoRw51H3K/Vh6OMIMstetzZ11vWO9rCsXSD/uUUArmA==}
     engines: {node: '>= 9.11.2'}
     requiresBuild: true
@@ -2870,14 +2870,14 @@ packages:
       '@types/sass': 1.16.1
       detect-indent: 6.1.0
       magic-string: 0.25.7
-      sass: 1.41.0
+      sass: 1.41.1
       sorcery: 0.10.0
       strip-indent: 3.0.0
       svelte: 3.42.6
       typescript: 4.4.3
     dev: true
 
-  /svelte-preprocess/4.9.4_sass@1.41.0+svelte@3.42.6:
+  /svelte-preprocess/4.9.4_sass@1.41.1+svelte@3.42.6:
     resolution: {integrity: sha512-Z0mUQBGtE+ZZSv/HerRSHe7ukJokxjiPeHe7iPOIXseEoRw51H3K/Vh6OMIMstetzZ11vWO9rCsXSD/uUUArmA==}
     engines: {node: '>= 9.11.2'}
     requiresBuild: true
@@ -2922,7 +2922,7 @@ packages:
       '@types/sass': 1.16.1
       detect-indent: 6.1.0
       magic-string: 0.25.7
-      sass: 1.41.0
+      sass: 1.41.1
       sorcery: 0.10.0
       strip-indent: 3.0.0
       svelte: 3.42.6
