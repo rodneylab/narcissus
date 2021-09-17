@@ -15,13 +15,14 @@ struct DataRequest {
 
 #[derive(Serialize)]
 struct DataResponse {
-    count: i32,
+    likes: i32,
+    views: i32,
 }
 
 #[derive(Deserialize)]
 struct LikeRequest {
     slug: String,
-    // unlike: bool,
+    unlike: bool,
 }
 
 #[derive(Deserialize)]
@@ -44,6 +45,16 @@ struct HcaptchaResponse {
     // error-codes: [String],
 }
 
+#[derive(Serialize)]
+struct ViewResponse {
+    views: i32,
+}
+
+#[derive(Deserialize)]
+struct ViewRequest {
+    slug: String,
+}
+
 fn log_request(req: &Request) {
     console_log!(
         "{} - [{}], located at: {:?}, within: {}",
@@ -59,7 +70,7 @@ fn get_count_from_supabase_response_header(headers: &reqwest::header::HeaderMap)
         match headers[reqwest::header::CONTENT_RANGE]
             .to_str()
             .unwrap()
-            .split("/")
+            .split('/')
             .nth(1)
         {
             Some(count) => return Some(count.parse::<i32>().unwrap()),
@@ -69,7 +80,7 @@ fn get_count_from_supabase_response_header(headers: &reqwest::header::HeaderMap)
         match headers[reqwest::header::RANGE]
             .to_str()
             .unwrap()
-            .split("-")
+            .split('-')
             .nth(1)
         {
             Some(count) => return Some(count.parse::<i32>().unwrap()),
@@ -149,7 +160,23 @@ async fn verify_captcha(client_response: &str, secret: &str, sitekey: &str) -> O
     };
     match response.json::<HcaptchaResponse>().await {
         Ok(res) => Some(res.success),
-        Err(_) => return None,
+        Err(_) => None,
+    }
+}
+
+async fn views(client: &Postgrest, post_id: &i32) -> Option<i32> {
+    match client
+        .from("View")
+        .eq("postId", post_id.to_string())
+        .select("id")
+        .estimated_count()
+        .execute()
+        .await
+    {
+        Ok(response) => {
+            get_count_from_supabase_response_header(response.headers()).map(|value| value)
+        }
+        Err(_) => None,
     }
 }
 
@@ -201,7 +228,7 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Ok(res) => data = res,
                 Err(_) => return Response::error("Bad request", 400),
             }
-            let slug = &data.slug;
+            let slug = data.slug;
             if !slug_valid(&slug) {
                 return Response::error("Bad request", 400);
             }
@@ -209,10 +236,6 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             if !title_valid(&slug) {
                 return Response::error("Bad request", 400);
             }
-            match slug_exists(&client, &slug).await {
-                Some(_) => return Response::error("Bad request", 400),
-                None => (),
-            };
             let insert_query = format!("[{{ \"slug\": \"{}\", \"title\": \"{}\" }}]", slug, title);
             let response = match client.from("Post").insert(insert_query).execute().await {
                 Ok(res) => res,
@@ -236,28 +259,43 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Err(_) => return Response::error("Bad request", 400),
             }
             let slug = &data.slug;
-            let post_id = match slug_exists(&client, &slug).await {
+            let post_id = match slug_exists(&client, slug).await {
                 Some(res) => res,
                 None => return Response::error("Bad request", 400),
             };
-            let response = match client
+            let like_future = client
                 .from("Like")
                 .eq("postId", post_id.to_string())
                 .select("id")
                 .estimated_count()
-                .execute()
-                .await
-            {
-                Ok(res) => res,
+                .execute();
+            let view_future = client
+                .from("View")
+                .eq("postId", post_id.to_string())
+                .select("id")
+                .estimated_count()
+                .execute();
+            let likes: i32;
+            match like_future.await {
+                Ok(response) => {
+                    match get_count_from_supabase_response_header(response.headers()) {
+                        Some(value) => likes = value,
+                        None => return Response::error("Error retrieving like count", 400),
+                    };
+                }
                 Err(_) => return Response::error("Error retrieving like count", 400),
             };
-            let count: i32;
-            match get_count_from_supabase_response_header(response.headers()) {
-                // Some(count) => Response::ok(count.to_string()),
-                Some(value) => count = value,
-                None => return Response::error("Error retrieving like count", 400),
+            let views: i32;
+            match view_future.await {
+                Ok(response) => {
+                    match get_count_from_supabase_response_header(response.headers()) {
+                        Some(value) => views = value,
+                        None => return Response::error("Error retrieving view count", 400),
+                    };
+                }
+                Err(_) => return Response::error("Error retrieving view count", 400),
             };
-            let data: DataResponse = DataResponse { count: count };
+            let data: DataResponse = DataResponse { likes, views };
             Response::ok(serde_json::to_string(&data).unwrap())
         })
         .post_async("/post/like", |mut req, ctx| async move {
@@ -273,10 +311,10 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Err(_) => return Response::error("Bad request: invalid data", 400),
             }
             let slug = &data.slug;
-            if !slug_valid(&slug) {
+            if !slug_valid(slug) {
                 return Response::error("Bad request", 400);
             }
-            let post_id = match slug_exists(&client, &slug).await {
+            let post_id = match slug_exists(&client, slug).await {
                 Some(res) => res,
                 None => return Response::error("Bad request", 400),
             };
@@ -286,6 +324,39 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Err(_) => panic!("Sorry about this!"),
             };
             Response::ok("Like inserted. Thankee!")
+        })
+        .post_async("/post/view", |mut req, ctx| async move {
+            let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
+            let api_key = ctx.var("SUPABASE_SERVICE_API_KEY")?.to_string();
+            let client = match get_supabase_client(&supabase_url, &api_key) {
+                Ok(res) => res,
+                Err(_) => panic!("Error creating PostgREST Supabase client"),
+            };
+            let data: ViewRequest;
+            match req.json().await {
+                Ok(res) => data = res,
+                Err(_) => return Response::error("Bad request: invalid data", 400),
+            }
+            let slug = &data.slug;
+            if !slug_valid(slug) {
+                return Response::error("Bad request", 400);
+            }
+            let post_id = match slug_exists(&client, slug).await {
+                Some(res) => res,
+                None => return Response::error("Bad request", 400),
+            };
+            let insert_query = format!("[{{ \"postId\": \"{}\" }}]", post_id.to_string());
+            match client.from("View").insert(insert_query).execute().await {
+                Ok(_) => (),
+                Err(_) => return Response::error("Error adding view count", 400),
+            };
+            let view_count: i32;
+            match views(&client, &post_id).await {
+                Some(value) => view_count = value,
+                None => view_count = -1,
+            };
+            let data = ViewResponse { views: view_count };
+            Response::ok(serde_json::to_string(&data).unwrap())
         })
         .run(req, env)
         .await
