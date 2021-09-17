@@ -1,7 +1,7 @@
 export const post = async (request) => {
   try {
     const { slug } = request.body;
-    const response = await fetch(`${process.env['WORKER_URL']}/post/data`, {
+    const response = await fetch(`${process.env['WORKER_URL']}/post/view`, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
@@ -11,12 +11,13 @@ export const post = async (request) => {
         slug,
       }),
     });
-    const { likes, views } = await response.json();
+    const { views } = await response.json();
     return {
-      body: JSON.stringify({ likes, views }),
+      status: 400,
+      body: JSON.stringify({ views }),
     };
   } catch (err) {
-    console.log('Error: ', err);
+    console.error('Error: ', err);
     return {
       status: 500,
       error: 'Error retreiving data',

@@ -99,9 +99,11 @@
   <main class="main-container">
     {#if isBlogPost}
       <BlogPost {post} {imageData} />
+      <slot />
+      <PostViewsLikes {likes} {views} slug={post.slug} />
+    {:else}
+      <slot />
     {/if}
-    <slot />
-    <PostViewsLikes {likes} {views} slug={post.slug} />
   </main>
   <footer class="footer-container">
     <div>
