@@ -56,20 +56,11 @@
   import '$lib/styles/normalise.css';
   import '$lib/styles/index.scss';
 
-  import { COPYRIGHT_ENTITY } from '$lib/constants/entities';
   import BlogPost from '$lib/components/BlogPost.svelte';
-  import CameraIcon from '$lib/components/Icons/Camera.svelte';
-  import ExternalLink from '$lib/components/ExternalLink.svelte';
-  const { facebookPage, githubPage, linkedinProfile, tiktokUsername, twitterUsername } = website;
-  import FacebookIcon from '$lib/components/Icons/Facebook.svelte';
-  import GitHubIcon from '$lib/components/Icons/GitHub.svelte';
-  import LinkedinIcon from '$lib/components/Icons/LinkedIn.svelte';
+  import Header from '$lib/components/Header.svelte';
   import PostViewsLikes from '$lib/components/PostViewsLikes.svelte';
   import PWA from '$lib/components/PWA.svelte';
-  import RodneyLabCredit from '$lib/components/RodneyLabCredit.svelte';
-  import TiktokIcon from '$lib/components/Icons/Tiktok.svelte';
-  import TwitterIcon from '$lib/components/Icons/Twitter.svelte';
-  import website from '$lib/config/website';
+  import Footer from '$lib/components/Footer.svelte';
 
   export let post, imageData;
 
@@ -85,71 +76,21 @@
 
 <PWA />
 <div class="container">
-  <header class="header-container">
-    <a aria-label="Jump to Home page" class="hover-jump" href="./"
-      ><span class="logo"><CameraIcon size="96" /></span></a
-    >
-    <nav class="nav">
-      <ul>
-        <li><a href="/.">Home</a></li>
-        <li><a href="/contact">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+  <Header />
   <main class="main-container">
     {#if isBlogPost}
       <BlogPost {post} {imageData} />
       <slot />
       <PostViewsLikes {likes} {views} slug={post.slug} />
+      <div>
+        <a href="https://hcaptcha.com/privacy">Privacy Policy</a> and
+        <a href="https://hcaptcha.com/terms">Terms of Service</a> apply.
+      </div>
     {:else}
       <slot />
     {/if}
   </main>
-  <footer class="footer-container">
-    <div>
-      Created by <a
-        aria-label="Open the Rodney Lab site"
-        href="https://rodneylab.com/"
-        target="_blank"
-        rel="noopener noreferrer">Rodney Lab</a
-      >. Copyright {COPYRIGHT_ENTITY} 2021.
-    </div>
-    <nav class="footer-icons">
-      <ul>
-        <li class="hover-jump">
-          <ExternalLink
-            ariaLabel="Go to the Rodney Lab Tik Tok Page"
-            href={`https://www.tiktok.com/${tiktokUsername}`}><TiktokIcon /></ExternalLink
-          >
-        </li>
-        <li class="hover-jump">
-          <ExternalLink ariaLabel="Go to the Rodney Lab Facebook Page" href={facebookPage}
-            ><FacebookIcon /></ExternalLink
-          >
-        </li>
-        <li class="hover-jump">
-          <ExternalLink
-            ariaLabel="Go to the Rodney Lab Twitter Page"
-            href={`https://twitter.com/intent/user?screen_name=${twitterUsername}`}
-            ><TwitterIcon /></ExternalLink
-          >
-        </li>
-        <li class="hover-jump">
-          <ExternalLink
-            ariaLabel="Go to the Rodney Lab Linked In Page"
-            href={`https://uk.linkedin.com/in/${linkedinProfile}`}><LinkedinIcon /></ExternalLink
-          >
-        </li>
-        <li class="hover-jump">
-          <ExternalLink
-            ariaLabel="Go to the Rodney Lab Git Hub In Page"
-            href={`https://github.com/${githubPage}`}><GitHubIcon /></ExternalLink
-          >
-        </li>
-      </ul>
-    </nav>
-    <RodneyLabCredit />
-  </footer>
+  <Footer />
 </div>
 
 <style lang="scss">
@@ -163,77 +104,10 @@
     min-height: 100vh;
   }
 
-  .header-container {
-    display: flex;
-    align-items: flex-end;
-    max-width: $max-width-wrapper;
-    width: 100%;
-    margin: $spacing-0 auto $spacing-12;
-  }
-
-  .nav {
-    display: flex;
-    margin-left: auto;
-    list-style-type: none;
-
-    ul {
-      display: flex;
-      align-items: flex-end;
-      padding-bottom: 0;
-      margin-bottom: $spacing-0;
-
-      li {
-        display: flex;
-        font-size: $font-size-4;
-        margin-left: $spacing-6;
-        margin-bottom: $spacing-1;
-      }
-    }
-  }
-
-  .logo {
-    color: $color-theme-1;
-  }
-
   .main-container {
     max-width: $max-width-wrapper;
     width: 100%;
     margin: $spacing-0 auto;
-  }
-
-  .footer-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: $max-width-wrapper;
-    margin: $spacing-12 auto $spacing-0;
-    width: 100%;
-  }
-
-  .footer-icons {
-    display: flex;
-    list-style-type: none;
-
-    ul {
-      display: flex;
-      margin: $spacing-6 $spacing-0;
-
-      li {
-        display: flex;
-        margin: $spacing-0 $spacing-4 $spacing-0 $spacing-0;
-      }
-    }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .hover-jump {
-      transition: all 0.25s ease-in-out;
-    }
-  }
-
-  .hover-jump:focus,
-  .hover-jump:hover {
-    transform: translateY(-$spacing-2);
   }
 
   @media screen and (max-width: $desktop-breakpoint) {
