@@ -1,6 +1,6 @@
 export const post = async (request) => {
   try {
-    const { slug, unlike } = request.body;
+    const { key, slug, token, unlike } = request.body;
     const response = await fetch(`${process.env['WORKER_URL']}/post/like`, {
       method: 'POST',
       credentials: 'same-origin',
@@ -8,7 +8,9 @@ export const post = async (request) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        key,
         slug,
+        token,
         unlike,
       }),
     });
