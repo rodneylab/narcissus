@@ -10,7 +10,9 @@
   export let slug;
   export let views;
 
+  $: freshLikeCount = null;
   $: freshViewCount = null;
+  $: displayLikes = freshLikeCount || likes;
   $: displayViews = freshViewCount || views;
 
   let observer;
@@ -64,7 +66,7 @@
 
   async function handleLike() {
     try {
-      const response = await fetch('/api/post/like.json', {
+      const responsePromise = fetch('/api/post/like.json', {
         method: 'POST',
         credentials: 'same-origin',
         headers: {
@@ -80,7 +82,9 @@
       } else {
         removeLikeFromStore();
       }
-      await response;
+      const response = await responsePromise;
+      const { likes } = await response.json();
+      freshLikeCount = likes;
     } catch (error) {
       console.error(`Error in handleLike: ${error}`);
     }
@@ -108,14 +112,16 @@
       console.error(`Error in handleLike: ${error}`);
     }
   }
+
+  $: likeButtonLabel = !liked ? 'Like this blog post' : 'Unlike this blog post';
 </script>
 
 <ViewsIcon />{displayViews}
-<button aria-label="Like this blog post" type="button" on:click={handleLike}>
+<button aria-label={likeButtonLabel} type="button" on:click={handleLike}>
   {#if liked}
     <LikedIcon />
   {:else}
     <NotYetLikedIcon />
   {/if}
 </button>
-{likes}
+{displayLikes}
