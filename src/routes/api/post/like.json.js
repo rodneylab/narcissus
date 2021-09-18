@@ -1,7 +1,7 @@
 export const post = async (request) => {
   try {
     const { slug, unlike } = request.body;
-    await fetch(`${process.env['WORKER_URL']}/post/like`, {
+    const response = await fetch(`${process.env['WORKER_URL']}/post/like`, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
@@ -12,9 +12,10 @@ export const post = async (request) => {
         unlike,
       }),
     });
+    const { likes } = await response.json();
     return {
       status: 400,
-      body: 'Like added.',
+      body: JSON.stringify({ likes }),
     };
   } catch (err) {
     console.error('Error: ', err);
