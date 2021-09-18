@@ -46,6 +46,11 @@ struct HcaptchaResponse {
 }
 
 #[derive(Serialize)]
+struct LikeResponse {
+    likes: i32,
+}
+
+#[derive(Serialize)]
 struct ViewResponse {
     views: i32,
 }
@@ -164,6 +169,22 @@ async fn verify_captcha(client_response: &str, secret: &str, sitekey: &str) -> O
     }
 }
 
+async fn likes(client: &Postgrest, post_id: &i32) -> Option<i32> {
+    match client
+        .from("Like")
+        .eq("postId", post_id.to_string())
+        .select("id")
+        .estimated_count()
+        .execute()
+        .await
+    {
+        Ok(response) => {
+            get_count_from_supabase_response_header(response.headers()).map(|value| value)
+        }
+        Err(_) => None,
+    }
+}
+
 async fn views(client: &Postgrest, post_id: &i32) -> Option<i32> {
     match client
         .from("View")
@@ -263,38 +284,19 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Some(res) => res,
                 None => return Response::error("Bad request", 400),
             };
-            let like_future = client
-                .from("Like")
-                .eq("postId", post_id.to_string())
-                .select("id")
-                .estimated_count()
-                .execute();
-            let view_future = client
-                .from("View")
-                .eq("postId", post_id.to_string())
-                .select("id")
-                .estimated_count()
-                .execute();
+            let likes_future = likes(&client, &post_id);
+            let views_future = views(&client, &post_id);
+            let (likes_result, views_result) = futures::join!(likes_future, views_future);
             let likes: i32;
-            match like_future.await {
-                Ok(response) => {
-                    match get_count_from_supabase_response_header(response.headers()) {
-                        Some(value) => likes = value,
-                        None => return Response::error("Error retrieving like count", 400),
-                    };
-                }
-                Err(_) => return Response::error("Error retrieving like count", 400),
-            };
+            match likes_result {
+                Some(value) => likes = value,
+                None => likes = -1,
+            }
             let views: i32;
-            match view_future.await {
-                Ok(response) => {
-                    match get_count_from_supabase_response_header(response.headers()) {
-                        Some(value) => views = value,
-                        None => return Response::error("Error retrieving view count", 400),
-                    };
-                }
-                Err(_) => return Response::error("Error retrieving view count", 400),
-            };
+            match views_result {
+                Some(value) => views = value,
+                None => views = -1,
+            }
             let data: DataResponse = DataResponse { likes, views };
             Response::ok(serde_json::to_string(&data).unwrap())
         })
@@ -320,10 +322,16 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             };
             let insert_query = format!("[{{ \"postId\": \"{}\" }}]", post_id.to_string());
             match client.from("Like").insert(insert_query).execute().await {
-                Ok(res) => res,
-                Err(_) => panic!("Sorry about this!"),
+                Ok(_) => (),
+                Err(_) => return Response::error("Error adding view count", 400),
             };
-            Response::ok("Like inserted. Thankee!")
+            let like_count: i32;
+            match likes(&client, &post_id).await {
+                Some(value) => like_count = value,
+                None => like_count = -1,
+            };
+            let data = LikeResponse { likes: like_count };
+            Response::ok(serde_json::to_string(&data).unwrap())
         })
         .post_async("/post/view", |mut req, ctx| async move {
             let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
