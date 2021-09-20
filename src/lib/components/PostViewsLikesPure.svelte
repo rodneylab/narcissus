@@ -18,6 +18,7 @@
   $: displayLikes = freshLikeCount ?? likes;
   $: displayViews = freshViewCount ?? views;
 
+  let hcaptchaWidgetID;
   let observer;
 
   onMount(() => {
