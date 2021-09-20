@@ -1,7 +1,7 @@
 export const post = async (request) => {
   try {
     const { slug } = request.body;
-    const response = await fetch(`${process.env['WORKER_URL']}/post/view`, {
+    const response = await fetch(`${process.env['VITE_WORKER_URL']}/post/view`, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {

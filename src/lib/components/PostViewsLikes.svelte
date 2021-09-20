@@ -1,13 +1,18 @@
 <script>
+  import website from '$lib/config/website';
   import PostViewsLikesPure from '$lib/components/PostViewsLikesPure.svelte';
 
   export let likes;
   export let views;
   export let slug;
 
+  const { workerUrl } = website;
+
   async function getViewsLikes() {
     try {
-      const response = await fetch('/api/post/data.json', {
+      // const response = await fetch('/api/post/data.json', {
+      const url = `${workerUrl}/post/data`;
+      const response = await fetch(url, {
         method: 'POST',
         credentials: 'same-origin',
         headers: {

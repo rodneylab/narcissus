@@ -21,6 +21,7 @@ const website = {
   twitterUserId: import.meta.env ? import.meta.env.VITE_TWITTER_ID : '',
   wireUsername: import.meta.env ? import.meta.env.VITE_WIRE_USERNAME : '',
   hcaptchaSitekey: import.meta.env ? import.meta.env.VITE_HCAPTCHA_SITEKEY : '',
+  workerUrl: import.meta.env ? import.meta.env.VITE_WORKER_URL : '',
 };
 
 export { website as default };

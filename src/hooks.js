@@ -8,13 +8,13 @@ const rootDomain = import.meta.env.VITE_DOMAIN; // or your server IP for dev
 const directives = {
   'base-uri': ["'self'"],
   'child-src': ["'self'"],
-  // 'connect-src': ["'self'", 'ws://localhost:*', process.env['WORKER_URL']],
+  // 'connect-src': ["'self'", 'ws://localhost:*', process.env['VITE_WORKER_URL']],
   'connect-src': [
     "'self'",
     'ws://localhost:*',
     'https://hcaptcha.com',
     'https://*.hcaptcha.com',
-    process.env['WORKER_URL'],
+    process.env['VITE_WORKER_URL'],
   ],
   'img-src': ["'self'", 'data:'],
   'font-src': ["'self'", 'data:'],

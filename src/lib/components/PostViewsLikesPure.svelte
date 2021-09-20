@@ -20,6 +20,7 @@
 
   let hcaptchaWidgetID;
   let observer;
+  function hcaptcha() {}
 
   onMount(() => {
     if (browser) {
@@ -36,6 +37,7 @@
       const element = window.document.querySelector('main').firstElementChild;
       observer.observe(element);
 
+      hcaptcha = window.hcaptcha;
       hcaptchaWidgetID = window.hcaptcha.render('hcaptcha', {
         sitekey: hcaptchaSitekey,
         size: 'invisible',
@@ -45,6 +47,7 @@
 
   onDestroy(() => {
     if (browser) {
+      hcaptcha = () => {};
     }
     if (observer) {
       observer.disconnect();
@@ -77,28 +80,30 @@
 
   async function handleLike() {
     try {
-      const { token, key } = await window.hcaptcha.execute(hcaptchaWidgetID, { async: true });
-      const responsePromise = fetch('/api/post/like.json', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          slug,
-          key,
-          token,
-          unlike: liked,
-        }),
-      });
-      if (!liked) {
-        addLikeToStore();
-      } else {
-        removeLikeFromStore();
+      if (browser) {
+        const { token, key } = await window.hcaptcha.execute(hcaptchaWidgetID, { async: true });
+        const responsePromise = fetch('/api/post/like.json', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            slug,
+            key,
+            token,
+            unlike: liked,
+          }),
+        });
+        if (!liked) {
+          addLikeToStore();
+        } else {
+          removeLikeFromStore();
+        }
+        const response = await responsePromise;
+        const { likes } = await response.json();
+        freshLikeCount = likes;
       }
-      const response = await responsePromise;
-      const { likes } = await response.json();
-      freshLikeCount = likes;
     } catch (error) {
       console.error(`Error in handleLike: ${error}`);
     }

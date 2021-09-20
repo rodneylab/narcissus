@@ -69,9 +69,6 @@
   }
 
   $: isBlogPost = post !== undefined;
-
-  const likes = -1;
-  const views = 0;
 </script>
 
 <PWA />
@@ -81,7 +78,7 @@
     {#if isBlogPost}
       <BlogPost {post} {imageData} />
       <slot />
-      <PostViewsLikes {likes} {views} slug={post.slug} />
+      <PostViewsLikes likes={post.likes} views={post.views} slug={post.slug} />
       <div>
         <a href="https://hcaptcha.com/privacy">Privacy Policy</a> and
         <a href="https://hcaptcha.com/terms">Terms of Service</a> apply.

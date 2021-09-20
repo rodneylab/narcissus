@@ -1,7 +1,7 @@
 export const post = async (request) => {
   try {
     const { key, slug, token, unlike } = request.body;
-    const response = await fetch(`${process.env['WORKER_URL']}/post/like`, {
+    const response = await fetch(`${process.env['VITE_WORKER_URL']}/post/like`, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
