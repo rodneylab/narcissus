@@ -10,7 +10,6 @@
 
   async function getViewsLikes() {
     try {
-      // const response = await fetch('/api/post/data.json', {
       const url = `${workerUrl}/post/data`;
       const response = await fetch(url, {
         method: 'POST',
@@ -34,7 +33,7 @@
 {#await likesPromise}
   <PostViewsLikesPure {slug} {likes} {views} />
 {:then data}
-  <PostViewsLikesPure {slug} likes={data.likes ?? likes} views={data.views ?? views} />
+  <PostViewsLikesPure {slug} likes={data?.likes ?? likes} views={data?.views ?? views} />
 {:catch}
   <PostViewsLikesPure {slug} {likes} {views} />
 {/await}

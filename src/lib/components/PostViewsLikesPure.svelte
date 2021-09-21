@@ -11,7 +11,7 @@
   export let slug;
   export let views;
 
-  const { hcaptchaSitekey } = website;
+  const { hcaptchaSitekey, workerUrl } = website;
 
   $: freshLikeCount = null;
   $: freshViewCount = null;
@@ -38,7 +38,7 @@
       observer.observe(element);
 
       hcaptcha = window.hcaptcha;
-      hcaptchaWidgetID = window.hcaptcha.render('hcaptcha', {
+      hcaptchaWidgetID = hcaptcha.render('hcaptcha', {
         sitekey: hcaptchaSitekey,
         size: 'invisible',
       });
@@ -81,17 +81,18 @@
   async function handleLike() {
     try {
       if (browser) {
-        const { token, key } = await window.hcaptcha.execute(hcaptchaWidgetID, { async: true });
-        const responsePromise = fetch('/api/post/like.json', {
+        const { response: hCaptchaResponse } = await hcaptcha.execute(hcaptchaWidgetID, {
+          async: true,
+        });
+        const responsePromise = fetch(`${workerUrl}/post/like`, {
           method: 'POST',
-          credentials: 'same-origin',
+          credentials: 'omit',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             slug,
-            key,
-            token,
+            response: hCaptchaResponse,
             unlike: liked,
           }),
         });
@@ -112,9 +113,9 @@
   async function handleView() {
     try {
       if (!viewed) {
-        const responsePromise = fetch('/api/post/view.json', {
+        const responsePromise = fetch(`${workerUrl}/post/view`, {
           method: 'POST',
-          credentials: 'same-origin',
+          credentials: 'omit',
           headers: {
             'Content-Type': 'application/json',
           },
