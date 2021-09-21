@@ -16,7 +16,8 @@ default = ["console_error_panic_hook"]
 [dependencies]
 cfg-if = "0.1.2"
 futures = "0.3.17"
-worker = "0.0.4"
+http = "0.2.4"
+worker = "0.0.6"
 regex= "1"
 reqwest = { version = "0.11.4", features = ["json"]}
 serde = "1.0.117"

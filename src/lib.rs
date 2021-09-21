@@ -1,6 +1,5 @@
 use ::regex::Regex;
 use postgrest::Postgrest;
-use reqwest;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::collections::HashMap;
@@ -22,6 +21,7 @@ struct DataResponse {
 #[derive(Deserialize)]
 struct LikeRequest {
     slug: String,
+    response: String,
     unlike: bool,
 }
 
@@ -36,12 +36,22 @@ struct IdResponse {
     id: i32,
 }
 
+//Expected response
+// {
+//  "success": true|false, // is the passcode valid, and does it meet security criteria you specified, e.g. sitekey?
+//  "challenge_ts": timestamp, // timestamp of the challenge (ISO format yyyy-MM-dd'T'HH:mm:ssZZ)
+//  "hostname": string, // the hostname of the site where the challenge was solved
+//  "credit": true|false, // optional: whether the response will be credited
+//  "error-codes": [...] // optional: any error codes
+//  "score": float, // ENTERPRISE feature: a score denoting malicious activity.
+//  "score_reason": [...] // ENTERPRISE feature: reason(s) for score.
+// }
 #[derive(Deserialize)]
 struct HcaptchaResponse {
     success: bool,
-    challenge_ts: String, // timestamp
-    hostname: String,
-    credit: bool,
+    // challenge_ts: String, // timestamp
+    // hostname: String,
+    // credit: bool,
     // error-codes: [String],
 }
 
@@ -104,6 +114,18 @@ fn get_supabase_client(supabase_url: &str, api_key: &str) -> Result<Postgrest> {
     Ok(client)
 }
 
+fn preflight_response(cors_origin: &str) -> Result<Response> {
+    let mut headers = worker::Headers::new();
+    headers.set("Access-Control-Allow-Headers", "Content-Type")?;
+    headers.set("Access-Control-Allow-Methods", "POST")?;
+    headers.set("Access-Control-Allow-Origin", cors_origin)?;
+    headers.set("Access-Control-Max-Age", "86400")?;
+    Ok(Response::empty()
+        .unwrap()
+        .with_headers(headers)
+        .with_status(204))
+}
+
 // consider parsing the i32 and if successful returning it as a string
 async fn slug_exists(client: &Postgrest, slug: &str) -> Option<i32> {
     let response = match client
@@ -152,11 +174,11 @@ async fn verify_captcha(client_response: &str, secret: &str, sitekey: &str) -> O
     map.insert("response", client_response);
     map.insert("secret", secret);
     map.insert("sitekey", sitekey);
-
+    // application/x-www-form-urlencoded
     let client = reqwest::Client::new();
     let response = match client
         .post("https://hcaptcha.com/siteverify")
-        .json(&map)
+        .form(&map)
         .send()
         .await
     {
@@ -211,7 +233,8 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
     // Optionally, use the Router to handle matching endpoints, use ":name" placeholders, or "*name"
     // catch-alls to match on specific patterns. The Router takes some data with its `new` method
     // that can be shared throughout all routes. If you don't need any shared data, use `()`.
-    let router = Router::new(());
+    // let router = Router::new(());
+    let router = Router::new();
 
     // Add as many routes as your Worker needs! Each route will get a `Request` for handling HTTP
     // functionality and a `RouteContext` which you can use to  and get route parameters and
@@ -267,6 +290,9 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Err(_) => Response::error("Error creating post", 400),
             }
         })
+        .options("/post/data", |_req, ctx| {
+            preflight_response(&ctx.var("CORS_ORIGIN")?.to_string())
+        })
         .post_async("/post/data", |mut req, ctx| async move {
             let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
             let api_key = ctx.var("SUPABASE_SERVICE_API_KEY")?.to_string();
@@ -300,6 +326,9 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             let data: DataResponse = DataResponse { likes, views };
             Response::ok(serde_json::to_string(&data).unwrap())
         })
+        .options("/post/like", |_req, ctx| {
+            preflight_response(&ctx.var("CORS_ORIGIN")?.to_string())
+        })
         .post_async("/post/like", |mut req, ctx| async move {
             let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
             let api_key = ctx.var("SUPABASE_SERVICE_API_KEY")?.to_string();
@@ -310,20 +339,36 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             let data: LikeRequest;
             match req.json().await {
                 Ok(res) => data = res,
-                Err(_) => return Response::error("Bad request: invalid data", 400),
+                Err(_) => return Response::error("Bad request", 400),
             }
             let slug = &data.slug;
+            let hcaptcha_sitekey = ctx.var("HCAPTCHA_SITEKEY")?.to_string();
+            let hcaptcha_secretkey = ctx.var("HCAPTCHA_SECRETKEY")?.to_string();
             if !slug_valid(slug) {
                 return Response::error("Bad request", 400);
             }
-            let post_id = match slug_exists(&client, slug).await {
+            let verify_captcha_future =
+                verify_captcha(&data.response, &hcaptcha_secretkey, &hcaptcha_sitekey);
+            let slug_exists_future = slug_exists(&client, slug);
+            let (verify_captcha_result, slug_exists_result) =
+                futures::join!(verify_captcha_future, slug_exists_future);
+            match verify_captcha_result {
+                Some(value) => {
+                    if !value {
+                        return Response::error("Bad request", 400);
+                    }
+                }
+                None => return Response::error("Bad request", 400),
+            };
+            let post_id = match slug_exists_result {
                 Some(res) => res,
                 None => return Response::error("Bad request", 400),
             };
+
             let insert_query = format!("[{{ \"postId\": \"{}\" }}]", post_id.to_string());
             match client.from("Like").insert(insert_query).execute().await {
                 Ok(_) => (),
-                Err(_) => return Response::error("Error adding view count", 400),
+                Err(_) => return Response::error("Error adding like", 400),
             };
             let like_count: i32;
             match likes(&client, &post_id).await {
@@ -332,6 +377,9 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             };
             let data = LikeResponse { likes: like_count };
             Response::ok(serde_json::to_string(&data).unwrap())
+        })
+        .options("/post/view", |_req, ctx| {
+            preflight_response(&ctx.var("CORS_ORIGIN")?.to_string())
         })
         .post_async("/post/view", |mut req, ctx| async move {
             let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
@@ -343,7 +391,7 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             let data: ViewRequest;
             match req.json().await {
                 Ok(res) => data = res,
-                Err(_) => return Response::error("Bad request: invalid data", 400),
+                Err(_) => return Response::error("Bad request", 400),
             }
             let slug = &data.slug;
             if !slug_valid(slug) {
@@ -356,7 +404,7 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             let insert_query = format!("[{{ \"postId\": \"{}\" }}]", post_id.to_string());
             match client.from("View").insert(insert_query).execute().await {
                 Ok(_) => (),
-                Err(_) => return Response::error("Error adding view count", 400),
+                Err(_) => return Response::error("Error adding view", 400),
             };
             let view_count: i32;
             match views(&client, &post_id).await {
