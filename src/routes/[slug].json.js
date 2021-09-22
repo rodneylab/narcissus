@@ -30,6 +30,7 @@ export async function get({ params }) {
       };
     }
   } catch (error) {
+    console.error(`Error: ${error}. Check slug "${params.slug}" is included in narcissus database`);
     return {
       status: 500,
       error: 'Error retreiving data',

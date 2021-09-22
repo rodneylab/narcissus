@@ -38,10 +38,13 @@
       observer.observe(element);
 
       hcaptcha = window.hcaptcha;
-      hcaptchaWidgetID = hcaptcha.render('hcaptcha', {
-        sitekey: hcaptchaSitekey,
-        size: 'invisible',
-      });
+      if (hcaptcha.render) {
+        hcaptchaWidgetID = hcaptcha.render('hcaptcha', {
+          sitekey: hcaptchaSitekey,
+          size: 'invisible',
+          theme: 'dark',
+        });
+      }
     }
   });
 
@@ -81,7 +84,7 @@
   async function handleLike() {
     try {
       if (browser) {
-        const { response: hCaptchaResponse } = await hcaptcha.execute(hcaptchaWidgetID, {
+        const { response } = await hcaptcha.execute(hcaptchaWidgetID, {
           async: true,
         });
         const responsePromise = fetch(`${workerUrl}/post/like`, {
@@ -92,7 +95,7 @@
           },
           body: JSON.stringify({
             slug,
-            response: hCaptchaResponse,
+            response,
             unlike: liked,
           }),
         });
@@ -101,8 +104,8 @@
         } else {
           removeLikeFromStore();
         }
-        const response = await responsePromise;
-        const { likes } = await response.json();
+        const responseResult = await responsePromise;
+        const { likes } = await responseResult.json();
         freshLikeCount = likes;
       }
     } catch (error) {
@@ -141,7 +144,13 @@
 </svelte:head>
 
 <ViewsIcon />{displayViews}
-<div id="hcaptcha" class="h-captcha" data-sitekey={hcaptchaSitekey} data-size="invisible" />
+<div
+  id="hcaptcha"
+  class="h-captcha"
+  data-sitekey={hcaptchaSitekey}
+  data-size="invisible"
+  data-theme="dark"
+/>
 <button aria-label={likeButtonLabel} type="button" on:click={handleLike}>
   {#if liked}
     <LikedIcon />

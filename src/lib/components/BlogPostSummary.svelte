@@ -1,7 +1,7 @@
 <script>
   import dayjs from 'dayjs';
   import { H_ELLIPSIS_ENTITY } from '$lib/constants/entities';
-  import { goto } from '$app/navigation';
+  import { goto, prefetch } from '$app/navigation';
 
   export let postTitle;
   export let datePublished;
@@ -17,7 +17,8 @@
   };
 
   const handleMouseDown = async () => {
-    goto(`/${slug}/`);
+    await prefetch(`/${slug}`);
+    goto(`/${slug}`);
   };
 
   const date = dayjs(datePublished);
@@ -33,8 +34,11 @@
 >
   <div class="content">
     <h3>
-      <a aria-label={`Open ${postTitle} blog post`} aria-describedby={idString} href={`/${slug}/`}
-        >{postTitle}</a
+      <a
+        aria-label={`Open ${postTitle} blog post`}
+        aria-describedby={idString}
+        sveltekit:prefetch
+        href={`/${slug}/`}>{postTitle}</a
       >
     </h3>
     <p>{dateString}</p>
