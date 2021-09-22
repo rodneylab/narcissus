@@ -114,11 +114,21 @@ fn get_supabase_client(supabase_url: &str, api_key: &str) -> Result<Postgrest> {
     Ok(client)
 }
 
-fn preflight_response(cors_origin: &str) -> Result<Response> {
+fn preflight_response(headers: &worker::Headers, cors_origin: &str) -> Result<Response> {
+    let origin = match headers.get("Origin").unwrap() {
+        Some(value) => value,
+        None => return Response::empty(),
+    };
     let mut headers = worker::Headers::new();
     headers.set("Access-Control-Allow-Headers", "Content-Type")?;
     headers.set("Access-Control-Allow-Methods", "POST")?;
-    headers.set("Access-Control-Allow-Origin", cors_origin)?;
+
+    for origin_element in cors_origin.split(',') {
+        if origin.eq(origin_element) {
+            headers.set("Access-Control-Allow-Origin", &origin)?;
+            break;
+        }
+    }
     headers.set("Access-Control-Max-Age", "86400")?;
     Ok(Response::empty()
         .unwrap()
@@ -290,8 +300,8 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Err(_) => Response::error("Error creating post", 400),
             }
         })
-        .options("/post/data", |_req, ctx| {
-            preflight_response(&ctx.var("CORS_ORIGIN")?.to_string())
+        .options("/post/data", |req, ctx| {
+            preflight_response(req.headers(), &ctx.var("CORS_ORIGIN")?.to_string())
         })
         .post_async("/post/data", |mut req, ctx| async move {
             let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
@@ -326,8 +336,8 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             let data: DataResponse = DataResponse { likes, views };
             Response::ok(serde_json::to_string(&data).unwrap())
         })
-        .options("/post/like", |_req, ctx| {
-            preflight_response(&ctx.var("CORS_ORIGIN")?.to_string())
+        .options("/post/like", |req, ctx| {
+            preflight_response(req.headers(), &ctx.var("CORS_ORIGIN")?.to_string())
         })
         .post_async("/post/like", |mut req, ctx| async move {
             let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
@@ -378,8 +388,8 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             let data = LikeResponse { likes: like_count };
             Response::ok(serde_json::to_string(&data).unwrap())
         })
-        .options("/post/view", |_req, ctx| {
-            preflight_response(&ctx.var("CORS_ORIGIN")?.to_string())
+        .options("/post/view", |req, ctx| {
+            preflight_response(req.headers(), &ctx.var("CORS_ORIGIN")?.to_string())
         })
         .post_async("/post/view", |mut req, ctx| async move {
             let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
