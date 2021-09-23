@@ -1,7 +1,6 @@
 use ::regex::Regex;
 use postgrest::Postgrest;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 use std::collections::HashMap;
 use worker::*;
 
@@ -20,8 +19,9 @@ struct DataResponse {
 
 #[derive(Deserialize)]
 struct LikeRequest {
-    slug: String,
+    id: String,
     response: String,
+    slug: String,
     unlike: bool,
 }
 
@@ -34,6 +34,11 @@ struct PostCreateRequest {
 #[derive(Deserialize)]
 struct IdResponse {
     id: i32,
+}
+
+#[derive(Deserialize)]
+struct LikeRow {
+    uid: String,
 }
 
 //Expected response
@@ -58,6 +63,7 @@ struct HcaptchaResponse {
 #[derive(Serialize)]
 struct LikeResponse {
     likes: i32,
+    id: String,
 }
 
 #[derive(Serialize)]
@@ -76,7 +82,8 @@ fn log_request(req: &Request) {
         Date::now().to_string(),
         req.path(),
         req.cf().coordinates().unwrap_or_default(),
-        req.cf().region().unwrap_or("unknown region".into())
+        // req.cf().region().unwrap_or("unknown region".into())
+        req.cf().region().unwrap_or_else(|| "unknown region".into())
     );
 }
 
@@ -114,6 +121,32 @@ fn get_supabase_client(supabase_url: &str, api_key: &str) -> Result<Postgrest> {
     Ok(client)
 }
 
+// fn get_origin_from_request_headers(headers: &worker::Headers) -> Option<String> {
+//     headers.get("Origin").unwrap()
+// }
+
+fn add_access_control_allow_origin_to_response_headers<'a>(
+    headers: &'a mut worker::Headers,
+    origin: &str,
+    cors_origin: &str,
+) -> &'a worker::Headers {
+    for origin_element in cors_origin.split(',') {
+        if origin.eq(origin_element) {
+            match headers.set("Access-Control-Allow-Origin", origin) {
+                Ok(_) => return headers,
+                Err(err) => {
+                    console_log!(
+                        "Error adding Access-Control-Allow-Origin to response headers: {}",
+                        err
+                    );
+                    return headers;
+                }
+            }
+        }
+    }
+    headers
+}
+
 fn preflight_response(headers: &worker::Headers, cors_origin: &str) -> Result<Response> {
     let origin = match headers.get("Origin").unwrap() {
         Some(value) => value,
@@ -122,13 +155,7 @@ fn preflight_response(headers: &worker::Headers, cors_origin: &str) -> Result<Re
     let mut headers = worker::Headers::new();
     headers.set("Access-Control-Allow-Headers", "Content-Type")?;
     headers.set("Access-Control-Allow-Methods", "POST")?;
-
-    for origin_element in cors_origin.split(',') {
-        if origin.eq(origin_element) {
-            headers.set("Access-Control-Allow-Origin", &origin)?;
-            break;
-        }
-    }
+    add_access_control_allow_origin_to_response_headers(&mut headers, &origin, cors_origin);
     headers.set("Access-Control-Max-Age", "86400")?;
     Ok(Response::empty()
         .unwrap()
@@ -184,7 +211,6 @@ async fn verify_captcha(client_response: &str, secret: &str, sitekey: &str) -> O
     map.insert("response", client_response);
     map.insert("secret", secret);
     map.insert("sitekey", sitekey);
-    // application/x-www-form-urlencoded
     let client = reqwest::Client::new();
     let response = match client
         .post("https://hcaptcha.com/siteverify")
@@ -205,14 +231,13 @@ async fn likes(client: &Postgrest, post_id: &i32) -> Option<i32> {
     match client
         .from("Like")
         .eq("postId", post_id.to_string())
+        .eq("unliked", "false")
         .select("id")
         .estimated_count()
         .execute()
         .await
     {
-        Ok(response) => {
-            get_count_from_supabase_response_header(response.headers()).map(|value| value)
-        }
+        Ok(response) => get_count_from_supabase_response_header(response.headers()),
         Err(_) => None,
     }
 }
@@ -226,9 +251,7 @@ async fn views(client: &Postgrest, post_id: &i32) -> Option<i32> {
         .execute()
         .await
     {
-        Ok(response) => {
-            get_count_from_supabase_response_header(response.headers()).map(|value| value)
-        }
+        Ok(response) => get_count_from_supabase_response_header(response.headers()),
         Err(_) => None,
     }
 }
@@ -250,26 +273,6 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
     // functionality and a `RouteContext` which you can use to  and get route parameters and
     // Enviornment bindings like KV Stores, Durable Objects, Secrets, and Variables.
     router
-        .post_async("/form/:field", |mut req, ctx| async move {
-            if let Some(name) = ctx.param("field") {
-                let form = req.form_data().await?;
-                match form.get(name) {
-                    Some(FormEntry::Field(value)) => {
-                        return Response::from_json(&json!({ name: value }))
-                    }
-                    Some(FormEntry::File(_)) => {
-                        return Response::error("`field` param in form shouldn't be a File", 422);
-                    }
-                    None => return Response::error("Bad Request", 400),
-                }
-            }
-
-            Response::error("Bad Request", 400)
-        })
-        .get("/worker-version", |_, ctx| {
-            let version = ctx.var("WORKERS_RS_VERSION")?.to_string();
-            Response::ok(version)
-        })
         .post_async("/post/create", |mut req, ctx| async move {
             let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
             let api_key = ctx.var("SUPABASE_SERVICE_API_KEY")?.to_string();
@@ -352,6 +355,8 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Err(_) => return Response::error("Bad request", 400),
             }
             let slug = &data.slug;
+            let is_unlike = &data.unlike;
+            let mut like_id = &data.id;
             let hcaptcha_sitekey = ctx.var("HCAPTCHA_SITEKEY")?.to_string();
             let hcaptcha_secretkey = ctx.var("HCAPTCHA_SECRETKEY")?.to_string();
             if !slug_valid(slug) {
@@ -374,19 +379,62 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Some(res) => res,
                 None => return Response::error("Bad request", 400),
             };
-
-            let insert_query = format!("[{{ \"postId\": \"{}\" }}]", post_id.to_string());
-            match client.from("Like").insert(insert_query).execute().await {
-                Ok(_) => (),
-                Err(_) => return Response::error("Error adding like", 400),
-            };
+            let data: Vec<LikeRow>;
+            if !is_unlike {
+                // add like to db
+                let insert_query = format!("[{{ \"postId\": \"{}\" }}]", post_id.to_string());
+                let response = match client.from("Like").insert(insert_query).execute().await {
+                    Ok(value) => value,
+                    Err(_) => return Response::error("Error adding like", 400),
+                };
+                // get uid of new like from response
+                let body = match response.text().await {
+                    Ok(value) => value,
+                    Err(_) => return Response::error("Bad request", 400),
+                };
+                data = match serde_json::from_str(&body) {
+                    Ok(value) => value,
+                    Err(_) => return Response::error("Bad request", 400),
+                };
+                like_id = &data[0].uid;
+            } else {
+                // add unliked flag in Like table row
+                match client
+                    .from("Like")
+                    .eq("uid", like_id)
+                    .update(r#"{ "unliked": true }"#)
+                    .execute()
+                    .await
+                {
+                    Ok(_value) => (),
+                    Err(_) => return Response::error("Error unliking post", 400),
+                };
+            }
+            // get current like count
             let like_count: i32;
             match likes(&client, &post_id).await {
                 Some(value) => like_count = value,
                 None => like_count = -1,
             };
-            let data = LikeResponse { likes: like_count };
-            Response::ok(serde_json::to_string(&data).unwrap())
+            // respond
+            let data = LikeResponse {
+                likes: like_count,
+                id: like_id.to_string(),
+            };
+            // set CORS header
+            let origin = match req.headers().get("Origin").unwrap() {
+                Some(value) => value,
+                None => return Response::error("Bad request", 400),
+            };
+            let mut headers = worker::Headers::new();
+            add_access_control_allow_origin_to_response_headers(
+                &mut headers,
+                &origin,
+                &ctx.var("CORS_ORIGIN")?.to_string(),
+            );
+            Ok(Response::ok(serde_json::to_string(&data).unwrap())
+                .unwrap()
+                .with_headers(headers))
         })
         .options("/post/view", |req, ctx| {
             preflight_response(req.headers(), &ctx.var("CORS_ORIGIN")?.to_string())
@@ -422,7 +470,20 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 None => view_count = -1,
             };
             let data = ViewResponse { views: view_count };
-            Response::ok(serde_json::to_string(&data).unwrap())
+            // set CORS header
+            let origin = match req.headers().get("Origin").unwrap() {
+                Some(value) => value,
+                None => return Response::error("Bad request", 400),
+            };
+            let mut headers = worker::Headers::new();
+            add_access_control_allow_origin_to_response_headers(
+                &mut headers,
+                &origin,
+                &ctx.var("CORS_ORIGIN")?.to_string(),
+            );
+            Ok(Response::ok(serde_json::to_string(&data).unwrap())
+                .unwrap()
+                .with_headers(headers))
         })
         .run(req, env)
         .await
