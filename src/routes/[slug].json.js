@@ -12,7 +12,7 @@ export async function get({ params }) {
 
     const response = await fetch(`${process.env['VITE_WORKER_URL']}/post/data`, {
       method: 'POST',
-      credentials: 'same-origin',
+      credentials: 'none',
       headers: {
         'Content-Type': 'application/json',
       },

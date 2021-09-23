@@ -57,9 +57,11 @@
     }
   });
 
-  function addLikeToStore() {
+  function addLikeToStore({ id }) {
     const { liked: likedArray, viewed: viewedArray } = JSON.parse($postLikedViewed);
-    postLikedViewed.set(JSON.stringify({ liked: [slug, ...likedArray], viewed: viewedArray }));
+    postLikedViewed.set(
+      JSON.stringify({ liked: [{ slug, id }, ...likedArray], viewed: viewedArray }),
+    );
   }
 
   function addViewToStore() {
@@ -67,9 +69,15 @@
     postLikedViewed.set(JSON.stringify({ liked: likedArray, viewed: [slug, ...viewedArray] }));
   }
 
+  function getLikeIdFromStore() {
+    const { liked: likedArray } = JSON.parse($postLikedViewed);
+    const { id } = likedArray.find((element) => slug === element.slug);
+    return id ? id : '';
+  }
+
   function removeLikeFromStore() {
     const { liked: likedArray, viewed: viewedArray } = JSON.parse($postLikedViewed);
-    const index = likedArray.findIndex((element) => slug === element);
+    const index = likedArray.findIndex((element) => slug === element.slug);
     postLikedViewed.set(
       JSON.stringify({
         liked: [...likedArray.slice(0, index), ...likedArray.slice(index + 1)],
@@ -94,18 +102,19 @@
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            id: !liked ? '' : getLikeIdFromStore(),
             slug,
             response,
             unlike: liked,
           }),
         });
+        const responseResult = await responsePromise;
+        const { id, likes } = await responseResult.json();
         if (!liked) {
-          addLikeToStore();
+          addLikeToStore({ id });
         } else {
           removeLikeFromStore();
         }
-        const responseResult = await responsePromise;
-        const { likes } = await responseResult.json();
         freshLikeCount = likes;
       }
     } catch (error) {

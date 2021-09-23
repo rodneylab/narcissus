@@ -22,7 +22,10 @@
       return {};
     }
 
-    const url = `${page.path}.json`;
+    const url =
+      page.path[page.path.length - 1] === '/'
+        ? `${page.path.slice(0, -1)}.json`
+        : `${page.path}.json`;
     const res = await fetch(url);
 
     if (res.ok) {
