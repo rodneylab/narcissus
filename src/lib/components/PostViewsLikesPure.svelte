@@ -86,7 +86,7 @@
     );
   }
 
-  $: liked = JSON.parse($postLikedViewed).liked.includes(slug);
+  $: liked = JSON.parse($postLikedViewed).liked.find((element) => element.slug === slug) != null;
   $: viewed = JSON.parse($postLikedViewed).viewed.includes(slug);
 
   async function handleLike() {
