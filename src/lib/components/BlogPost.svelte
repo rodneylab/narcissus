@@ -13,8 +13,6 @@
     postTitle: title,
     seoMetaDescription: metadescription,
     slug,
-    likes,
-    views,
   } = post;
   const { ogImage, ogSquareImage, src: featuredImage, twitterImage } = imageData;
   const timeToRead = Math.ceil(readingTime(post.body).minutes);

@@ -20,7 +20,7 @@
 
   let hcaptchaWidgetID;
   let observer;
-  function hcaptcha() {}
+  let hcaptcha = { execute: async () => {}, render: () => {} };
 
   onMount(() => {
     if (browser) {
