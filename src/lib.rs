@@ -7,6 +7,15 @@ use worker::*;
 mod utils;
 
 #[derive(Deserialize)]
+struct CommentRequest {
+    author: String,
+    text: String,
+    email: String,
+    response: String,
+    slug: String,
+}
+
+#[derive(Deserialize)]
 struct DataRequest {
     slug: String,
 }
@@ -20,7 +29,7 @@ struct DataResponse {
 #[derive(Deserialize)]
 struct LikeRequest {
     id: String,
-    response: String,
+    // response: String,
     slug: String,
     unlike: bool,
 }
@@ -34,6 +43,17 @@ struct PostCreateRequest {
 #[derive(Deserialize)]
 struct IdResponse {
     id: i32,
+}
+
+#[derive(Deserialize)]
+struct CommentRow {
+    // uid: String,
+// created_at: String,
+// updated_at: String,
+// author: String,
+// text: String,
+// verified_author: String,
+// path: String,
 }
 
 #[derive(Deserialize)]
@@ -82,7 +102,6 @@ fn log_request(req: &Request) {
         Date::now().to_string(),
         req.path(),
         req.cf().coordinates().unwrap_or_default(),
-        // req.cf().region().unwrap_or("unknown region".into())
         req.cf().region().unwrap_or_else(|| "unknown region".into())
     );
 }
@@ -120,10 +139,6 @@ fn get_supabase_client(supabase_url: &str, api_key: &str) -> Result<Postgrest> {
         .insert_header("Authorization", authorization_value);
     Ok(client)
 }
-
-// fn get_origin_from_request_headers(headers: &worker::Headers) -> Option<String> {
-//     headers.get("Origin").unwrap()
-// }
 
 fn add_access_control_allow_origin_to_response_headers<'a>(
     headers: &'a mut worker::Headers,
@@ -198,12 +213,121 @@ fn slug_valid(slug: &str) -> bool {
     re.is_match(slug)
 }
 
-fn title_valid(slug: &str) -> bool {
+fn contains_only_printable_characters(text: &str) -> bool {
     let re = Regex::new(
         r"^[[:print:]]+$", // printable
     )
     .unwrap();
-    re.is_match(slug)
+    re.is_match(text)
+}
+
+fn author_valid(author: &str) -> Option<String> {
+    if contains_only_printable_characters(author) {
+        return None;
+    }
+    console_log!("Check the comment author name");
+    Some("Check the comment author name".to_string())
+}
+
+// todo(rodneylab): allow emoji try /[\u{1f300}-\u{1f5ff}\u{1f900}-\u{1f9ff}\u{1f600}-\u{1f64f}\u{1f680}-\u{1f6ff}\u{2600}-\u{26ff}\u{2700}-\u{27bf}\u{1f1e6}-\u{1f1ff}\u{1f191}-\u{1f251}\u{1f004}\u{1f0cf}\u{1f170}-\u{1f171}\u{1f17e}-\u{1f17f}\u{1f18e}\u{3030}\u{2b50}\u{2b55}\u{2934}-\u{2935}\u{2b05}-\u{2b07}\u{2b1b}-\u{2b1c}\u{3297}\u{3299}\u{303d}\u{00a9}\u{00ae}\u{2122}\u{23f3}\u{24c2}\u{23e9}-\u{23ef}\u{25b6}\u{23f8}-\u{23fa}]/ug
+fn comment_text_valid(text: &str) -> Option<String> {
+    let re = Regex::new(r"^[[:print:]\n\t]+$").unwrap();
+    if !re.is_match(text) {
+        console_log!("Check the comment");
+        return Some("Check the comment".to_string());
+    }
+    if text.chars().count() > 1024 {
+        console_log!("Comment is a little long!");
+        return Some("Comment is a little long!".to_string());
+    }
+    None
+}
+
+fn email_valid(email: &str) -> Option<String> {
+    let re = Regex::new(r"^([a-zA-Z0-9_+]([a-zA-Z0-9_+.]*[a-zA-Z0-9_+])?)@([a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,6})").unwrap();
+
+    if re.is_match(email) {
+        return None;
+    }
+    console_log!("Check the email address");
+    Some("Check the email address".to_string())
+}
+
+fn title_valid(title: &str) -> bool {
+    contains_only_printable_characters(title)
+}
+
+fn get_header_value(headers: &worker::Headers, header: &str) -> Option<String> {
+    match headers.get(header) {
+        Ok(value) => value,
+        Err(_) => None,
+    }
+}
+
+async fn spam_check(
+    site_url: &str,
+    email: &str,
+    name: &str,
+    text: &str,
+    headers: &worker::Headers,
+    akismet_api_key: &str,
+) -> Option<bool> {
+    // for entry in headers.entries() {
+    //     console_log!("Key: {}, Value: {}", entry.0, entry.1);
+    // }
+    let mut map = HashMap::new();
+    map.insert("blog", site_url);
+    let user_ip: String;
+    if let Some(value) = get_header_value(headers, "x-real-ip") {
+        user_ip = value;
+        map.insert("user_ip", &user_ip);
+    }
+    let user_agent: String;
+    if let Some(value) = get_header_value(headers, "user-agent") {
+        user_agent = value;
+        map.insert("user_agent", &user_agent);
+    }
+    let referrer: String;
+    if let Some(value) = get_header_value(headers, "referer") {
+        referrer = value;
+        map.insert("referrer", &referrer);
+    }
+    map.insert("permalink", "full_link_to_article");
+    map.insert("comment_type", "comment");
+    map.insert("comment_author", name);
+    map.insert("comment_email", email);
+    map.insert("comment_content", text);
+    map.insert("blog_lang", "en");
+    // map.insert("blog_charset", "UTF-8");
+    let client = reqwest::Client::new();
+    let url = format!(
+        "https://{}.rest.akismet.com/1.1/comment-check",
+        akismet_api_key
+    );
+    let response = match client.post(url).form(&map).send().await {
+        Ok(res) => res,
+        Err(_) => {
+            console_log!("Akismet response error");
+            return None;
+        }
+    };
+    match response.text().await {
+        Ok(value) => {
+            let result = value.get(..);
+            match result {
+                Some("true") => Some(true),
+                Some("false") => Some(false),
+                _ => {
+                    console_log!("Akismet response error");
+                    None
+                }
+            }
+        }
+        Err(_) => {
+            console_log!("Akismet response error");
+            None
+        }
+    }
 }
 
 async fn verify_captcha(client_response: &str, secret: &str, sitekey: &str) -> Option<bool> {
@@ -226,6 +350,35 @@ async fn verify_captcha(client_response: &str, secret: &str, sitekey: &str) -> O
         Err(_) => None,
     }
 }
+
+// todo(rodneylab): add pagination cursor
+// async fn comments(client: &Postgrest, post_id: &i32, limit: Option<u32>) -> Vec<CommentRow> {
+//     let default_limit = 10u32;
+//     let limit_used = match limit {
+//         Some(value) => value,
+//         None => default_limit,
+//     };
+//     let response = match client
+//         .from("Comment")
+//         .eq("post_id", post_id.to_string())
+//         .select("id")
+//         .order("created_at.asc")
+//         .limit(limit_used as usize)
+//         .execute()
+//         .await
+//     {
+//         Ok(value) => value,
+//         Err(_) => return Vec::<CommentRow>::new(),
+//     };
+//     let body = match response.text().await {
+//         Ok(res) => res,
+//         Err(_) => return Vec::<CommentRow>::new(),
+//     };
+//     match serde_json::from_str(&body) {
+//         Ok(res) => res,
+//         Err(_) => Vec::<CommentRow>::new(),
+//     }
+// }
 
 async fn likes(client: &Postgrest, post_id: &i32) -> Option<i32> {
     match client
@@ -337,7 +490,94 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 None => views = -1,
             }
             let data: DataResponse = DataResponse { likes, views };
-            Response::ok(serde_json::to_string(&data).unwrap())
+            let has_origin_header = req.headers().has("Origin").unwrap_or(false);
+            if has_origin_header {
+                let origin = match req.headers().get("Origin").unwrap() {
+                    Some(value) => value,
+                    None => return Response::error("Bad request", 400),
+                };
+                let mut headers = worker::Headers::new();
+                add_access_control_allow_origin_to_response_headers(
+                    &mut headers,
+                    &origin,
+                    &ctx.var("CORS_ORIGIN")?.to_string(),
+                );
+                Ok(Response::ok(serde_json::to_string(&data).unwrap())
+                    .unwrap()
+                    .with_headers(headers))
+            } else {
+                Response::ok(serde_json::to_string(&data).unwrap())
+            }
+        })
+        .options("/post/comment", |req, ctx| {
+            preflight_response(req.headers(), &ctx.var("CORS_ORIGIN")?.to_string())
+        })
+        .post_async("/post/comment", |mut req, ctx| async move {
+            let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
+            let api_key = ctx.var("SUPABASE_SERVICE_API_KEY")?.to_string();
+            let client = match get_supabase_client(&supabase_url, &api_key) {
+                Ok(res) => res,
+                Err(_) => return Response::error("Error creating PostgREST Supabase client", 400),
+            };
+            let data: CommentRequest;
+            match req.json().await {
+                Ok(res) => data = res,
+                Err(_) => return Response::error("Bad request", 400),
+            }
+            let author = &data.author;
+            let email = &data.email;
+            let response = &data.response;
+            let slug = &data.slug;
+            let text = &data.text;
+            let hcaptcha_sitekey = ctx.var("HCAPTCHA_SITEKEY")?.to_string();
+            let hcaptcha_secretkey = ctx.var("HCAPTCHA_SECRETKEY")?.to_string();
+            if let Some(value) = author_valid(author) { return Response::error(value, 400)};
+            if let Some(value) = email_valid(email) { return Response::error(value, 400)};
+            if let Some(value) = comment_text_valid(text) { return Response::error(value, 400)};
+            if !slug_valid(slug) {
+                return Response::error("Bad request", 400);
+            }
+            let verify_captcha_future = verify_captcha(response, &hcaptcha_secretkey, &hcaptcha_sitekey);
+            let blog = ctx.var("SITE_URL")?.to_string();
+            let akismet_api_key = ctx.var("AKISMET_API_KEY")?.to_string();
+            let spam_check_future = spam_check(&blog, email, author, text, req.headers(),&akismet_api_key);
+            let slug_exists_future = slug_exists(&client, slug);
+            let (verify_captcha_result, spam_check_result, slug_exists_result) =
+                futures::join!(verify_captcha_future, spam_check_future, slug_exists_future);
+            let mut marked_bot = false;
+            match verify_captcha_result {
+                Some(value) => {
+                    if !value {
+                        marked_bot = true;
+                        console_log!("hCaptcha flags bot!");
+                    }
+                }
+                None => return Response::error("Bad request: captcha!", 400),
+            };
+            let marked_spam = match spam_check_result {
+                Some(value) => value,
+                None => return Response::error("Bad request: spam_check", 400),
+            };
+            let post_id = match slug_exists_result {
+                Some(res) => res,
+                None => return Response::error("Bad request: slug", 400),
+            };
+            let insert_query = format!(
+                r#"{{ "author": "{}", "text": "{}", "marked_bot": {}, "marked_spam": {}, "post_id": {} }}"#,
+                author, text, marked_bot, marked_spam, post_id);
+            let response = match client.from("Comment").insert(insert_query).execute().await {
+                Ok(value) => value,
+                Err(_) => return Response::error("Error adding comment", 400),
+            };
+            let body = match response.text().await {
+                Ok(value) => value,
+                Err(_) => return Response::error("Bad request: resp", 400),
+            };
+            let _data: CommentRow = match serde_json::from_str(&body) {
+                Ok(value) => value,
+                Err(_) => return Response::error("Bad request: json", 400),
+            };
+            Response::ok("Thanks for your comment!")
         })
         .options("/post/like", |req, ctx| {
             preflight_response(req.headers(), &ctx.var("CORS_ORIGIN")?.to_string())
@@ -355,27 +595,13 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Err(_) => return Response::error("Bad request", 400),
             }
             let slug = &data.slug;
+            // return Response::error("Bad request", 401);
             let is_unlike = &data.unlike;
             let mut like_id = &data.id;
-            let hcaptcha_sitekey = ctx.var("HCAPTCHA_SITEKEY")?.to_string();
-            let hcaptcha_secretkey = ctx.var("HCAPTCHA_SECRETKEY")?.to_string();
             if !slug_valid(slug) {
                 return Response::error("Bad request", 400);
             }
-            let verify_captcha_future =
-                verify_captcha(&data.response, &hcaptcha_secretkey, &hcaptcha_sitekey);
-            let slug_exists_future = slug_exists(&client, slug);
-            let (verify_captcha_result, slug_exists_result) =
-                futures::join!(verify_captcha_future, slug_exists_future);
-            match verify_captcha_result {
-                Some(value) => {
-                    if !value {
-                        return Response::error("Bad request", 400);
-                    }
-                }
-                None => return Response::error("Bad request", 400),
-            };
-            let post_id = match slug_exists_result {
+            let post_id = match slug_exists(&client, slug).await {
                 Some(res) => res,
                 None => return Response::error("Bad request", 400),
             };
@@ -406,7 +632,7 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                     .execute()
                     .await
                 {
-                    Ok(_value) => (),
+                    Ok(_) => (),
                     Err(_) => return Response::error("Error unliking post", 400),
                 };
             }
@@ -487,6 +713,73 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
         })
         .run(req, env)
         .await
+}
+
+#[test]
+fn test_comment_text_valid() {
+    // let valid_comments = ["Lovely post!", "Really\ngood\tpost.", "Simply amazing ❤️"];
+    let valid_comments = ["Lovely post!", "Really\ngood\tpost.", "Simply amazing "];
+    for element in valid_comments.iter() {
+        assert_eq!(comment_text_valid(element), None);
+    }
+
+    let invalid_comments = ["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Auctor eu augue ut lectus arcu bibendum at varius vel. Amet purus gravida quis blandit turpis. Hendrerit gravida rutrum quisque non tellus orci ac auctor. Purus sit amet volutpat consequat mauris nunc. Quis commodo odio aenean sed. Habitasse platea dictumst vestibulum rhoncus est pellentesque elit. Tortor aliquam nulla facilisi cras fermentum odio eu feugiat pretium. Dignissim convallis aenean et tortor at risus viverra adipiscing. Et sollicitudin ac orci phasellus egestas tellus rutrum tellus. Nunc scelerisque viverra mauris in aliquam sem fringilla ut. Hendrerit gravida rutrum quisque non tellus orci ac auctor augue. In cursus turpis massa tincidunt dui ut ornare lectus. Laoreet non curabitur gravida arcu ac tortor dignissim convallis aenean. Blandit turpis cursus in hac habitasse platea dictumst. Quis enim lobortis scelerisque fermentum dui faucibus in. Leo urna molestie at elementum. Morbi leo urna molestie at elementum. Gravida cum sociis natoque penatibus et magnis dis parturient. Vitae suscipit tellus mauris a diam maecenas sed enim."];
+    for element in &invalid_comments {
+        assert!(comment_text_valid(element)
+            .unwrap()
+            .eq("Comment is a little long!"));
+    }
+}
+
+#[test]
+fn test_name_author() {
+    let valid_names = ["Matthew", "MATTHEW", "matthew", "mark Luke"];
+    for element in valid_names.iter() {
+        assert_eq!(author_valid(element), None);
+    }
+
+    let invalid_names = ["Jo\nhn", "Matthew \t Mark"];
+    for element in &invalid_names {
+        assert!(author_valid(element)
+            .unwrap()
+            .eq("Check the comment author name"));
+    }
+}
+
+#[test]
+fn test_contains_only_printable_characters() {
+    let valid_strings = ["My New Title", "My New Title 1", "My New Title: 1"];
+    for element in valid_strings.iter() {
+        assert!(contains_only_printable_characters(element));
+    }
+
+    let invalid_strings = ["My\nNew\nTitle"];
+    for element in &invalid_strings {
+        assert!(!contains_only_printable_characters(element));
+    }
+}
+
+#[test]
+fn test_email_valid() {
+    let valid_emails = [
+        "john@john.com",
+        "MATTHEW@matthew.co.JP",
+        "mark.luke@mark.biz",
+    ];
+    for element in valid_emails.iter() {
+        assert_eq!(email_valid(element), None);
+    }
+
+    let invalid_emails = [
+        "@john.com",
+        "john",
+        "john.com",
+        "m@rk@mark.com",
+        "peter&paul@va",
+    ];
+    for element in &invalid_emails {
+        assert!(email_valid(element).unwrap().eq("Check the email address"));
+    }
 }
 
 #[test]
