@@ -23,7 +23,7 @@
       });
       return response.json();
     } catch (error) {
-      console.error(`Error in getLikes: ${error}`);
+      console.error(`Error in getViewsLikes: ${error}`);
     }
   }
 

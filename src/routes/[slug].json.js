@@ -10,7 +10,7 @@ export async function get({ params }) {
     const article = articles.find((element) => element.slug === slug);
     const postPromise = getPost(article.content, true);
 
-    const response = await fetch(`${process.env['VITE_WORKER_URL']}/post/data`, {
+    const dataResponsePromise = fetch(`${process.env['VITE_WORKER_URL']}/post/data`, {
       method: 'POST',
       credentials: 'none',
       headers: {
@@ -20,13 +20,15 @@ export async function get({ params }) {
         slug,
       }),
     });
-    const dataPromise = response.json();
+    const dataResponse = await dataResponsePromise;
+    const dataPromise = dataResponse.json();
+
     const [post, data] = await Promise.all([postPromise, dataPromise]);
-    const { likes, views } = data;
+    const { comments, likes, views } = data;
 
     if (post) {
       return {
-        body: JSON.stringify({ post: { ...post, slug, likes, views } }),
+        body: JSON.stringify({ post: { ...post, slug, likes, views, comments } }),
       };
     }
   } catch (error) {

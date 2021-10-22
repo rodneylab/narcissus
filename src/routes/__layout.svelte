@@ -4,24 +4,24 @@
    */
   export async function load({ page, fetch }) {
     const { path } = page;
-    const { slug } = page.params;
 
     // make sure this is not a blog post
     if (path === '/') {
-      const url = `./index.json`;
+      const url = './index.json';
       const response = await fetch(url);
 
       if (response.ok) {
         return {
-          props: { ...(await response.json()) },
+          props: { ...(await response.json()), post: null },
         };
       }
 
       return {};
     } else if (path === '/contact') {
-      return {};
+      return { props: { post: null } };
     }
 
+    const { slug } = page.params;
     const url =
       page.path[page.path.length - 1] === '/'
         ? `${page.path.slice(0, -1)}.json`
@@ -64,6 +64,8 @@
   import PostViewsLikes from '$lib/components/PostViewsLikes.svelte';
   import PWA from '$lib/components/PWA.svelte';
   import Footer from '$lib/components/Footer.svelte';
+  import CommentForm from '$lib/components/CommentForm.svelte';
+  import Comments from '$lib/components/Comments.svelte';
 
   export let post, imageData;
 
@@ -71,7 +73,7 @@
     document.lazyloadInstance = new lazyload();
   }
 
-  $: isBlogPost = post !== undefined;
+  $: isBlogPost = post != null;
 </script>
 
 <PWA />
@@ -86,6 +88,8 @@
         <a href="https://hcaptcha.com/privacy">Privacy Policy</a> and
         <a href="https://hcaptcha.com/terms">Terms of Service</a> apply.
       </div>
+      <CommentForm slug={post.slug} />
+      <Comments comments={post.comments} />
     {:else}
       <slot />
     {/if}

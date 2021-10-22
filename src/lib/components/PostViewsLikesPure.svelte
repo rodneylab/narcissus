@@ -11,16 +11,14 @@
   export let slug;
   export let views;
 
-  const { hcaptchaSitekey, workerUrl } = website;
+  const { workerUrl } = website;
 
   $: freshLikeCount = null;
   $: freshViewCount = null;
   $: displayLikes = freshLikeCount ?? likes;
   $: displayViews = freshViewCount ?? views;
 
-  let hcaptchaWidgetID;
   let observer;
-  let hcaptcha = { execute: async () => {}, render: () => {} };
 
   onMount(() => {
     if (browser) {
@@ -36,22 +34,10 @@
       observer = new IntersectionObserver(handleIntersect, options);
       const element = window.document.querySelector('main').firstElementChild;
       observer.observe(element);
-
-      hcaptcha = window.hcaptcha;
-      if (hcaptcha.render) {
-        hcaptchaWidgetID = hcaptcha.render('hcaptcha', {
-          sitekey: hcaptchaSitekey,
-          size: 'invisible',
-          theme: 'dark',
-        });
-      }
     }
   });
 
   onDestroy(() => {
-    if (browser) {
-      hcaptcha = () => {};
-    }
     if (observer) {
       observer.disconnect();
     }
@@ -92,9 +78,6 @@
   async function handleLike() {
     try {
       if (browser) {
-        const { response } = await hcaptcha.execute(hcaptchaWidgetID, {
-          async: true,
-        });
         const responsePromise = fetch(`${workerUrl}/post/like`, {
           method: 'POST',
           credentials: 'omit',
@@ -104,7 +87,6 @@
           body: JSON.stringify({
             id: !liked ? '' : getLikeIdFromStore(),
             slug,
-            response,
             unlike: liked,
           }),
         });
@@ -141,25 +123,14 @@
         freshViewCount = views;
       }
     } catch (error) {
-      console.error(`Error in handleLike: ${error}`);
+      console.error(`Error in handleView: ${error}`);
     }
   }
 
   $: likeButtonLabel = !liked ? 'Like this blog post' : 'Unlike this blog post';
 </script>
 
-<svelte:head>
-  <script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
-</svelte:head>
-
 <ViewsIcon />{displayViews}
-<div
-  id="hcaptcha"
-  class="h-captcha"
-  data-sitekey={hcaptchaSitekey}
-  data-size="invisible"
-  data-theme="dark"
-/>
 <button aria-label={likeButtonLabel} type="button" on:click={handleLike}>
   {#if liked}
     <LikedIcon />
