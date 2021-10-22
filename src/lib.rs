@@ -22,6 +22,7 @@ struct DataRequest {
 
 #[derive(Serialize)]
 struct DataResponse {
+    comments: Vec<CommentRow>,
     likes: i32,
     views: i32,
 }
@@ -45,15 +46,15 @@ struct IdResponse {
     id: i32,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 struct CommentRow {
-    // uid: String,
-// created_at: String,
-// updated_at: String,
-// author: String,
-// text: String,
-// verified_author: String,
-// path: String,
+    uid: String,
+    created_at: String,
+    updated_at: String,
+    author: String,
+    text: String,
+    verified_author: bool,
+    // path: String,
 }
 
 #[derive(Deserialize)]
@@ -352,33 +353,42 @@ async fn verify_captcha(client_response: &str, secret: &str, sitekey: &str) -> O
 }
 
 // todo(rodneylab): add pagination cursor
-// async fn comments(client: &Postgrest, post_id: &i32, limit: Option<u32>) -> Vec<CommentRow> {
-//     let default_limit = 10u32;
-//     let limit_used = match limit {
-//         Some(value) => value,
-//         None => default_limit,
-//     };
-//     let response = match client
-//         .from("Comment")
-//         .eq("post_id", post_id.to_string())
-//         .select("id")
-//         .order("created_at.asc")
-//         .limit(limit_used as usize)
-//         .execute()
-//         .await
-//     {
-//         Ok(value) => value,
-//         Err(_) => return Vec::<CommentRow>::new(),
-//     };
-//     let body = match response.text().await {
-//         Ok(res) => res,
-//         Err(_) => return Vec::<CommentRow>::new(),
-//     };
-//     match serde_json::from_str(&body) {
-//         Ok(res) => res,
-//         Err(_) => Vec::<CommentRow>::new(),
-//     }
-// }
+async fn comments(client: &Postgrest, post_id: &i32, limit: Option<u32>) -> Vec<CommentRow> {
+    let default_limit = 10u32;
+    let limit_used = match limit {
+        Some(value) => value,
+        None => default_limit,
+    };
+    //     uid: String,
+    // created_at: String,
+    // updated_at: String,
+    // author: String,
+    // text: String,
+    // verified_author: String,
+    // path: String,
+    let response = match client
+        .from("Comment")
+        .eq("post_id", post_id.to_string())
+        .select("uid,created_at,updated_at,author,text, verified_author")
+        .order("created_at.asc")
+        .limit(limit_used as usize)
+        .execute()
+        .await
+    {
+        Ok(value) => value,
+        Err(_) => return Vec::<CommentRow>::new(),
+    };
+    let body = match response.text().await {
+        Ok(res) => res,
+        Err(_) => return Vec::<CommentRow>::new(),
+    };
+    let result: Vec<CommentRow>;
+    match serde_json::from_str(&body) {
+        Ok(res) => result = res,
+        Err(_) => result = Vec::<CommentRow>::new(),
+    };
+    result
+}
 
 async fn likes(client: &Postgrest, post_id: &i32) -> Option<i32> {
     match client
@@ -478,7 +488,8 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             };
             let likes_future = likes(&client, &post_id);
             let views_future = views(&client, &post_id);
-            let (likes_result, views_result) = futures::join!(likes_future, views_future);
+            let comments_future = comments(&client, &post_id, Some(8));
+            let (comments_result, likes_result, views_result) = futures::join!(comments_future,likes_future, views_future);
             let likes: i32;
             match likes_result {
                 Some(value) => likes = value,
@@ -489,7 +500,7 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Some(value) => views = value,
                 None => views = -1,
             }
-            let data: DataResponse = DataResponse { likes, views };
+            let data: DataResponse = DataResponse { comments: comments_result, likes, views };
             let has_origin_header = req.headers().has("Origin").unwrap_or(false);
             if has_origin_header {
                 let origin = match req.headers().get("Origin").unwrap() {
