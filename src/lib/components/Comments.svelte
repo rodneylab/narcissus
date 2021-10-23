@@ -1,8 +1,8 @@
 <script>
   import dayjs from 'dayjs';
-  import 'dayjs/locale/en-gb';
-  import localizedFormat from 'dayjs/plugin/localizedFormat';
-  import relativeTime from 'dayjs/plugin/relativeTime';
+  import 'dayjs/locale/en-gb.js';
+  import localizedFormat from 'dayjs/plugin/localizedFormat.js';
+  import relativeTime from 'dayjs/plugin/relativeTime.js';
   import Card from '$lib/components/Card.svelte';
 
   export let comments;

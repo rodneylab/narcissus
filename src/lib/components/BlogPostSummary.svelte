@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
   import dayjs from 'dayjs';
   import { H_ELLIPSIS_ENTITY } from '$lib/constants/entities';
   import { goto, prefetch } from '$app/navigation';
+  import { container, content, contentBody, contentHeading } from './BlogPostSummary.css';
 
   export let postTitle;
   export let datePublished;
@@ -27,13 +28,13 @@
 </script>
 
 <div
-  class="container"
+  class={container}
   on:mouseenter={handleMouseEnter}
   on:mouseleave={handleMouseLeave}
   on:mousedown={handleMouseDown}
 >
-  <div class="content">
-    <h3>
+  <div class={content}>
+    <h3 class={contentHeading}>
       <a
         aria-label={`Open ${postTitle} blog post`}
         aria-describedby={idString}
@@ -41,48 +42,10 @@
         href={`/${slug}/`}>{postTitle}</a
       >
     </h3>
-    <p>{dateString}</p>
-    <p>{seoMetaDescription}</p>
-    <span id={idString} aria-hidden="true">Read more {H_ELLIPSIS_ENTITY}</span>
+    <section class={contentBody}>
+      <p>{dateString}</p>
+      <p>{seoMetaDescription}</p>
+      <span id={idString} aria-hidden="true">Read more {H_ELLIPSIS_ENTITY}</span>
+    </section>
   </div>
 </div>
-
-<style lang="scss">
-  .container {
-    display: flex;
-    width: 100%;
-    margin: $spacing-12 $spacing-0;
-  }
-
-  .content {
-    width: 80%;
-    border: $spacing-px-2 solid $color-theme-2;
-    border-radius: $spacing-3;
-    margin: $spacing-0 auto;
-    padding: $spacing-4;
-
-    h3 {
-      margin: $spacing-0 $spacing-2;
-    }
-    p {
-      color: $color-theme-1;
-      font-size: $mobile-font-size-2;
-      margin: $spacing-2;
-    }
-  }
-
-  .content:focus,
-  .content:hover {
-    h3 {
-      color: $color-theme-2;
-    }
-    p {
-      color: $color-theme-3;
-    }
-    border-color: $color-theme-4;
-    background-color: $color-theme-4;
-    box-shadow: $spacing-0 $spacing-0 $spacing-1 $spacing-0
-      adjust-color($color-theme-4, $alpha: 0.2);
-    color: $color-accent;
-  }
-</style>

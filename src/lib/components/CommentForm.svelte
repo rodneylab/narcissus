@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import website from '$lib/config/website';
   import { browser } from '$app/env';
@@ -8,7 +8,7 @@
   const { hcaptchaSitekey, workerUrl } = website;
 
   let hcaptchaWidgetID;
-  let hcaptcha = { execute: async () => {}, render: () => {} };
+  let hcaptcha;
 
   const darkMode =
     browser && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
