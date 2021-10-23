@@ -6,7 +6,7 @@
   </svg>
 </span>
 
-<style>
+<style lang="scss">
   svg {
     width: 24px;
     height: 24px;
