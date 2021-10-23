@@ -25,6 +25,7 @@
   import Card from '$lib/components/Card.svelte';
   import SEO from '$lib/components/SEO/index.svelte';
   import website from '$lib/config/website';
+  import { subheading } from './index.css';
 
   export let posts;
 
@@ -85,7 +86,7 @@
 <SEO {...seoProps} />
 <header>
   <h1>Climate &mdash; Sveltekit Starter</h1>
-  <h2>SvelteKit MDsveX (Markdown for Svelte) Blog</h2>
+  <h2 class={subheading}>SvelteKit MDsveX (Markdown for Svelte) Blog</h2>
 </header>
 <Card>
   <h2><span>About me</span></h2>
@@ -96,9 +97,3 @@
   </p>
 </Card>
 <BlogRoll {posts} />
-
-<style lang="scss">
-  header > h2 {
-    font-size: $font-size-3;
-  }
-</style>

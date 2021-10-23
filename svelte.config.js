@@ -4,17 +4,11 @@ import 'dotenv/config';
 import { mdsvex } from 'mdsvex';
 import preprocess from 'svelte-preprocess';
 import { imagetools } from 'vite-imagetools';
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 
 const config = {
   extensions: ['.svelte', '.md', '.svelte.md'],
-  preprocess: [
-    mdsvex({ extensions: ['.svelte.md', '.md', '.svx'] }),
-    preprocess({
-      scss: {
-        prependData: "@import 'src/lib/styles/variables.scss';",
-      },
-    }),
-  ],
+  preprocess: [preprocess(), mdsvex({ extensions: ['.svelte.md', '.md', '.svx'] })],
   kit: {
     adapter: adapter(),
     files: {
@@ -26,7 +20,11 @@ const config = {
       define: {
         'process.env.VITE_BUILD_TIME': JSON.stringify(new Date().toISOString()),
       },
-      plugins: [imagetools({ force: true })],
+      plugins: [vanillaExtractPlugin(), imagetools({ force: true })],
+      ssr:
+        process.env.NODE_ENV === 'development'
+          ? {}
+          : { noExternal: ['@vanilla-extract/css', '@vanilla-extract/css/fileScope'] },
     },
   },
 };

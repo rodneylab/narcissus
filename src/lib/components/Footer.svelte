@@ -2,16 +2,19 @@
   import { COPYRIGHT_ENTITY } from '$lib/constants/entities';
   import ExternalLink from '$lib/components/ExternalLink.svelte';
   const { facebookPage, githubPage, linkedinProfile, tiktokUsername, twitterUsername } = website;
-  import FacebookIcon from '$lib/components/Icons/Facebook.svelte';
-  import GitHubIcon from '$lib/components/Icons/GitHub.svelte';
-  import LinkedinIcon from '$lib/components/Icons/LinkedIn.svelte';
   import RodneyLabCredit from '$lib/components/RodneyLabCredit.svelte';
   import TiktokIcon from '$lib/components/Icons/Tiktok.svelte';
-  import TwitterIcon from '$lib/components/Icons/Twitter.svelte';
   import website from '$lib/config/website';
+  import SocialIcons from '@rodneylab/svelte-social-icons';
+  import {
+    container,
+    footerIcons,
+    footerIconsList,
+    footerIconsListItem,
+  } from '$lib/components/Footer.css';
 </script>
 
-<footer class="footer-container">
+<footer class={container}>
   <div>
     Created by <a
       aria-label="Open the Rodney Lab site"
@@ -20,76 +23,41 @@
       rel="noopener noreferrer">Rodney Lab</a
     >. Copyright {COPYRIGHT_ENTITY} 2021.
   </div>
-  <nav class="footer-icons">
-    <ul>
-      <li class="hover-jump">
+  <nav class={footerIcons}>
+    <ul class={footerIconsList}>
+      <li class={footerIconsListItem}>
         <ExternalLink
           ariaLabel="Go to the Rodney Lab Tik Tok Page"
           href={`https://www.tiktok.com/${tiktokUsername}`}><TiktokIcon /></ExternalLink
         >
       </li>
-      <li class="hover-jump">
+      <li class={footerIconsListItem}>
         <ExternalLink ariaLabel="Go to the Rodney Lab Facebook Page" href={facebookPage}
-          ><FacebookIcon /></ExternalLink
+          ><SocialIcons network="facebook" fgColor="#1d3557" bgColor="transparent" /></ExternalLink
         >
       </li>
-      <li class="hover-jump">
+      <li class={footerIconsListItem}>
         <ExternalLink
           ariaLabel="Go to the Rodney Lab Twitter Page"
           href={`https://twitter.com/intent/user?screen_name=${twitterUsername}`}
-          ><TwitterIcon /></ExternalLink
+          ><SocialIcons network="twitter" fgColor="#1d3557" bgColor="transparent" /></ExternalLink
         >
       </li>
-      <li class="hover-jump">
+      <li class={footerIconsListItem}>
         <ExternalLink
           ariaLabel="Go to the Rodney Lab Linked In Page"
-          href={`https://uk.linkedin.com/in/${linkedinProfile}`}><LinkedinIcon /></ExternalLink
+          href={`https://uk.linkedin.com/in/${linkedinProfile}`}
+          ><SocialIcons network="linkedin" fgColor="#1d3557" bgColor="transparent" /></ExternalLink
         >
       </li>
-      <li class="hover-jump">
+      <li class={footerIconsListItem}>
         <ExternalLink
           ariaLabel="Go to the Rodney Lab Git Hub In Page"
-          href={`https://github.com/${githubPage}`}><GitHubIcon /></ExternalLink
+          href={`https://github.com/${githubPage}`}
+          ><SocialIcons network="github" fgColor="#1d3557" bgColor="transparent" /></ExternalLink
         >
       </li>
     </ul>
   </nav>
   <RodneyLabCredit />
 </footer>
-
-<style lang="scss">
-  .footer-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: $max-width-wrapper;
-    margin: $spacing-12 auto $spacing-0;
-    width: 100%;
-  }
-
-  .footer-icons {
-    display: flex;
-    list-style-type: none;
-
-    ul {
-      display: flex;
-      margin: $spacing-6 $spacing-0;
-
-      li {
-        display: flex;
-        margin: $spacing-0 $spacing-4 $spacing-0 $spacing-0;
-      }
-    }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .hover-jump {
-      transition: all 0.25s ease-in-out;
-    }
-  }
-
-  .hover-jump:focus,
-  .hover-jump:hover {
-    transform: translateY(-$spacing-2);
-  }
-</style>
