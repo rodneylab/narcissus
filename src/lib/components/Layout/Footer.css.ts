@@ -1,5 +1,5 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
-import { spacing0, spacing1, spacing12, spacing4, spacing6 } from '$lib/styles/vars/spacing.css';
+import { spacing0, spacing12, spacing4, spacing6 } from '$lib/styles/vars/spacing.css';
 import { maxWidthFull, maxWidthWrapper } from '$lib/styles/vars/widths.css';
 import { style } from '@vanilla-extract/css';
 

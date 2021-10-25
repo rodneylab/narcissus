@@ -11,7 +11,7 @@ export const container = style({
 export const content = style({
   width: '80%',
   border: [spacingPx2, 'solid', themeVars.colour.alternative],
-  backgroundColor: themeVars.colour.secondary,
+  // backgroundColor: themeVars.colour.secondary,
   borderRadius: [spacing3],
   margin: [spacing6, 'auto'],
   padding: [spacing4],

@@ -9,5 +9,7 @@ export const lightTheme = createTheme(themeVars, {
     background: '#f1faee',
     text: '#1d3557',
     textAlternative: '#815e5b',
+    accent: '#fff',
+    shadow: '#43363321',
   },
 });
