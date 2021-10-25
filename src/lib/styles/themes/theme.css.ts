@@ -7,5 +7,6 @@ export const [theme, themeVars] = createTheme({
     alternative: '#f00',
     background: '#f00',
     text: '#f00',
+    textAlternative: '#f00',
   },
 });

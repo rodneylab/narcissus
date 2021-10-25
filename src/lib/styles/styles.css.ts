@@ -1,6 +1,7 @@
 import '$lib/styles/vars/font.css';
 import { globalStyle, style } from '@vanilla-extract/css';
 import { insert } from 'svelte/internal';
+import { themeVars } from './themes/theme.css';
 import { spacing0, spacing12, spacing6, spacingPx } from './vars/spacing.css';
 
 globalStyle('nav :is(ul, ol)', {
@@ -22,6 +23,10 @@ globalStyle('hr', {
 
 globalStyle('html & :is (h1, h2, h3, h4, h5, h6, h7)', {
   margin: [spacing12, spacing0, spacing6],
+});
+
+globalStyle('a', {
+  color: themeVars.colour.alternative,
 });
 
 globalStyle('a:hover, a:focus', {

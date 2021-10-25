@@ -20,6 +20,10 @@ export const container = style({
   margin: [spacing0, 'auto', spacing12],
 });
 
+export const content = style({
+  flexDirection: 'column',
+});
+
 export const nav = style({
   display: 'flex',
   marginLeft: ['auto'],

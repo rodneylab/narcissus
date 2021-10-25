@@ -5,6 +5,7 @@
   import theme from '$lib/shared/stores/theme';
   import {
     container,
+    content,
     hoverJump,
     logo,
     nav,
@@ -33,14 +34,16 @@
       {/if}</button
     >
   </div>
-  <a aria-label="Jump to Home page" class={hoverJump} href="./"
-    ><span class={logo}><CameraIcon size="96" /></span></a
-  >
-  <!-- svelte-ignore component-name-lowercase -->
-  <nav class={nav}>
-    <ul class={navList}>
-      <li class={navListItem}><a href="/.">Home</a></li>
-      <li class={navListItem}><a href="/contact">Contact</a></li>
-    </ul>
-  </nav>
+  <div class={content}>
+    <a aria-label="Jump to Home page" class={hoverJump} href="./"
+      ><span class={logo}><CameraIcon size="96" /></span></a
+    >
+    <!-- svelte-ignore component-name-lowercase -->
+    <nav class={nav}>
+      <ul class={navList}>
+        <li class={navListItem}><a href="/.">Home</a></li>
+        <li class={navListItem}><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
 </header>

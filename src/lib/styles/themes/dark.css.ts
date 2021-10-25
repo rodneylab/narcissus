@@ -5,8 +5,9 @@ export const darkTheme = createTheme(themeVars, {
   colour: {
     primary: '#457b9d',
     secondary: '#a8dadc',
-    alternative: '#e63946',
+    alternative: '#a8dadc',
     background: '#1d3557',
-    text: '#f1faee',
+    text: '#fed766',
+    textAlternative: '#815e5b',
   },
 });
