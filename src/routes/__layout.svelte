@@ -44,12 +44,14 @@
   import BlogPost from '$lib/components/BlogPost.svelte';
   import CommentForm from '$lib/components/CommentForm.svelte';
   import Comments from '$lib/components/Comments.svelte';
-  import Footer from '$lib/components/Footer.svelte';
-  import Header from '$lib/components/Header.svelte';
+  import Footer from '$lib/components/Layout/Footer.svelte';
+  import Header from '$lib/components/Layout/Header.svelte';
   import PostViewsLikes from '$lib/components/PostViewsLikes.svelte';
   import PWA from '$lib/components/PWA.svelte';
+  import theme from '$lib/shared/stores/theme';
   import '$lib/styles/normalise.css';
   import '$lib/styles/styles.css';
+  import { darkTheme } from '$lib/styles/themes/dark.css';
   import { lightTheme } from '$lib/styles/themes/light.css';
   import '@fontsource/lato/400.css';
   import '@fontsource/lora/600.css';
@@ -67,10 +69,12 @@
   }
 
   $: isBlogPost = post != null;
+  $: lightThemeActive = $theme === 'light';
+  $: containerClass = `${container} ${lightThemeActive ? lightTheme : darkTheme}`;
 </script>
 
 <PWA />
-<div class={`${container} ${lightTheme}`}>
+<div class={containerClass}>
   <Header />
   <!-- svelte-ignore component-name-lowercase -->
   <main class={main}>

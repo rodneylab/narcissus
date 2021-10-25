@@ -2,7 +2,7 @@
   import { COPYRIGHT_ENTITY } from '$lib/constants/entities';
   import ExternalLink from '$lib/components/ExternalLink.svelte';
   const { facebookPage, githubPage, linkedinProfile, tiktokUsername, twitterUsername } = website;
-  import RodneyLabCredit from '$lib/components/RodneyLabCredit.svelte';
+  import RodneyLabCredit from '$lib/components/Layout/RodneyLabCredit.svelte';
   import TiktokIcon from '$lib/components/Icons/Tiktok.svelte';
   import website from '$lib/config/website';
   import SocialIcons from '@rodneylab/svelte-social-icons';
@@ -11,7 +11,7 @@
     footerIcons,
     footerIconsList,
     footerIconsListItem,
-  } from '$lib/components/Footer.css';
+  } from '$lib/components/Layout/Footer.css';
 </script>
 
 <footer class={container}>

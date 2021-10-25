@@ -1,11 +1,19 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
 import { fontSize4 } from '$lib/styles/vars/font.css';
-import { spacing0, spacing1, spacing12, spacing6 } from '$lib/styles/vars/spacing.css';
+import {
+  spacing0,
+  spacing1,
+  spacing12,
+  spacing2,
+  spacing3,
+  spacing6,
+} from '$lib/styles/vars/spacing.css';
 import { maxWidthFull, maxWidthWrapper } from '$lib/styles/vars/widths.css';
 import { style } from '@vanilla-extract/css';
 
 export const container = style({
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'flex-end',
   maxWidth: [maxWidthWrapper],
   width: [maxWidthFull],
@@ -49,4 +57,17 @@ export const hoverJump = style({
       transition: 'all 2s ease-in-out',
     },
   },
+});
+
+export const themeButtonContainer = style({
+  display: 'flex',
+  width: [maxWidthFull],
+});
+
+export const themeButton = style({
+  borderStyle: 'none',
+  backgroundColor: 'transparent',
+  color: themeVars.colour.text,
+  padding: [spacing3],
+  marginLeft: 'auto',
 });

@@ -1,7 +1,7 @@
 <script>
   import '@fontsource/lato/300.css';
   import '@fontsource/lato/400.css';
-  import { container, logo, rodneyLabText } from '$lib/components/RodneyLabCredit.css';
+  import { container, logo, rodneyLabText } from '$lib/components/Layout/RodneyLabCredit.css';
 </script>
 
 <div class={container}>

@@ -1,11 +1,12 @@
 import { createTheme } from '@vanilla-extract/css';
+import { themeVars } from './theme.css';
 
-export const [theme, themeVars] = createTheme({
+export const darkTheme = createTheme(themeVars, {
   colour: {
-    primary: '#f00',
-    secondary: '#f00',
-    alternative: '#f00',
-    background: '#f00',
-    text: '#f00',
+    primary: '#457b9d',
+    secondary: '#a8dadc',
+    alternative: '#e63946',
+    background: '#1d3557',
+    text: '#f1faee',
   },
 });
