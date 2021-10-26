@@ -5,7 +5,6 @@ import {
   spacing1,
   spacing12,
   spacing2,
-  spacing3,
   spacing4,
   spacingPx2,
 } from '$lib/styles/vars/spacing.css';
@@ -15,13 +14,12 @@ import { style } from '@vanilla-extract/css';
 export const container = style({
   display: 'flex',
   width: [maxWidthFull],
-  margin: [spacing12, spacing0],
+  marginTop: [spacing12],
 });
 
 export const content = style({
-  width: '80%',
   border: [spacingPx2],
-  borderRadius: [spacing3],
+  borderRadius: [spacing1],
   margin: [spacing0, 'auto'],
   padding: [spacing4],
 
@@ -29,16 +27,22 @@ export const content = style({
     ['&:hover, &:focus']: {
       borderColor: themeVars.colour.text,
       backgroundColor: themeVars.colour.text,
-      boxShadow: [spacing0, spacing0, spacing1, spacing0, themeVars.colour.primary],
-      color: themeVars.colour.background,
+      boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
     },
   },
 });
 
+export const contentHeadingContainer = style({
+  marginTop: [spacing0],
+});
+
 export const contentHeading = style({
-  margin: [spacing0, spacing2],
+  color: themeVars.colour.alternative,
   selectors: {
-    ['&:hover, &:focus']: {
+    [`${content} &`]: {
+      color: themeVars.colour.alternative,
+    },
+    [`${content}:hover &,${content}:focus & `]: {
       color: themeVars.colour.secondary,
     },
   },
@@ -49,7 +53,10 @@ export const contentBody = style({
   fontSize: fontSize2,
   margin: [spacing2],
   selectors: {
-    ['&:hover, &:focus']: {
+    [`${content} &`]: {
+      color: themeVars.colour.text,
+    },
+    [`${content}:hover &,${content}:focus & `]: {
       color: themeVars.colour.secondary,
     },
   },

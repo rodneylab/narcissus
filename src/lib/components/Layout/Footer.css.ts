@@ -1,5 +1,5 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
-import { spacing0, spacing12, spacing4, spacing6 } from '$lib/styles/vars/spacing.css';
+import { spacing0, spacing12, spacing24, spacing4, spacing6 } from '$lib/styles/vars/spacing.css';
 import { maxWidthFull, maxWidthWrapper } from '$lib/styles/vars/widths.css';
 import { style } from '@vanilla-extract/css';
 
@@ -9,7 +9,8 @@ export const container = style({
   alignItems: 'center',
   maxWidth: [maxWidthWrapper],
   width: [maxWidthFull],
-  margin: [spacing12, 'auto', spacing0],
+  // margin: [spacing12, 'auto', spacing0],
+  marginTop: [spacing24],
   padding: [spacing12, spacing0],
   backgroundColor: themeVars.colour.alternative,
   color: themeVars.colour.background,

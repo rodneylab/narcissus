@@ -2,7 +2,13 @@
   import dayjs from 'dayjs';
   import { H_ELLIPSIS_ENTITY } from '$lib/constants/entities';
   import { goto, prefetch } from '$app/navigation';
-  import { container, content, contentBody, contentHeading } from './BlogPostSummary.css';
+  import {
+    container,
+    content,
+    contentBody,
+    contentHeading,
+    contentHeadingContainer,
+  } from './BlogPostSummary.css';
 
   export let postTitle;
   export let datePublished;
@@ -34,10 +40,11 @@
   on:mousedown={handleMouseDown}
 >
   <div class={content}>
-    <h3 class={contentHeading}>
+    <h3 class={contentHeadingContainer}>
       <a
         aria-label={`Open ${postTitle} blog post`}
         aria-describedby={idString}
+        class={contentHeading}
         sveltekit:prefetch
         href={`/${slug}/`}>{postTitle}</a
       >
