@@ -3,7 +3,6 @@
   import ExternalLink from '$lib/components/ExternalLink.svelte';
   const { facebookPage, githubPage, linkedinProfile, tiktokUsername, twitterUsername } = website;
   import RodneyLabCredit from '$lib/components/Layout/RodneyLabCredit.svelte';
-  import TiktokIcon from '$lib/components/Icons/Tiktok.svelte';
   import website from '$lib/config/website';
   import SocialIcons from '@rodneylab/svelte-social-icons';
   import {
@@ -34,7 +33,8 @@
         <li class={footerIconsListItem}>
           <ExternalLink
             ariaLabel="Go to the Rodney Lab Tik Tok Page"
-            href={`https://www.tiktok.com/${tiktokUsername}`}><TiktokIcon /></ExternalLink
+            href={`https://www.tiktok.com/${tiktokUsername}`}
+            ><SocialIcons network="tiktok" fgColor="transparent" bgColor={fgColor} /></ExternalLink
           >
         </li>
         <li class={footerIconsListItem}>

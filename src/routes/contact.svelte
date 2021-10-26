@@ -1,7 +1,6 @@
 <script lang="ts">
   import Card from '$lib/components/Card.svelte';
   import ExternalLink from '$lib/components/ExternalLink.svelte';
-  import WireIcon from '$lib/components/Icons/Wire.svelte';
   import SocialIcons from '@rodneylab/svelte-social-icons';
   import website from '$lib/config/website';
   import {
@@ -10,16 +9,9 @@
     contactDetailsList,
     contactDetailsListItem,
   } from './contact.css';
-  const {
-    contactEmail,
-    facebookPageName,
-    telegramUsername,
-    twitterUserId,
-    twitterUsername,
-    wireUsername,
-  } = website;
+  const { contactEmail, facebookPageName, telegramUsername, twitterUserId, twitterUsername } =
+    website;
   import SEO from '$lib/components/SEO/index.svelte';
-  import { lightTheme } from '$lib/styles/themes/light.css';
 
   let title = 'Contact';
   let metadescription = 'Get in touch with Rodneylab, the developer of Climate SvelteKit Starter.';
@@ -100,10 +92,6 @@
         >
           <span class={contactAddress}>{telegramUsername}</span>
         </ExternalLink>
-      </li>
-      <li class={contactDetailsListItem}>
-        <WireIcon />
-        <span class={contactAddress}>{wireUsername}</span>
       </li>
     </ul>
   </div></Card
