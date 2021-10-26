@@ -8,7 +8,7 @@ export const container = style({
   flexWrap: 'wrap',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'sace-between',
+  justifyContent: 'space-between',
   padding: [spacing4, spacing4],
   minHeight: '100vh',
   backgroundColor: themeVars.colour.background,

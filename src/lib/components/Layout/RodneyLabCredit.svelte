@@ -1,7 +1,7 @@
 <script>
   import '@fontsource/lato/300.css';
   import '@fontsource/lato/400.css';
-  import { container, logo, rodneyLabText } from '$lib/components/Layout/RodneyLabCredit.css';
+  import { container, link, logo, rodneyLabText } from '$lib/components/Layout/RodneyLabCredit.css';
 </script>
 
 <div class={container}>
@@ -20,6 +20,7 @@
   >
   <a
     aria-label="Open the Rodney Lab site"
+    class={link}
     href="https://rodneylab.com/"
     target="_blank"
     rel="noopener noreferrer"><span class={rodneyLabText}>RODNEY LAB</span></a

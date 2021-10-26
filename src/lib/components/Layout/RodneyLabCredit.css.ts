@@ -5,7 +5,7 @@ import { style } from '@vanilla-extract/css';
 export const container = style({
   display: 'flex',
   alignItems: 'center',
-  // color: '#032539',
+  justifyContent: 'center',
   color: themeVars.colour.background,
   fontFamily: 'Lato',
 });
@@ -17,4 +17,12 @@ export const logo = style({
 
 export const rodneyLabText = style({
   fontWeight: 300,
+});
+
+export const link = style({
+  selectors: {
+    [`${container} &`]: {
+      color: themeVars.colour.background,
+    },
+  },
 });
