@@ -9,7 +9,8 @@ export const darkTheme = createTheme(themeVars, {
     background: '#1d3557',
     text: '#fed766',
     textAlternative: '#815e5b',
+    textSecondary: '#32021f',
     shadow: '#815e5b22',
-    accent: '#a8dadc',
+    accent: '#fed766',
   },
 });

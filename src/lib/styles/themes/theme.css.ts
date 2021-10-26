@@ -8,6 +8,7 @@ export const [theme, themeVars] = createTheme({
     background: '#f00',
     text: '#f00',
     textAlternative: '#f00',
+    textSecondary: '#f00',
     accent: '#f00',
     shadow: '#f00',
   },

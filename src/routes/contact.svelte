@@ -4,14 +4,18 @@
   import SocialIcons from '@rodneylab/svelte-social-icons';
   import website from '$lib/config/website';
   import {
+    cardContainer,
+    cardContent,
     contactAddress,
     contactDetails,
     contactDetailsList,
     contactDetailsListItem,
+    summaryText,
   } from './contact.css';
   const { contactEmail, facebookPageName, telegramUsername, twitterUserId, twitterUsername } =
     website;
   import SEO from '$lib/components/SEO/index.svelte';
+  import theme from '$lib/shared/stores/theme';
 
   let title = 'Contact';
   let metadescription = 'Get in touch with Rodneylab, the developer of Climate SvelteKit Starter.';
@@ -33,30 +37,27 @@
     datePublished: '2021-07-07T14:19:33.000+0100',
     lastUpdated: '2021-07-07T14:19:33.000+0100',
   };
+  $: fgColor = $theme === 'light' ? '#433633' : '#32021f';
+  const width = 36;
+  const height = 36;
 </script>
 
 <SEO {...seoProps} />
-<Card>
-  <h1>Contact me</h1>
-  <p>I would love to hear from you. Please get in touch!</p>
+<h1>Contact me</h1>
+<p class={summaryText}>I would love to hear from you. Please get in touch!</p>
+<Card containerClass={cardContainer} contentClass={cardContent}>
   <div class={contactDetails}>
     <ul class={contactDetailsList}>
       <li class={contactDetailsListItem}>
-        <SocialIcons
-          network="email"
-          width={24}
-          height={24}
-          fgColor="#1d3557"
-          bgColor="transparent"
-        />
+        <SocialIcons network="email" width={36} height={36} {fgColor} bgColor="transparent" />
         <span class={contactAddress}>{contactEmail}</span>
       </li>
       <li class={contactDetailsListItem}>
         <SocialIcons
           network="facebook"
-          width={24}
-          height={24}
-          fgColor="#1d3557"
+          {width}
+          {height}
+          {fgColor}
           bgColor="transparent"
         /><ExternalLink
           ariaLabel="D M Rodney Lab on Facebook Messenger"
@@ -68,9 +69,9 @@
       <li class={contactDetailsListItem}>
         <SocialIcons
           network="twitter"
-          width={24}
-          height={24}
-          fgColor="#1d3557"
+          {width}
+          {height}
+          {fgColor}
           bgColor="transparent"
         /><ExternalLink
           ariaLabel="D M Rodney Lab on Twitter"
@@ -82,9 +83,9 @@
       <li class={contactDetailsListItem}>
         <SocialIcons
           network="telegram"
-          width={24}
-          height={24}
-          fgColor="#1d3557"
+          {width}
+          {height}
+          {fgColor}
           bgColor="transparent"
         /><ExternalLink
           ariaLabel="Message Rodney Lab on Telegram"

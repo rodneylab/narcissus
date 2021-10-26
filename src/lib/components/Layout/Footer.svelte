@@ -8,6 +8,7 @@
   import {
     container,
     content,
+    copyrightText,
     footerIcons,
     footerIconsList,
     footerIconsListItem,
@@ -19,7 +20,7 @@
 
 <footer class={container}>
   <div class={content}>
-    <div>
+    <div class={copyrightText}>
       Created by <a
         aria-label="Open the Rodney Lab site"
         class={footerLink}

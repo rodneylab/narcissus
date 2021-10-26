@@ -1,7 +1,9 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
 import {
   spacing0,
+  spacing1,
   spacing12,
+  spacing2,
   spacing24,
   spacing4,
   spacing6,
@@ -27,6 +29,10 @@ export const content = style({
   maxWidth: [maxWidthWrapper],
 });
 
+export const copyrightText = style({
+  textAlign: 'center',
+});
+
 export const footerLink = style({
   selectors: {
     [`${content} &`]: {
@@ -47,7 +53,9 @@ export const footerIconsList = style({
 
 export const footerIconsListItem = style({
   display: 'flex',
-  margin: [spacing0, spacing4, spacing0, spacing0],
+  // margin: [spacing0, spacing4, spacing0, spacing0],
+  marginLeft: [spacing1],
+  marginRight: [spacing1],
   selectors: {
     ['&:hover, &:focus']: {
       transform: 'translateY(-0.5rem)',
