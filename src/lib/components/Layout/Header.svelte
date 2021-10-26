@@ -1,13 +1,10 @@
 <script>
-  import CameraIcon from '$lib/components/Icons/Camera.svelte';
   import SunIcon from '$lib/components/Icons/Sun.svelte';
   import MoonIcon from '$lib/components/Icons/Moon.svelte';
   import theme from '$lib/shared/stores/theme';
   import {
     container,
     content,
-    hoverJump,
-    logo,
     nav,
     navList,
     navListItem,
@@ -35,9 +32,6 @@
     >
   </div>
   <div class={content}>
-    <a aria-label="Jump to Home page" class={hoverJump} href="./"
-      ><span class={logo}><CameraIcon size="96" /></span></a
-    >
     <!-- svelte-ignore component-name-lowercase -->
     <nav class={nav}>
       <ul class={navList}>

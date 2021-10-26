@@ -25,7 +25,7 @@
   import Card from '$lib/components/Card.svelte';
   import SEO from '$lib/components/SEO/index.svelte';
   import website from '$lib/config/website';
-  import { subheading } from './index.css';
+  import { header } from './index.css';
 
   export let posts;
 
@@ -84,9 +84,9 @@
 </script>
 
 <SEO {...seoProps} />
-<header>
-  <h1>Climate &mdash; Sveltekit Starter</h1>
-  <h2 class={subheading}>SvelteKit MDsveX (Markdown for Svelte) Blog</h2>
+<!-- svelte-ignore component-name-lowercase -->
+<header class={header}>
+  <h1>Narcissus: API as a Service / Backendless Blog</h1>
 </header>
 <Card>
   <h2><span>About me</span></h2>

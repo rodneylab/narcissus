@@ -18,6 +18,7 @@
   "devDependencies": {
     "@fontsource/lato": "^4.5.0",
     "@fontsource/lora": "^4.5.0",
+    "@fontsource/slabo-13px": "^4.5.0",
     "@fontsource/slabo-27px": "^4.5.0",
     "@fontsource/source-sans-pro": "^4.5.0",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",

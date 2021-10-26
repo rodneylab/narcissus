@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@fontsource/lato': ^4.5.0
   '@fontsource/lora': ^4.5.0
+  '@fontsource/slabo-13px': ^4.5.0
   '@fontsource/slabo-27px': ^4.5.0
   '@fontsource/source-sans-pro': ^4.5.0
   '@fortawesome/free-regular-svg-icons': ^5.15.4
@@ -47,6 +48,7 @@ specifiers:
 devDependencies:
   '@fontsource/lato': 4.5.0
   '@fontsource/lora': 4.5.0
+  '@fontsource/slabo-13px': 4.5.0
   '@fontsource/slabo-27px': 4.5.0
   '@fontsource/source-sans-pro': 4.5.0
   '@fortawesome/free-regular-svg-icons': 5.15.4
@@ -138,6 +140,10 @@ packages:
 
   /@fontsource/lora/4.5.0:
     resolution: {integrity: sha512-4ThGnMFbktlQqsTW7kCdzT888esMFfnbHE9PJMQCtcP2JUIJXDQpxvmtlsio1AJBnvUxPxegAAp76Q8lm7t1VQ==}
+    dev: true
+
+  /@fontsource/slabo-13px/4.5.0:
+    resolution: {integrity: sha512-a5JnFJeMwuhWMTWfjxbeU8t3djDHqssfDFIfQCSjLwdm+qpOX1XyOCvlK2J0dWuMM7wTt+sQl8e+QkMsT0I6dg==}
     dev: true
 
   /@fontsource/slabo-27px/4.5.0:

@@ -41,7 +41,7 @@ globalFontFace('BodyFont', {
 });
 
 globalFontFace('HeadingFont', {
-  src: 'local("Slabo 27px")',
+  src: 'local("Slabo 13px")',
 });
 
 globalStyle('html, body', {
@@ -98,9 +98,10 @@ globalStyle('body', {
   textRendering: 'optimizeLegibility',
 });
 
-globalStyle('h1, h2,h3, h4,h5,h6,h7', {
+globalStyle('body, :is(h1, h2, h3, h4, h5, h6, h7)', {
   vars: {
-    [fontFamilyHeading]: 'HeadingFont',
+    [fontFamilyHeading]:
+      '"Slabo 27", "Noto Serif", Merriweather, Georgia, Cambria, "Times New Roman", Times, serif',
   },
   fontFamily: [fontFamilyHeading],
 });
@@ -116,6 +117,7 @@ globalStyle('h3, h4, h5, h6', {
 globalStyle('h1', {
   fontWeight: [fontWeightBlack],
   fontSize: [mobileFontSize6],
+  fontFamily: 'Slabo 13',
   '@media': {
     '(min-width: 768px)': {
       fontSize: [fontSize6],
