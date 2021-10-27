@@ -20,6 +20,14 @@ struct DataRequest {
     slug: String,
 }
 
+#[derive(Deserialize)]
+struct MessageRequest {
+    name: String,
+    text: String,
+    email: String,
+    response: String,
+}
+
 #[derive(Serialize)]
 struct DataResponse {
     comments: Vec<CommentRow>,
@@ -359,13 +367,6 @@ async fn comments(client: &Postgrest, post_id: &i32, limit: Option<u32>) -> Vec<
         Some(value) => value,
         None => default_limit,
     };
-    //     uid: String,
-    // created_at: String,
-    // updated_at: String,
-    // author: String,
-    // text: String,
-    // verified_author: String,
-    // path: String,
     let response = match client
         .from("Comment")
         .eq("post_id", post_id.to_string())
@@ -571,7 +572,7 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             };
             let post_id = match slug_exists_result {
                 Some(res) => res,
-                None => return Response::error("Bad request: slug", 400),
+                None => return Response::error("Bad request", 400),
             };
             let insert_query = format!(
                 r#"{{ "author": "{}", "text": "{}", "marked_bot": {}, "marked_spam": {}, "post_id": {} }}"#,
@@ -582,11 +583,11 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             };
             let body = match response.text().await {
                 Ok(value) => value,
-                Err(_) => return Response::error("Bad request: resp", 400),
+                Err(_) => return Response::error("Bad request", 400),
             };
             let _data: CommentRow = match serde_json::from_str(&body) {
                 Ok(value) => value,
-                Err(_) => return Response::error("Bad request: json", 400),
+                Err(_) => return Response::error("Bad request:", 400),
             };
             Response::ok("Thanks for your comment!")
         })
@@ -672,6 +673,67 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             Ok(Response::ok(serde_json::to_string(&data).unwrap())
                 .unwrap()
                 .with_headers(headers))
+        })
+        .options("/post/message", |req, ctx| {
+            preflight_response(req.headers(), &ctx.var("CORS_ORIGIN")?.to_string())
+        })
+        .post_async("/post/message", |mut req, ctx| async move {
+            let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
+            let api_key = ctx.var("SUPABASE_SERVICE_API_KEY")?.to_string();
+            let client = match get_supabase_client(&supabase_url, &api_key) {
+                Ok(res) => res,
+                Err(_) => return Response::error("Error creating PostgREST Supabase client", 400),
+            };
+            let data: MessageRequest;
+            match req.json().await {
+                Ok(res) => data = res,
+                Err(_) => return Response::error("Bad request", 400),
+            }
+            let name = &data.name;
+            let email = &data.email;
+            let response = &data.response;
+            let text = &data.text;
+            let hcaptcha_sitekey = ctx.var("HCAPTCHA_SITEKEY")?.to_string();
+            let hcaptcha_secretkey = ctx.var("HCAPTCHA_SECRETKEY")?.to_string();
+            if let Some(value) = author_valid(name) { return Response::error(value, 400)};
+            if let Some(value) = email_valid(email) { return Response::error(value, 400)};
+            if let Some(value) = comment_text_valid(text) { return Response::error(value, 400)};
+            let verify_captcha_future = verify_captcha(response, &hcaptcha_secretkey, &hcaptcha_sitekey);
+            let blog = ctx.var("SITE_URL")?.to_string();
+            let akismet_api_key = ctx.var("AKISMET_API_KEY")?.to_string();
+            let spam_check_future = spam_check(&blog, email, name, text, req.headers(),&akismet_api_key);
+            let (verify_captcha_result, spam_check_result) =
+                futures::join!(verify_captcha_future, spam_check_future);
+            let mut marked_bot = false;
+            match verify_captcha_result {
+                Some(value) => {
+                    if !value {
+                        marked_bot = true;
+                        console_log!("hCaptcha flags bot!");
+                    }
+                }
+                None => return Response::error("Bad request: captcha!", 400),
+            };
+            let marked_spam = match spam_check_result {
+                Some(value) => value,
+                None => return Response::error("Bad request: spam_check", 400),
+            };
+            let insert_query = format!(
+                r#"{{ "name": "{}", "text": "{}", "marked_bot": {}, "marked_spam": {} }}"#,
+                name, text, marked_bot, marked_spam);
+            let response = match client.from("Message").insert(insert_query).execute().await {
+                Ok(value) => value,
+                Err(_) => return Response::error("Error adding message", 400),
+            };
+            let body = match response.text().await {
+                Ok(value) => value,
+                Err(_) => return Response::error("Bad request", 400),
+            };
+            let _data: CommentRow = match serde_json::from_str(&body) {
+                Ok(value) => value,
+                Err(_) => return Response::error("Bad request", 400),
+            };
+            Response::ok("Thanks for your message!")
         })
         .options("/post/view", |req, ctx| {
             preflight_response(req.headers(), &ctx.var("CORS_ORIGIN")?.to_string())
