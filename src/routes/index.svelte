@@ -97,7 +97,8 @@
     as well as post
     <strong>views and likes</strong>. This proof of concept site is static and uses Serverless
     Cloudflare Workers to read and create commments as well as other interactive elements using REST
-    requests.
+    requests, adding spam detection and Captchas without the added hassle of adding spam detection
+    and Captchas.
   </p>
 </Card>
 <BlogRoll {posts} />

@@ -24,6 +24,21 @@ export const themeButton = style({
   color: themeVars.colour.text,
   padding: [spacing3],
   marginLeft: 'auto',
+  selectors: {
+    ['&:hover, &:focus']: {
+      color: themeVars.colour.text,
+      backgroundColor: 'transparent',
+      transform: 'translateY(-0.5rem)',
+    },
+  },
+  '@media': {
+    '(prefers-reduced-motion: no-preference)': {
+      transition: 'all 0.25s ease-in-out',
+    },
+    '(prefers-reduced-motion: reduce)': {
+      transition: 'all 2s ease-in-out',
+    },
+  },
 });
 
 export const content = style({

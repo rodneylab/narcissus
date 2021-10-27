@@ -11,5 +11,7 @@ export const [theme, themeVars] = createTheme({
     textSecondary: '#f00',
     accent: '#f00',
     shadow: '#f00',
+    buttonText: '#f00',
+    buttonBackground: '#f00',
   },
 });

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { browser } from '$app/env';
   import Card from '$lib/components/Card.svelte';
-  import { container, content, formLink, heading } from '$lib/components/MessageForm.css';
+  import { button, container, content, formLink, heading } from '$lib/components/MessageForm.css';
   import website from '$lib/config/website';
   import { validEmail } from '$lib/utilities/form';
   import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
@@ -144,7 +144,8 @@
         in our database.
       </small>
       <div>
-        <button type="submit" disabled={submitting}>Submit your message</button>
+        <!-- svelte-ignore component-name-lowercase -->
+        <button type="submit" class={button} disabled={submitting}>Send your message</button>
       </div>
       <div
         id="hcaptcha"

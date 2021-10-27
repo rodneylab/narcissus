@@ -22,7 +22,6 @@ export const content = style({
   borderRadius: [spacing1],
   margin: [spacing0, 'auto'],
   padding: [spacing4],
-
   selectors: {
     ['&:hover, &:focus']: {
       borderColor: themeVars.colour.text,

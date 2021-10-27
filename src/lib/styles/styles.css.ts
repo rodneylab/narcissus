@@ -64,10 +64,10 @@ globalStyle('button', {
   padding: [spacing2, spacing4],
   fontSize: [fontSize2],
   fontWeight: [fontWeightBlack],
-  backgroundColor: themeVars.colour.background,
+  backgroundColor: themeVars.colour.buttonBackground,
   borderStyle: 'solid',
   borderColor: themeVars.colour.secondary,
-  color: themeVars.colour.alternative,
+  color: themeVars.colour.buttonText,
   '@media': {
     '(prefers-reduced-motion: no-preference)': {
       transition: 'color 0.25s',
@@ -79,8 +79,8 @@ globalStyle('button', {
 });
 
 globalStyle('button:focus, button:hover', {
-  backgroundColor: themeVars.colour.secondary,
-  color: themeVars.colour.accent,
+  backgroundColor: themeVars.colour.buttonText,
+  color: themeVars.colour.buttonBackground,
 });
 
 globalStyle('input, textarea', {
