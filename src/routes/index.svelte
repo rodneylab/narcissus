@@ -25,7 +25,7 @@
   import Card from '$lib/components/Card.svelte';
   import SEO from '$lib/components/SEO/index.svelte';
   import website from '$lib/config/website';
-  import { header } from './index.css';
+  import { cardContainer, cardContent, header, summaryHeading, summaryText } from './index.css';
 
   export let posts;
 
@@ -88,12 +88,16 @@
 <header class={header}>
   <h1>Narcissus: API as a Service / Backendless Blog</h1>
 </header>
-<Card>
-  <h2><span>About me</span></h2>
-  <p>
-    I live and breathe analogue photography. I show you my favourite analogue film cameras on this
-    site. Hopefully if you are not into analogue photography yet, some of my enthusiasm will rub off
-    onto you.
+<Card containerClass={cardContainer} contentClass={cardContent}>
+  <h2 class={summaryHeading}><span>About Narcissus</span></h2>
+  <p class={summaryText}>
+    Narcissus is a proof of concept <strong>backend as a service</strong> app which lets you create
+    a blog site quicker by managing important blog features like
+    <strong>comment and message forms</strong>
+    as well as post
+    <strong>views and likes</strong>. This proof of concept site is static and uses Serverless
+    Cloudflare Workers to read and create commments as well as other interactive elements using REST
+    requests.
   </p>
 </Card>
 <BlogRoll {posts} />
