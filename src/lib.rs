@@ -719,19 +719,15 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 None => return Response::error("Bad request: spam_check", 400),
             };
             let insert_query = format!(
-                r#"{{ "name": "{}", "text": "{}", "marked_bot": {}, "marked_spam": {} }}"#,
-                name, text, marked_bot, marked_spam);
+                r#"{{ "name": "{}", "email": "{}", "message": "{}", "marked_bot": {}, "marked_spam": {} }}"#,
+                name, email, text, marked_bot, marked_spam);
             let response = match client.from("Message").insert(insert_query).execute().await {
                 Ok(value) => value,
                 Err(_) => return Response::error("Error adding message", 400),
             };
-            let body = match response.text().await {
+            match response.text().await {
                 Ok(value) => value,
-                Err(_) => return Response::error("Bad request", 400),
-            };
-            let _data: CommentRow = match serde_json::from_str(&body) {
-                Ok(value) => value,
-                Err(_) => return Response::error("Bad request", 400),
+                Err(_) => return Response::error("Bad request: message", 400),
             };
             Response::ok("Thanks for your message!")
         })
