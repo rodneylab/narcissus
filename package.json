@@ -44,7 +44,7 @@
     "prettier-plugin-svelte": "^2.4.0",
     "reading-time": "1.4.0",
     "sharp": "^0.29.2",
-    "stylelint": "^14.0.0",
+    "stylelint": "^14.0.1",
     "stylelint-a11y": "^1.2.3",
     "stylelint-config-recommended-scss": "^5.0.0",
     "stylelint-config-standard": "^23.0.0",
