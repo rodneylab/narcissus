@@ -10,12 +10,14 @@
     contactDetails,
     contactDetailsList,
     contactDetailsListItem,
+    formLink,
     summaryText,
   } from './contact.css';
   const { contactEmail, facebookPageName, telegramUsername, twitterUserId, twitterUsername } =
     website;
   import SEO from '$lib/components/SEO/index.svelte';
   import theme from '$lib/shared/stores/theme';
+  import MessageForm from '$lib/components/MessageForm.svelte';
 
   let title = 'Contact';
   let metadescription = 'Get in touch with Rodneylab, the developer of Climate SvelteKit Starter.';
@@ -97,3 +99,4 @@
     </ul>
   </div></Card
 >
+<MessageForm />
