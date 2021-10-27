@@ -41,13 +41,13 @@ globalFontFace('BodyFont', {
 });
 
 globalFontFace('HeadingFont', {
-  src: 'local("Slabo 13px")',
+  src: 'local("Slabo 27px")',
 });
 
 globalStyle('html, body', {
   vars: {
-    [fontFamilyBody]: 'BodyFont',
-
+    [fontFamilyBody]:
+      "'BodyFont', 'Open Sans', 'Montserrat', system-ui, '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', sans-serif,",
     [fontWeightLight]: '300',
     [fontWeightNormal]: '400',
     [fontWeightMedium]: '500',
@@ -92,17 +92,15 @@ globalStyle('html', {
 globalStyle('body', {
   vars: {
     [fontFamilyBody]: 'BodyFont',
+    [fontFamilyHeading]:
+      '"Slabo 27px", "Roboto Slab", "Noto Serif", Merriweather, Georgia, Cambria, "Times New Roman", Times, serif',
   },
   fontFamily: [fontFamilyBody],
   fontSize: [fontSize1],
   textRendering: 'optimizeLegibility',
 });
 
-globalStyle('body, :is(h1, h2, h3, h4, h5, h6, h7)', {
-  vars: {
-    [fontFamilyHeading]:
-      '"Slabo 27", "Noto Serif", Merriweather, Georgia, Cambria, "Times New Roman", Times, serif',
-  },
+globalStyle('h1, h2, h3, h4, h5, h6, h7', {
   fontFamily: [fontFamilyHeading],
 });
 

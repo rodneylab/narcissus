@@ -57,7 +57,11 @@
   import '@fontsource/lora/600.css';
   import '@fontsource/lora/700-italic.css';
   import '@fontsource/lora/700.css';
-  import '@fontsource/slabo-27px';
+  import '@fontsource/roboto-slab/400.css';
+  import '@fontsource/roboto-slab/700.css';
+  import '@fontsource/roboto-slab/900.css';
+  import '@fontsource/slabo-13px/400.css';
+  import '@fontsource/slabo-27px/400.css';
   import '@fontsource/source-sans-pro/400-italic.css';
   import lazyload from 'vanilla-lazyload';
   import { container, main } from './layout.css';

@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@fontsource/lato': ^4.5.0
   '@fontsource/lora': ^4.5.0
+  '@fontsource/roboto-slab': ^4.5.1
   '@fontsource/slabo-13px': ^4.5.0
   '@fontsource/slabo-27px': ^4.5.0
   '@fontsource/source-sans-pro': ^4.5.0
@@ -48,6 +49,7 @@ specifiers:
 devDependencies:
   '@fontsource/lato': 4.5.0
   '@fontsource/lora': 4.5.0
+  '@fontsource/roboto-slab': 4.5.1
   '@fontsource/slabo-13px': 4.5.0
   '@fontsource/slabo-27px': 4.5.0
   '@fontsource/source-sans-pro': 4.5.0
@@ -140,6 +142,10 @@ packages:
 
   /@fontsource/lora/4.5.0:
     resolution: {integrity: sha512-4ThGnMFbktlQqsTW7kCdzT888esMFfnbHE9PJMQCtcP2JUIJXDQpxvmtlsio1AJBnvUxPxegAAp76Q8lm7t1VQ==}
+    dev: true
+
+  /@fontsource/roboto-slab/4.5.1:
+    resolution: {integrity: sha512-SE7R7QZNtzGfJbh8xdA8JDsTOQKJyY5EcndDssOw5tmnoxac/N2TSQSGv8GXMexhV90pQe+OoHTBVDVycdTlLg==}
     dev: true
 
   /@fontsource/slabo-13px/4.5.0:

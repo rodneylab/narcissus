@@ -8,6 +8,7 @@
     contentBody,
     contentHeading,
     contentHeadingContainer,
+    dateText,
   } from './BlogPostSummary.css';
 
   export let postTitle;
@@ -50,7 +51,7 @@
       >
     </h3>
     <section class={contentBody}>
-      <p>{dateString}</p>
+      <p class={dateText}>{dateString}</p>
       <p>{seoMetaDescription}</p>
       <span id={idString} aria-hidden="true">Read more {H_ELLIPSIS_ENTITY}</span>
     </section>
