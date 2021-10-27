@@ -1,7 +1,24 @@
 import '$lib/styles/vars/font.css';
+import {
+  fontSize2,
+  fontSize3,
+  fontWeightBlack,
+  fontWeightBold,
+  lineHeightNormal,
+  lineHeightRelaxed,
+} from '$lib/styles/vars/font.css';
 import { globalStyle, style } from '@vanilla-extract/css';
 import { themeVars } from './themes/theme.css';
-import { spacing0, spacing12, spacing6, spacing8, spacingPx } from './vars/spacing.css';
+import {
+  spacing0,
+  spacing1,
+  spacing12,
+  spacing2,
+  spacing4,
+  spacing6,
+  spacing8,
+  spacingPx,
+} from './vars/spacing.css';
 
 globalStyle('nav :is(ul, ol)', {
   listStyleType: 'none',
@@ -43,6 +60,43 @@ globalStyle('a:hover, a:focus', {
 
 globalStyle('button', {
   cursor: 'pointer',
+  borderRadius: [spacing6],
+  padding: [spacing2, spacing4],
+  fontSize: [fontSize2],
+  fontWeight: [fontWeightBlack],
+  backgroundColor: themeVars.colour.background,
+  borderStyle: 'solid',
+  borderColor: themeVars.colour.secondary,
+  color: themeVars.colour.alternative,
+  '@media': {
+    '(prefers-reduced-motion: no-preference)': {
+      transition: 'color 0.25s',
+    },
+    '(prefers-reduced-motion: reduce)': {
+      transition: 'color 2s',
+    },
+  },
+});
+
+globalStyle('button:focus, button:hover', {
+  backgroundColor: themeVars.colour.secondary,
+  color: themeVars.colour.accent,
+});
+
+globalStyle('input, textarea', {
+  borderStyle: 'solid',
+  borderWidth: [spacingPx],
+  borderColor: themeVars.colour.textSecondary,
+  background: themeVars.colour.background,
+  borderRadius: [spacing1],
+  lineHeight: [lineHeightNormal],
+  padding: [spacing0, spacing2],
+  color: themeVars.colour.text,
+});
+
+globalStyle(':is(input, textarea)::placeholder', {
+  color: themeVars.colour.text,
+  opacity: 0.8,
 });
 
 export const screenReaderText = style({

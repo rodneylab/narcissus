@@ -1,5 +1,5 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
-import { fontSize2, fontSize3 } from '$lib/styles/vars/font.css';
+import { fontSize3 } from '$lib/styles/vars/font.css';
 import { spacing12, spacingPx } from '$lib/styles/vars/spacing.css';
 import { style } from '@vanilla-extract/css';
 

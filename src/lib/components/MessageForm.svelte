@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
-  import website from '$lib/config/website';
   import { browser } from '$app/env';
   import Card from '$lib/components/Card.svelte';
   import { container, content, formLink, heading } from '$lib/components/MessageForm.css';
-  import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
+  import website from '$lib/config/website';
   import { validEmail } from '$lib/utilities/form';
+  import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
+  import { onDestroy, onMount } from 'svelte';
 
   const { hcaptchaSitekey, workerUrl } = website;
 
@@ -47,7 +47,7 @@
   }
 
   $: submitting = false;
-  $: successfulCommentSubmission = false;
+  $: successfulMessageSubmission = false;
 
   async function handleSubmit() {
     try {
@@ -57,14 +57,14 @@
         const { response } = await hcaptcha.execute(hcaptchaWidgetID, {
           async: true,
         });
-        const responsePromise = fetch(`${workerUrl}/post/comment`, {
+        const responsePromise = fetch(`${workerUrl}/post/message`, {
           method: 'POST',
           credentials: 'omit',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            author: name,
+            name,
             text: message,
             email,
             response,
@@ -72,10 +72,10 @@
         });
         await responsePromise;
         submitting = false;
-        successfulCommentSubmission = true;
+        successfulMessageSubmission = true;
       }
     } catch (error) {
-      console.error(`Error in CommentForm, handleSubmit: ${error}`);
+      console.error(`Error in MessageForm, handleSubmit: ${error}`);
     }
   }
 </script>
@@ -86,7 +86,7 @@
 
 <Card containerClass={container} contentClass={content}>
   <h2 class={heading}>Drop me a message</h2>
-  {#if successfulCommentSubmission}
+  {#if successfulMessageSubmission}
     <div>Thanks for your message. I normally respond within one working day.</div>
   {:else}
     <form on:submit|preventDefault={handleSubmit}>
@@ -99,7 +99,7 @@
         on:update={(event) => {
           name = event.detail;
         }}
-        style="padding-bottom:1rem"
+        style="padding-bottom:1.25rem"
       />
       <EmailInputField
         value={email}
@@ -110,7 +110,7 @@
         on:update={(event) => {
           email = event.detail;
         }}
-        style="padding-bottom:1rem"
+        style="padding-bottom:1.25rem"
       />
       <TextArea
         value={message}
@@ -121,7 +121,7 @@
         on:update={(event) => {
           message = event.detail;
         }}
-        style="padding-bottom:1rem"
+        style="padding-bottom:1.25rem"
       />
       <small>
         This site uses Akismet to reduce spam.{' '}
