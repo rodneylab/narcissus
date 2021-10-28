@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
-import website from './src/lib/config/website.js';
+import website from './dist/src/lib/config/website.js';
 
 const __dirname = path.resolve();
 const iconsDirectory = path.join(__dirname, 'static/icons');
