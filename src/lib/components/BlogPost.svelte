@@ -2,6 +2,7 @@
   import readingTime from 'reading-time';
   import BannerImage from '$lib/components/BannerImage.svelte';
   import SEO from '$lib/components/SEO/index.svelte';
+  import PostViewsLikes from '$lib/components/PostViewsLikes.svelte';
 
   export let imageData;
   export let post;
@@ -71,3 +72,9 @@
 
 <BannerImage {imageData} />
 <h1>{title}</h1>
+<PostViewsLikes
+  likes={post.likes}
+  views={post.views}
+  slug={post.slug}
+  comments={post.comments.length}
+/>

@@ -19,21 +19,23 @@
   dayjs.locale('en-gb');
 </script>
 
-<section>
-  <h2>Visitor Comments</h2>
-  <ul>
-    {#each comments as { created_at: date, author, text }}
-      <li class={commentListItem}>
-        <Card containerClass={commentContainer} contentClass={commentContent}>
-          <h3 class={authorText}>{author}</h3>
-          <p>{text}</p>
-          <div>
-            <small class={dateText}>
-              {dayjs(date).fromNow()}
-            </small>
-          </div>
-        </Card>
-      </li>
-    {/each}
-  </ul>
-</section>
+{#if comments.length > 0}
+  <section>
+    <h2 id="comments">Visitor Comments</h2>
+    <ul>
+      {#each comments as { created_at: date, author, text }}
+        <li class={commentListItem}>
+          <Card containerClass={commentContainer} contentClass={commentContent}>
+            <h3 class={authorText}>{author}</h3>
+            <p>{text}</p>
+            <div>
+              <small class={dateText}>
+                {dayjs(date).fromNow()}
+              </small>
+            </div>
+          </Card>
+        </li>
+      {/each}
+    </ul>
+  </section>
+{/if}

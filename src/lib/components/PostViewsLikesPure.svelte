@@ -1,22 +1,35 @@
-<script>
+<script lang="ts">
   import ViewsIcon from '$lib/components/Icons/View.svelte';
   import LikedIcon from '$lib/components/Icons/HeartSolid.svelte';
+  import CommentIcon from '$lib/components/Icons/Comment.svelte';
   import NotYetLikedIcon from '$lib/components/Icons/HeartOutline.svelte';
   import { postLikedViewed } from '$lib/shared/stores/postLikedViewed';
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/env';
   import website from '$lib/config/website';
+  import {
+    container,
+    content,
+    icon,
+    likeButton,
+    link,
+    meta,
+  } from '$lib/components/PostViewsLikesPure.css';
+  import Card from './Card.svelte';
 
-  export let likes;
-  export let slug;
-  export let views;
+  export let likes: number;
+  export let slug: string;
+  export let views: number;
+  export let comments: number;
 
   const { workerUrl } = website;
 
   $: freshLikeCount = null;
   $: freshViewCount = null;
+  $: freshCommentCount = null;
   $: displayLikes = freshLikeCount ?? likes;
   $: displayViews = freshViewCount ?? views;
+  $: displayComments = freshCommentCount ?? comments;
 
   let observer;
 
@@ -130,12 +143,28 @@
   $: likeButtonLabel = !liked ? 'Like this blog post' : 'Unlike this blog post';
 </script>
 
-<ViewsIcon />{displayViews}
-<button aria-label={likeButtonLabel} type="button" on:click={handleLike}>
-  {#if liked}
-    <LikedIcon />
-  {:else}
-    <NotYetLikedIcon />
-  {/if}
-</button>
-{displayLikes}
+<aside class={container}>
+  <div class={content}>
+    <span class={meta}><span class={icon}><ViewsIcon /></span>{displayViews}</span>
+    <span class={meta}
+      ><span class={icon}>
+        <button aria-label={likeButtonLabel} type="button" class={likeButton} on:click={handleLike}>
+          {#if liked}
+            <LikedIcon />
+          {:else}
+            <NotYetLikedIcon />
+          {/if}
+        </button></span
+      >
+      {displayLikes}</span
+    >
+    {#if displayComments > 0}
+      <span class={meta}
+        ><a aria-label="Jump to comments" class={link} href="#comments"
+          ><span class={icon}><CommentIcon /></span>
+          {displayComments}</a
+        ></span
+      >
+    {/if}
+  </div>
+</aside>

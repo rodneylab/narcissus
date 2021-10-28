@@ -83,9 +83,20 @@
   <!-- svelte-ignore component-name-lowercase -->
   <main class={main}>
     {#if isBlogPost}
-      <BlogPost {post} {imageData} />
+      <BlogPost
+        {post}
+        {imageData}
+        likes={post.likes}
+        views={post.views}
+        comments={post.comments.length}
+      />
       <slot />
-      <PostViewsLikes likes={post.likes} views={post.views} slug={post.slug} />
+      <PostViewsLikes
+        likes={post.likes}
+        views={post.views}
+        slug={post.slug}
+        comments={post.comments.length}
+      />
       <CommentForm slug={post.slug} />
       <Comments comments={post.comments} />
     {:else}

@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
   import website from '$lib/config/website';
   import PostViewsLikesPure from '$lib/components/PostViewsLikesPure.svelte';
 
-  export let likes;
-  export let views;
-  export let slug;
+  export let likes: number;
+  export let views: number;
+  export let slug: string;
+  export let comments: number;
 
   const { workerUrl } = website;
 
@@ -31,9 +32,14 @@
 </script>
 
 {#await likesPromise}
-  <PostViewsLikesPure {slug} {likes} {views} />
+  <PostViewsLikesPure {slug} {likes} {views} {comments} />
 {:then data}
-  <PostViewsLikesPure {slug} likes={data?.likes ?? likes} views={data?.views ?? views} />
+  <PostViewsLikesPure
+    {slug}
+    likes={data?.likes ?? likes}
+    views={data?.views ?? views}
+    comments={data?.comments.length ?? comments}
+  />
 {:catch}
-  <PostViewsLikesPure {slug} {likes} {views} />
+  <PostViewsLikesPure {slug} {likes} {views} {comments} />
 {/await}
