@@ -1,7 +1,6 @@
 <script>
-  import { DEFAULT_ICON_SIZE } from './index.js';
-  import Moon from 'svelte-feather-icons/src/icons/MoonIcon.svelte';
-  export let size = DEFAULT_ICON_SIZE;
+  import Icon from 'svelte-awesome/components/Icon.svelte';
+  import { faMoon } from '@fortawesome/free-regular-svg-icons';
 </script>
 
-<Moon {size} />
+<Icon data={faMoon} />

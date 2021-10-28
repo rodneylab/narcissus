@@ -1,7 +1,6 @@
 <script>
-  import { DEFAULT_ICON_SIZE } from './index.js';
-  import MailIcon from 'svelte-feather-icons/src/icons/MailIcon.svelte';
-  export let size = DEFAULT_ICON_SIZE;
+  import Icon from 'svelte-awesome/components/Icon.svelte';
+  import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 </script>
 
-<MailIcon {size} />
+<Icon data={faEnvelope} />

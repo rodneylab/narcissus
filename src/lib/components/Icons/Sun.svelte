@@ -1,7 +1,6 @@
 <script>
-  import { DEFAULT_ICON_SIZE } from './index.js';
-  import Sun from 'svelte-feather-icons/src/icons/SunIcon.svelte';
-  export let size = DEFAULT_ICON_SIZE;
+  import Icon from 'svelte-awesome/components/Icon.svelte';
+  import { faSun } from '@fortawesome/free-solid-svg-icons';
 </script>
 
-<Sun {size} />
+<Icon data={faSun} />
