@@ -159,9 +159,22 @@
           browser user agent
         </a>{' '}
         to Akismet for spam detection. Neither your IP address nor user agent is stored in our database.
-        This site is protected by <a href="https://www.hCaptcha.com">hCaptcha</a> and its
-        <a href="https://www.hcaptcha.com/privacy">Privacy Policy</a> and
-        <a href="https://www.hcaptcha.com/terms">Terms of Service</a> apply.
+        This site is protected by
+        <a aria-label="Learn more about h Captcha" class={formLink} href="https://www.hCaptcha.com"
+          >hCaptcha</a
+        >
+        and its
+        <a
+          aria-label="View h Captcha privacy policy"
+          class={formLink}
+          href="https://www.hcaptcha.com/privacy">Privacy Policy</a
+        >
+        and
+        <a
+          aria-label="View h Captcha terms of service"
+          class={formLink}
+          href="https://www.hcaptcha.com/terms">Terms of Service</a
+        > apply.
       </small>
       <div class={buttonContainer}>
         <!-- svelte-ignore component-name-lowercase -->

@@ -86,10 +86,6 @@
       <BlogPost {post} {imageData} />
       <slot />
       <PostViewsLikes likes={post.likes} views={post.views} slug={post.slug} />
-      <div>
-        <a href="https://hcaptcha.com/privacy">Privacy Policy</a> and
-        <a href="https://hcaptcha.com/terms">Terms of Service</a> apply.
-      </div>
       <CommentForm slug={post.slug} />
       <Comments comments={post.comments} />
     {:else}
