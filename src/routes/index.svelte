@@ -25,7 +25,14 @@
   import Card from '$lib/components/Card.svelte';
   import SEO from '$lib/components/SEO/index.svelte';
   import website from '$lib/config/website';
-  import { cardContainer, cardContent, header, summaryHeading, summaryText } from './index.css';
+  import {
+    cardContainer,
+    cardContent,
+    extraSummaryText,
+    header,
+    summaryHeading,
+    summaryText,
+  } from './index.css';
 
   export let posts;
 
@@ -95,10 +102,14 @@
     a blog site quicker by managing important blog features like
     <strong>comment and message forms</strong>
     as well as post
-    <strong>views and likes</strong>. This proof of concept site is static and uses Serverless
-    Cloudflare Workers to read and create commments as well as other interactive elements using REST
-    requests, adding spam detection and Captchas without the added hassle of adding spam detection
-    and Captchas.
+    <strong>views and likes</strong>.
+  </p>
+  <p class={extraSummaryText}>
+    This demo <strong>Svelte</strong> site is static and uses Serverless
+    <strong>Rust Cloudflare Workers</strong>
+    to read and create commments as well as other interactive elements using REST requests, adding spam
+    detection and Captchas without the added hassle of adding spam detection and Captchas. The app is
+    backed by a <strong>Supabase</strong> PostgreSQL database.
   </p>
 </Card>
 <BlogRoll {posts} />

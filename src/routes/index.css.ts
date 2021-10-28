@@ -36,3 +36,7 @@ export const summaryText = style({
   fontSize: [fontSize2],
   color: themeVars.colour.textSecondary,
 });
+
+export const extraSummaryText = style({
+  color: themeVars.colour.textSecondary,
+});
