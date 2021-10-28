@@ -8,6 +8,7 @@
   export let comments: number;
   export let containerClass: string = undefined;
   export let contentClass: string = undefined;
+  export let interactive: boolean = true;
 
   const { workerUrl } = website;
 
@@ -43,6 +44,7 @@
     likes={data?.likes ?? likes}
     views={data?.views ?? views}
     comments={data?.comments.length ?? comments}
+    {interactive}
   />
 {:catch}
   <PostViewsLikesPure {containerClass} {contentClass} {slug} {likes} {views} {comments} />

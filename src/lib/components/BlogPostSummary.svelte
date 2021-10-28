@@ -67,6 +67,7 @@
           {views}
           {comments}
           {slug}
+          interactive={false}
         />
       </div>
       <p>{seoMetaDescription}</p>

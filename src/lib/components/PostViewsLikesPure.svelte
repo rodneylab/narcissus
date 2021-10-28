@@ -22,6 +22,7 @@
   export let comments: number;
   export let containerClass: string = undefined;
   export let contentClass: string = undefined;
+  export let interactive: boolean = true;
 
   const { workerUrl } = website;
 
@@ -36,7 +37,7 @@
   let observer: IntersectionObserver;
 
   onMount(() => {
-    if (browser) {
+    if (browser && interactive) {
       const handleIntersect = (
         entries: IntersectionObserverEntry[],
         observer: IntersectionObserver,
@@ -155,25 +156,31 @@
     <span class={meta}><span class={icon}><ViewsIcon /></span>{displayViews}</span>
     <span class={meta}
       ><span class={icon}>
-        <button
-          aria-label={likeButtonLabel}
-          type="button"
-          class={likeButton}
-          on:click={handleLike}
-          on:mouseenter={() => {
-            likeButtonHover = true;
-          }}
-          on:mouseleave={() => {
-            likeButtonHover = false;
-          }}
-        >
-          {#if liked || likeButtonHover}
-            <LikedIcon />
-          {:else}
-            <NotYetLikedIcon />
-          {/if}
-        </button></span
-      >
+        {#if interactive}
+          <button
+            aria-label={likeButtonLabel}
+            type="button"
+            class={likeButton}
+            on:click={handleLike}
+            on:mouseenter={() => {
+              likeButtonHover = true;
+            }}
+            on:mouseleave={() => {
+              likeButtonHover = false;
+            }}
+          >
+            {#if liked || likeButtonHover}
+              <LikedIcon />
+            {:else}
+              <NotYetLikedIcon />
+            {/if}
+          </button>
+        {:else if liked}
+          <LikedIcon />
+        {:else}
+          <NotYetLikedIcon />
+        {/if}
+      </span>
       {displayLikes}</span
     >
     {#if displayComments > 0}
