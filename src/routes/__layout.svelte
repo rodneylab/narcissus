@@ -78,7 +78,17 @@
     comments: { created_at: string; author: string; text: string }[];
     slug: string;
   };
-  export let imageData;
+  export let imageData: {
+    ogImage: string;
+    ogSquareImage: string;
+    src: string;
+    twitterImage: string;
+    alt: string;
+    width: number;
+    height: number;
+    sources: { srcset: string; type: string }[];
+    placeholder: string;
+  };
 
   if (browser && !document.lazyloadInstance) {
     document.lazyloadInstance = new lazyload();
@@ -95,13 +105,7 @@
   <!-- svelte-ignore component-name-lowercase -->
   <main class={main}>
     {#if isBlogPost}
-      <BlogPost
-        {post}
-        {imageData}
-        likes={post.likes}
-        views={post.views}
-        comments={post.comments.length}
-      />
+      <BlogPost {post} {imageData} />
       <slot />
       <PostViewsLikes
         likes={post.likes}

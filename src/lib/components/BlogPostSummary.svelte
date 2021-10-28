@@ -24,11 +24,11 @@
   export let comments: number;
 
   const handleMouseEnter = (event: MouseEvent) => {
-    event.target.style.cursor = 'pointer';
+    (event.target as HTMLElement).style.cursor = 'pointer';
   };
 
   const handleMouseLeave = (event: MouseEvent) => {
-    event.target.style.cursor = 'default';
+    (event.target as HTMLElement).style.cursor = 'default';
   };
 
   const handleMouseDown = async () => {

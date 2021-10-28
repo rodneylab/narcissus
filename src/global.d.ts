@@ -1,7 +1,7 @@
 /// <reference types="@sveltejs/kit" />
 import type { ILazyLoadInstance } from 'vanilla-lazyload';
 
-interface ExecuteResponse {
+export interface HCaptchaExecuteResponse {
   response: string;
   key: string;
 }
@@ -15,8 +15,11 @@ export declare global {
 export declare global {
   interface Window {
     hcaptcha: {
-      execute(opts?: { async: boolean }): Promise<ExecuteResponse> | void;
-      render(): void;
+      execute(
+        hcaptchaWidgetID: string,
+        opts?: { async: boolean },
+      ): Promise<HCaptchaExecuteResponse>;
+      render(id: string, config: { sitekey: string; size: string; theme: string }): string;
     };
   }
 }

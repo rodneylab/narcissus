@@ -17,11 +17,15 @@
   import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
   import { onDestroy, onMount } from 'svelte';
   import type { FieldError } from '$lib/utilities/form';
+  import type { HCaptchaExecuteResponse } from 'src/global';
 
   const { hcaptchaSitekey, workerUrl } = website;
 
   let hcaptchaWidgetID: string;
-  let hcaptcha;
+  let hcaptcha: {
+    execute(hcaptchaWidgetID: string, opts?: { async: boolean }): Promise<HCaptchaExecuteResponse>;
+    render(id: string, config: { sitekey: string; size: string; theme: string }): string;
+  } | null;
 
   const darkMode =
     browser && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -41,7 +45,7 @@
 
   onDestroy(() => {
     if (browser) {
-      hcaptcha = () => {};
+      hcaptcha = null;
     }
   });
 
