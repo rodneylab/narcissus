@@ -15,7 +15,6 @@
     link,
     meta,
   } from '$lib/components/PostViewsLikesPure.css';
-  import Card from './Card.svelte';
 
   export let likes: number;
   export let slug: string;
@@ -30,6 +29,7 @@
   $: displayLikes = freshLikeCount ?? likes;
   $: displayViews = freshViewCount ?? views;
   $: displayComments = freshCommentCount ?? comments;
+  let likeButtonHover = false;
 
   let observer;
 
@@ -148,8 +148,19 @@
     <span class={meta}><span class={icon}><ViewsIcon /></span>{displayViews}</span>
     <span class={meta}
       ><span class={icon}>
-        <button aria-label={likeButtonLabel} type="button" class={likeButton} on:click={handleLike}>
-          {#if liked}
+        <button
+          aria-label={likeButtonLabel}
+          type="button"
+          class={likeButton}
+          on:click={handleLike}
+          on:mouseenter={() => {
+            likeButtonHover = true;
+          }}
+          on:mouseleave={() => {
+            likeButtonHover = false;
+          }}
+        >
+          {#if liked || likeButtonHover}
             <LikedIcon />
           {:else}
             <NotYetLikedIcon />
