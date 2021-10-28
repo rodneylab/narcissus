@@ -12,7 +12,7 @@ export async function get({ params }) {
 
     const dataResponsePromise = fetch(`${process.env['VITE_WORKER_URL']}/post/data`, {
       method: 'POST',
-      credentials: 'none',
+      credentials: 'omit',
       headers: {
         'Content-Type': 'application/json',
       },

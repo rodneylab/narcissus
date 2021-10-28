@@ -1,4 +1,5 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
+import { fontWeightSemibold } from '$lib/styles/vars/font.css';
 import { spacing12, spacing2, spacing6, spacing8, spacingPx2 } from '$lib/styles/vars/spacing.css';
 import { style } from '@vanilla-extract/css';
 
@@ -15,7 +16,7 @@ export const content = style({
   paddingLeft: [spacing6],
   borderColor: themeVars.colour.text,
   boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
-  color: themeVars.colour.text,
+  fontWeight: [fontWeightSemibold],
 });
 
 export const icon = style({
@@ -37,7 +38,7 @@ export const meta = style({
 export const link = style({
   selectors: {
     [`${meta} &`]: {
-      color: themeVars.colour.text,
+      color: 'inherit',
     },
   },
 });
@@ -47,5 +48,5 @@ export const likeButton = style({
   marginLeft: '-1rem',
   marginRight: '-1.25rem',
   background: 'transparent',
-  color: themeVars.colour.text,
+  color: 'inherit',
 });

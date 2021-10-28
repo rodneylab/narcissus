@@ -20,6 +20,8 @@
   export let slug: string;
   export let views: number;
   export let comments: number;
+  export let containerClass: string = undefined;
+  export let contentClass: string = undefined;
 
   const { workerUrl } = website;
 
@@ -143,8 +145,8 @@
   $: likeButtonLabel = !liked ? 'Like this blog post' : 'Unlike this blog post';
 </script>
 
-<aside class={container}>
-  <div class={content}>
+<aside class={`${container} ${containerClass ?? ''}`}>
+  <div class={`${content} ${contentClass ?? ''}`}>
     <span class={meta}><span class={icon}><ViewsIcon /></span>{displayViews}</span>
     <span class={meta}
       ><span class={icon}>

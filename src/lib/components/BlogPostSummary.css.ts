@@ -6,6 +6,7 @@ import {
   spacing12,
   spacing2,
   spacing4,
+  spacing8,
   spacingPx2,
 } from '$lib/styles/vars/spacing.css';
 import { maxWidthFull } from '$lib/styles/vars/widths.css';
@@ -61,7 +62,27 @@ export const contentBody = style({
   },
 });
 
+export const postMeta = style({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'baseline',
+  justifyContent: 'flex-start',
+});
+
+export const viewsLikesContainer = style({
+  display: 'flex',
+  margin: [spacing0],
+  backgroundColor: 'transparent',
+});
+
+export const viewsLikesContent = style({
+  borderStyle: 'none',
+  boxShadow: 'none',
+  backgroundColor: 'transparent',
+});
+
 export const dateText = style({
   fontFamily: [fontFamilyHeading],
   fontSize: [fontSize3],
+  marginRight: 'auto',
 });

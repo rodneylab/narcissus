@@ -9,12 +9,19 @@
     contentHeading,
     contentHeadingContainer,
     dateText,
+    postMeta,
+    viewsLikesContainer,
+    viewsLikesContent,
   } from './BlogPostSummary.css';
+  import PostViewsLikes from './PostViewsLikes.svelte';
 
-  export let postTitle;
-  export let datePublished;
-  export let seoMetaDescription;
-  export let slug;
+  export let postTitle: string;
+  export let datePublished: string;
+  export let seoMetaDescription: string;
+  export let slug: string;
+  export let likes: number;
+  export let views: number;
+  export let comments: number;
 
   const handleMouseEnter = (event) => {
     event.target.style.cursor = 'pointer';
@@ -51,7 +58,17 @@
       >
     </h3>
     <section class={contentBody}>
-      <p class={dateText}>{dateString}</p>
+      <div class={postMeta}>
+        <div class={dateText}>{dateString}</div>
+        <PostViewsLikes
+          containerClass={viewsLikesContainer}
+          contentClass={viewsLikesContent}
+          {likes}
+          {views}
+          {comments}
+          {slug}
+        />
+      </div>
       <p>{seoMetaDescription}</p>
       <span id={idString} aria-hidden="true">Read more {H_ELLIPSIS_ENTITY}</span>
     </section>

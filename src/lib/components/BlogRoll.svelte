@@ -23,6 +23,9 @@
         postTitle={post.postTitle}
         seoMetaDescription={post.seoMetaDescription}
         slug={post.slug}
+        likes={post.likes}
+        views={post.views}
+        comments={post.comments.length}
       />
     </article>
   {:else}

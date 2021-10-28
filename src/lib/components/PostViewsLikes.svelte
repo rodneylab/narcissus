@@ -6,6 +6,8 @@
   export let views: number;
   export let slug: string;
   export let comments: number;
+  export let containerClass: string = undefined;
+  export let contentClass: string = undefined;
 
   const { workerUrl } = website;
 
@@ -32,14 +34,16 @@
 </script>
 
 {#await likesPromise}
-  <PostViewsLikesPure {slug} {likes} {views} {comments} />
+  <PostViewsLikesPure {containerClass} {contentClass} {slug} {likes} {views} {comments} />
 {:then data}
   <PostViewsLikesPure
+    {containerClass}
+    {contentClass}
     {slug}
     likes={data?.likes ?? likes}
     views={data?.views ?? views}
     comments={data?.comments.length ?? comments}
   />
 {:catch}
-  <PostViewsLikesPure {slug} {likes} {views} {comments} />
+  <PostViewsLikesPure {containerClass} {contentClass} {slug} {likes} {views} {comments} />
 {/await}
