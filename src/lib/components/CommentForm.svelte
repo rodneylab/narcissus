@@ -8,6 +8,7 @@
     buttonContainer,
     container,
     content,
+    formLink,
     heading,
   } from '$lib/components/CommentForm.css';
   import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
@@ -133,21 +134,38 @@
       />
       <small>
         This site uses Akismet to reduce spam.{' '}
-        <a aria-label="Learn how Akismet process comment data" href="https://akismet.com/privacy/">
+        <a
+          aria-label="Learn how Akismet process comment data"
+          class={formLink}
+          href="https://akismet.com/privacy/"
+        >
           Learn how your comment data is processed
         </a>
         . We pass your comment, name, email, IP address and{' '}
         <a
           aria-label="Learn more about browser user agent from M D N"
+          class={formLink}
           href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent"
         >
           browser user agent
         </a>{' '}
         to Akismet for spam detection. Neither your email address, IP address or user agent is stored
-        in our database. This site is protected by <a href="https://www.hCaptcha.com">hCaptcha</a>
+        in our database. This site is protected by
+        <a aria-label="Learn more about h Captcha" class={formLink} href="https://www.hCaptcha.com"
+          >hCaptcha</a
+        >
         and its
-        <a href="https://www.hcaptcha.com/privacy">Privacy Policy</a> and
-        <a href="https://www.hcaptcha.com/terms">Terms of Service</a> apply.
+        <a
+          aria-label="Open h Captcha privacy policy"
+          class={formLink}
+          href="https://www.hcaptcha.com/privacy">Privacy Policy</a
+        >
+        and
+        <a
+          aria-label="Open hCaptcha terms of service"
+          class={formLink}
+          href="https://www.hcaptcha.com/terms">Terms of Service</a
+        > apply.
       </small>
       <div class={buttonContainer}>
         <!-- svelte-ignore component-name-lowercase -->

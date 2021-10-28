@@ -19,7 +19,8 @@ export const commentContent = style({
   boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
   backgroundColor: themeVars.colour.accent,
   paddingTop: spacing2,
-  color: themeVars.colour.alternative,
+  color: themeVars.colour.textSecondary,
+  accentColor: themeVars.colour.textSecondary,
 });
 
 export const authorText = style({

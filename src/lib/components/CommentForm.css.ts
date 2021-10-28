@@ -24,12 +24,17 @@ export const content = style({
   borderColor: themeVars.colour.secondary,
   boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
   backgroundColor: themeVars.colour.accent,
-  color: themeVars.colour.alternative,
+  color: themeVars.colour.textSecondary,
+  accentColor: themeVars.colour.textSecondary,
 });
 
 export const heading = style({
   fontSize: [fontSize3],
   textAlign: 'center',
+});
+
+export const formLink = style({
+  color: themeVars.colour.textSecondary,
 });
 
 export const buttonContainer = style({
