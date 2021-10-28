@@ -10,7 +10,7 @@ export async function get({ params }) {
     const article = articles.find((element) => element.slug === slug);
     const postPromise = getPost(article.content, true);
 
-    const dataResponsePromise = fetch(`${process.env['VITE_WORKER_URL']}/post/data`, {
+    const dataResponse = await fetch(`${process.env['VITE_WORKER_URL']}/post/data`, {
       method: 'POST',
       credentials: 'omit',
       headers: {
@@ -20,9 +20,7 @@ export async function get({ params }) {
         slug,
       }),
     });
-    const dataResponse = await dataResponsePromise;
     const dataPromise = dataResponse.json();
-
     const [post, data] = await Promise.all([postPromise, dataPromise]);
     const { comments, likes, views } = data;
 
