@@ -65,23 +65,3 @@ export const navListItem = style({
   marginLeft: [spacing6],
   marginBottom: [spacing1],
 });
-
-// export const logo = style({
-//   color: themeVars.colour.alternative,
-// });
-
-// export const hoverJump = style({
-//   selectors: {
-//     ['&:hover, &:focus']: {
-//       transform: 'translateY(-0.5rem)',
-//     },
-//   },
-//   '@media': {
-//     '(prefers-reduced-motion: no-preference)': {
-//       transition: 'all 0.25s ease-in-out',
-//     },
-//     '(prefers-reduced-motion: reduce)': {
-//       transition: 'all 2s ease-in-out',
-//     },
-//   },
-// });

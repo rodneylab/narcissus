@@ -122,7 +122,10 @@
           browser user agent
         </a>{' '}
         to Akismet for spam detection. Neither your email address, IP address or user agent is stored
-        in our database.
+        in our database. This site is protected by <a href="https://www.hCaptcha.com">hCaptcha</a>
+        and its
+        <a href="https://www.hcaptcha.com/privacy">Privacy Policy</a> and
+        <a href="https://www.hcaptcha.com/terms">Terms of Service</a> apply.
       </small>
       <div>
         <button type="submit" disabled={submitting}>Submit your comment</button>

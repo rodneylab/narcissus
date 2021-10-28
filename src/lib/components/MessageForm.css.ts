@@ -1,14 +1,14 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
-import { fontSize2, fontSize3, fontWeightBlack } from '$lib/styles/vars/font.css';
+import { fontSize3, fontWeightBlack } from '$lib/styles/vars/font.css';
 import {
   spacing12,
-  spacing2,
   spacing3,
   spacing4,
   spacing5,
   spacing8,
   spacingPx,
 } from '$lib/styles/vars/spacing.css';
+import { maxWidthFull } from '$lib/styles/vars/widths.css';
 import { style } from '@vanilla-extract/css';
 
 export const container = style({
@@ -32,15 +32,34 @@ export const heading = style({
   textAlign: 'center',
 });
 
+export const form = style({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  width: [maxWidthFull],
+});
+
+export const formField = style({
+  width: '100%',
+  margin: 0,
+});
+
+export const disclaimer = style({});
+
 export const formLink = style({
-  [`${content} &`]: {
-    color: themeVars.colour.textSecondary,
-  },
+  color: themeVars.colour.textSecondary,
+});
+
+export const buttonContainer = style({
+  display: 'flex',
+  width: [maxWidthFull],
 });
 
 export const button = style({
   marginTop: [spacing8],
   marginBottom: [spacing4],
+  marginLeft: 'auto',
   fontWeight: [fontWeightBlack],
   paddingTop: [spacing3],
   paddingBottom: [spacing3],

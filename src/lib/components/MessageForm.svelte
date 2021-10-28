@@ -1,7 +1,17 @@
 <script lang="ts">
   import { browser } from '$app/env';
   import Card from '$lib/components/Card.svelte';
-  import { button, container, content, formLink, heading } from '$lib/components/MessageForm.css';
+  import {
+    button,
+    buttonContainer,
+    container,
+    content,
+    disclaimer,
+    form,
+    formField,
+    formLink,
+    heading,
+  } from '$lib/components/MessageForm.css';
   import website from '$lib/config/website';
   import { validEmail } from '$lib/utilities/form';
   import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
@@ -89,50 +99,57 @@
   {#if successfulMessageSubmission}
     <div>Thanks for your message. I normally respond within one working day.</div>
   {:else}
-    <form on:submit|preventDefault={handleSubmit}>
-      <TextInputField
-        value={name}
-        id="contact-name"
-        placeholder="Blake Costa"
-        title="Name"
-        error={errors?.email ?? null}
-        on:update={(event) => {
-          name = event.detail;
-        }}
-        style="padding-bottom:1.25rem"
-      />
-      <EmailInputField
-        value={email}
-        id="contact-email"
-        placeholder="blake@example.com"
-        title="Email"
-        error={errors?.email ?? null}
-        on:update={(event) => {
-          email = event.detail;
-        }}
-        style="padding-bottom:1.25rem"
-      />
-      <TextArea
-        value={message}
-        id="contact-message"
-        placeholder="Enter your message here"
-        title="Message"
-        error={errors?.message ?? null}
-        on:update={(event) => {
-          message = event.detail;
-        }}
-        style="padding-bottom:1.25rem"
-      />
-      <small>
+    <!-- svelte-ignore component-name-lowercase -->
+    <form class={form} on:submit|preventDefault={handleSubmit}>
+      <div class={formField}>
+        <TextInputField
+          value={name}
+          id="contact-name"
+          placeholder="Blake Costa"
+          title="Name"
+          error={errors?.email ?? null}
+          on:update={(event) => {
+            name = event.detail;
+          }}
+          style="padding-bottom:1.25rem;margin-right:1rem"
+        />
+      </div>
+      <div class={formField}>
+        <EmailInputField
+          value={email}
+          id="contact-email"
+          placeholder="blake@example.com"
+          title="Email"
+          error={errors?.email ?? null}
+          on:update={(event) => {
+            email = event.detail;
+          }}
+          style="padding-bottom:1.25rem;margin-right:1rem"
+        />
+      </div>
+      <div class={formField}>
+        <TextArea
+          value={message}
+          id="contact-message"
+          placeholder="Enter your message here"
+          title="Message"
+          error={errors?.message ?? null}
+          on:update={(event) => {
+            message = event.detail;
+          }}
+          style="padding-bottom:1.25rem;margin-right:1rem"
+        />
+      </div>
+      <small class={disclaimer}>
         This site uses Akismet to reduce spam.{' '}
         <a
           aria-label="Learn how Akismet process comment data"
           class={formLink}
           href="https://akismet.com/privacy/"
         >
-          Learn how your comment data is processed
+          Learn how your message data is processed
         </a>
-        . We pass your comment, name, email, IP address and{' '}
+        . We pass your message, name, email, IP address and{' '}
         <a
           aria-label="Learn more about browser user agent from M D N"
           class={formLink}
@@ -140,10 +157,12 @@
         >
           browser user agent
         </a>{' '}
-        to Akismet for spam detection. Neither your email address, IP address or user agent is stored
-        in our database.
+        to Akismet for spam detection. Neither your IP address nor user agent is stored in our database.
+        This site is protected by <a href="https://www.hCaptcha.com">hCaptcha</a> and its
+        <a href="https://www.hcaptcha.com/privacy">Privacy Policy</a> and
+        <a href="https://www.hcaptcha.com/terms">Terms of Service</a> apply.
       </small>
-      <div>
+      <div class={buttonContainer}>
         <!-- svelte-ignore component-name-lowercase -->
         <button type="submit" class={button} disabled={submitting}>Send your message</button>
       </div>

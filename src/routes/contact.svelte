@@ -46,6 +46,7 @@
 <SEO {...seoProps} />
 <h1>Contact me</h1>
 <p class={summaryText}>I would love to hear from you. Please get in touch!</p>
+<MessageForm />
 <Card containerClass={cardContainer} contentClass={cardContent}>
   <div class={contactDetails}>
     <ul class={contactDetailsList}>
@@ -98,4 +99,3 @@
     </ul>
   </div></Card
 >
-<MessageForm />
