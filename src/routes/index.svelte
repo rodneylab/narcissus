@@ -4,8 +4,10 @@
    */
   export async function load({ fetch }) {
     const url = `./index.json`;
-    const response = await fetch(url);
-
+    // const response = await fetch(url)
+    const response = await fetch(url, {
+      method: 'GET',
+    });
     if (response.ok) {
       return {
         props: { ...(await response.json()) },

@@ -1,11 +1,19 @@
-<script>
+<script lang="ts">
   import BlogPostSummary from '$lib/components/BlogPostSummary.svelte';
   import { H_ELLIPSIS_ENTITY } from '$lib/constants/entities';
 
-  export let initialPosts = 4;
-  export let posts;
+  export let initialPosts: number = 4;
+  export let posts: {
+    datePublished: string;
+    postTitle: string;
+    seoMetaDescription: string;
+    slug: string;
+    likes: number;
+    views: number;
+    comments: { created_at: string; author: string; text: string }[];
+  }[];
 
-  const postCount = posts.length;
+  const postCount = posts?.length ?? 0;
   $: showPosts = initialPosts;
   $: displayPosts = posts.slice(0, showPosts);
 

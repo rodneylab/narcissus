@@ -6,9 +6,8 @@ export async function get() {
   try {
     const __dirname = path.resolve();
     const location = path.join(__dirname, BLOG_PATH);
-    const postsContent = await getPostsContent(location);
+    const postsContent: { slug: string }[] = await getPostsContent(location);
     const posts = await getPosts(postsContent, false);
-
     let postDataPromises = posts.map(async (element) => {
       const { slug } = element;
       const response = await fetch(`${process.env['VITE_WORKER_URL']}/post/data`, {
