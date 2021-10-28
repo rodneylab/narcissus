@@ -273,6 +273,28 @@ fn get_header_value(headers: &worker::Headers, header: &str) -> Option<String> {
     }
 }
 
+async fn notify_via_telegram(
+    message: &str,
+    telegram_bot_api_token: &str,
+    telegram_bot_chat_id: &str,
+) -> bool {
+    let client = reqwest::Client::new();
+    let mut map = HashMap::new();
+    map.insert("chat_id", telegram_bot_chat_id);
+    map.insert("text", message);
+    let url = format!(
+        "https://api.telegram.org/bot{}/sendMessage",
+        telegram_bot_api_token
+    );
+    match client.post(url).json(&map).send().await {
+        Ok(_) => true,
+        Err(_) => {
+            console_log!("Telegram API response error");
+            false
+        }
+    }
+}
+
 async fn spam_check(
     site_url: &str,
     email: &str,
@@ -729,6 +751,11 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Ok(value) => value,
                 Err(_) => return Response::error("Bad request: message", 400),
             };
+            let telegram_message = format!("Contact form message:\n  from: {}\n  email: {}\n  message: {}\n  marked bot: {}\n  marked spam: {}\n",
+                name, email, text, marked_bot, marked_spam);
+            let telegram_bot_api_token = ctx.var("TELEGRAM_BOT_API_TOKEN")?.to_string();
+            let telegram_bot_chat_id = ctx.var("TELEGRAM_BOT_CHAT_ID")?.to_string();
+            notify_via_telegram(&telegram_message, &telegram_bot_api_token, &telegram_bot_chat_id).await;
             Response::ok("Thanks for your message!")
         })
         .options("/post/view", |req, ctx| {
