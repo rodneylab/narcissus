@@ -23,11 +23,11 @@
   export let views: number;
   export let comments: number;
 
-  const handleMouseEnter = (event) => {
+  const handleMouseEnter = (event: MouseEvent) => {
     event.target.style.cursor = 'pointer';
   };
 
-  const handleMouseLeave = (event) => {
+  const handleMouseLeave = (event: MouseEvent) => {
     event.target.style.cursor = 'default';
   };
 

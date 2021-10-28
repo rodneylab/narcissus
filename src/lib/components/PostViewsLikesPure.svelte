@@ -33,11 +33,14 @@
   $: displayComments = freshCommentCount ?? comments;
   let likeButtonHover = false;
 
-  let observer;
+  let observer: IntersectionObserver;
 
   onMount(() => {
     if (browser) {
-      const handleIntersect = (entries, observer) => {
+      const handleIntersect = (
+        entries: IntersectionObserverEntry[],
+        observer: IntersectionObserver,
+      ) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             observer.unobserve(entry.target);
@@ -72,13 +75,13 @@
 
   function getLikeIdFromStore() {
     const { liked: likedArray } = JSON.parse($postLikedViewed);
-    const { id } = likedArray.find((element) => slug === element.slug);
+    const { id } = likedArray.find((element: { slug: string }) => slug === element.slug);
     return id ? id : '';
   }
 
   function removeLikeFromStore() {
     const { liked: likedArray, viewed: viewedArray } = JSON.parse($postLikedViewed);
-    const index = likedArray.findIndex((element) => slug === element.slug);
+    const index = likedArray.findIndex((element: { slug: string }) => slug === element.slug);
     postLikedViewed.set(
       JSON.stringify({
         liked: [...likedArray.slice(0, index), ...likedArray.slice(index + 1)],
@@ -87,7 +90,9 @@
     );
   }
 
-  $: liked = JSON.parse($postLikedViewed).liked.find((element) => element.slug === slug) != null;
+  $: liked =
+    JSON.parse($postLikedViewed).liked.find((element: { slug: string }) => element.slug === slug) !=
+    null;
   $: viewed = JSON.parse($postLikedViewed).viewed.includes(slug);
 
   async function handleLike() {

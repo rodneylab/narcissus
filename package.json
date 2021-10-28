@@ -28,6 +28,7 @@
     "@rodneylab/sveltekit-components": "^0.2.4",
     "@sveltejs/adapter-static": "^1.0.0-next.21",
     "@sveltejs/kit": "^1.0.0-next.190",
+    "@types/object-hash": "^2.2.1",
     "@typescript-eslint/eslint-plugin": "^5.2.0",
     "@typescript-eslint/parser": "^5.2.0",
     "@vanilla-extract/css": "^1.6.3",

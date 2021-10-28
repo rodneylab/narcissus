@@ -66,7 +66,19 @@
   import lazyload from 'vanilla-lazyload';
   import { container, main } from './layout.css';
 
-  export let post, imageData;
+  export let post: {
+    datePublished: string;
+    featuredImageAlt: string;
+    lastUpdated: string;
+    postTitle: string;
+    seoMetaDescription: string;
+    body: string;
+    likes: number;
+    views: number;
+    comments: { created_at: string; author: string; text: string }[];
+    slug: string;
+  };
+  export let imageData;
 
   if (browser && !document.lazyloadInstance) {
     document.lazyloadInstance = new lazyload();

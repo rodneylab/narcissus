@@ -4,8 +4,29 @@
   import SEO from '$lib/components/SEO/index.svelte';
   import PostViewsLikes from '$lib/components/PostViewsLikes.svelte';
 
-  export let imageData;
-  export let post;
+  export let imageData: {
+    ogImage: string;
+    ogSquareImage: string;
+    src: string;
+    twitterImage: string;
+    alt: string;
+    width: number;
+    height: number;
+    sources: { srcset: string; type: string }[];
+    placeholder: string;
+  };
+  export let post: {
+    datePublished: string;
+    featuredImageAlt: string;
+    lastUpdated: string;
+    postTitle: string;
+    seoMetaDescription: string;
+    slug: string;
+    body: string;
+    likes: number;
+    views: number;
+    comments: { created_at: string; author: string; text: string }[];
+  };
 
   const {
     datePublished,

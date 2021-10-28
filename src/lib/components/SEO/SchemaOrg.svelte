@@ -1,25 +1,31 @@
-<script>
+<script lang="ts">
   import hash from 'object-hash';
-  export let article = false;
-  export let author;
-  export let breadcrumbs;
-  export let datePublished;
-  export let entity;
-  export let lastUpdated;
-  export let featuredImage;
-  export let metadescription;
-  export let siteLanguage;
-  export let siteTitle;
-  export let siteTitleAlt;
-  export let siteUrl;
-  export let title;
-  export let url;
-  export let facebookPage;
-  export let githubPage;
-  export let linkedinProfile;
-  export let telegramUsername;
-  export let tiktokUsername;
-  export let twitterUsername;
+  export let article: boolean = false;
+  export let author: string;
+  export let breadcrumbs: { name: string; slug: string }[];
+  export let datePublished: string;
+  export let entity: string;
+  export let lastUpdated: string;
+  export let featuredImage: {
+    url: string;
+    alt: string;
+    width: number;
+    height: number;
+    caption: string;
+  };
+  export let metadescription: string;
+  export let siteLanguage: string;
+  export let siteTitle: string;
+  export let siteTitleAlt: string;
+  export let siteUrl: string;
+  export let title: string;
+  export let url: string;
+  export let facebookPage: string;
+  export let githubPage: string;
+  export let linkedinProfile: string;
+  export let telegramUsername: string;
+  export let tiktokUsername: string;
+  export let twitterUsername: string;
   export let entityMeta = null;
 
   const entityHash = hash({ author }, { algorithm: 'md5' });
@@ -86,7 +92,7 @@
   const schemaOrgBreadcrumbList = {
     '@type': 'BreadcrumbList',
     '@id': `${url}#breadcrumb`,
-    itemListElement: breadcrumbs.map((element, index) => ({
+    itemListElement: breadcrumbs.map((element, index: number) => ({
       '@type': 'ListItem',
       position: index + 1,
       item: {

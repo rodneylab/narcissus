@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import defaultFeaturedImage from '$lib/assets/home/home.jpg';
   import defaultOgImage from '$lib/assets/home/home-open-graph.jpg';
   import defaultOgSquareImage from '$lib/assets/home/home-open-graph-square.jpg';
@@ -27,15 +27,15 @@
     twitterUsername,
   } = website;
 
-  export let article = false;
-  export let breadcrumbs = [];
+  export let article: boolean = false;
+  export let breadcrumbs: { name: string; slug: string }[] = [];
   export let entityMeta = null;
-  export let lastUpdated;
-  export let datePublished;
-  export let metadescription;
-  export let slug;
-  export let timeToRead = 0;
-  export let title;
+  export let lastUpdated: string;
+  export let datePublished: string;
+  export let metadescription: string;
+  export let slug: string;
+  export let timeToRead: number = 0;
+  export let title: string;
 
   const defaultAlt =
     'picture of a person with long, curly hair, wearing a red had taking a picture with an analogue camera';

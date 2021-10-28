@@ -12,7 +12,7 @@
   import localizedFormat from 'dayjs/plugin/localizedFormat.js';
   import relativeTime from 'dayjs/plugin/relativeTime.js';
 
-  export let comments;
+  export let comments: { created_at: string; author: string; text: string }[];
 
   dayjs.extend(localizedFormat);
   dayjs.extend(relativeTime);
