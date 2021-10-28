@@ -3,12 +3,21 @@
   import website from '$lib/config/website';
   import { browser } from '$app/env';
   import Card from '$lib/components/Card.svelte';
-  import { container, content } from '$lib/components/CommentForm.css';
-  export let slug;
+  import {
+    button,
+    buttonContainer,
+    container,
+    content,
+    heading,
+  } from '$lib/components/CommentForm.css';
+  import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
+  import { FieldError, validEmail } from '$lib/utilities/form';
+
+  export let slug: string;
 
   const { hcaptchaSitekey, workerUrl } = website;
 
-  let hcaptchaWidgetID;
+  let hcaptchaWidgetID: string;
   let hcaptcha;
 
   const darkMode =
@@ -37,11 +46,19 @@
   let name = '';
   let email = '';
 
+  let errors: { name: FieldError; email: FieldError; comment: FieldError };
+  $: errors = { name: null, email: null, comment: null };
+
+  function validateInputs() {
+    errors = { ...errors, ...validEmail(email) };
+  }
+
   $: submitting = false;
   $: successfulCommentSubmission = false;
 
   async function handleSubmit() {
     try {
+      validateInputs();
       if (browser) {
         submitting = true;
         const { response } = await hcaptcha.execute(hcaptchaWidgetID, {
@@ -76,38 +93,43 @@
 </svelte:head>
 
 <Card containerClass={container} contentClass={content}>
+  <h2 class={heading}>What's your opinion? Leave a comment.</h2>
   {#if successfulCommentSubmission}
     <div>Thanks for your comment. We will review and post it shortly.</div>
   {:else}
     <form on:submit|preventDefault={handleSubmit}>
-      <span class="screen-reader-text"><label for="comment-name">Name</label></span>
-      <input
-        bind:value={name}
-        required
+      <TextInputField
+        value={name}
         id="comment-name"
-        placeholder="Name"
+        placeholder="Blake Costa"
         title="Name"
-        type="text"
+        error={errors?.email ?? null}
+        on:update={(event) => {
+          name = event.detail;
+        }}
+        style="padding-bottom:1.25rem;margin-right:1rem"
       />
-      <span class="screen-reader-text"><label for="comment-email">Email</label></span>
-      <input
-        bind:value={email}
-        required
-        id="comment-email"
-        placeholder="email@me.com"
+      <EmailInputField
+        value={email}
+        id="contact-email"
+        placeholder="blake@example.com"
         title="Email"
-        type="email"
+        error={errors?.email ?? null}
+        on:update={(event) => {
+          email = event.detail;
+        }}
+        style="padding-bottom:1.25rem;margin-right:1rem"
       />
-      <span class="screen-reader-text"><label for="comment-content">Comment</label></span>
-      <textarea
-        bind:value={comment}
-        required
-        id="comment-content"
-        placeholder="Write your comment here"
-        rows="10"
-        spellcheck="true"
-        title="Comment"
-        type="text"
+      <TextArea
+        value={comment}
+        id="contact-message"
+        placeholder="Enter your comment here"
+        title="Message"
+        error={errors?.comment ?? null}
+        on:update={(event) => {
+          comment = event.detail;
+        }}
+        style="padding-bottom:1.25rem;margin-right:1rem"
       />
       <small>
         This site uses Akismet to reduce spam.{' '}
@@ -127,8 +149,9 @@
         <a href="https://www.hcaptcha.com/privacy">Privacy Policy</a> and
         <a href="https://www.hcaptcha.com/terms">Terms of Service</a> apply.
       </small>
-      <div>
-        <button type="submit" disabled={submitting}>Submit your comment</button>
+      <div class={buttonContainer}>
+        <!-- svelte-ignore component-name-lowercase -->
+        <button type="submit" class={button} disabled={submitting}>Leave your comment</button>
       </div>
       <div
         id="hcaptcha"

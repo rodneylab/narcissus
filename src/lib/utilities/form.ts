@@ -8,3 +8,5 @@ export function validEmail(email: string) {
   }
   return errors;
 }
+
+export type FieldError = string | null;

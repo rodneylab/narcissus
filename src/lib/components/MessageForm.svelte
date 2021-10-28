@@ -16,10 +16,11 @@
   import { validEmail } from '$lib/utilities/form';
   import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
   import { onDestroy, onMount } from 'svelte';
+  import type { FieldError } from '$lib/utilities/form';
 
   const { hcaptchaSitekey, workerUrl } = website;
 
-  let hcaptchaWidgetID;
+  let hcaptchaWidgetID: string;
   let hcaptcha;
 
   const darkMode =
@@ -48,7 +49,7 @@
   let name = '';
   let email = '';
 
-  type FieldError = string | null;
+  // type FieldError = string | null;
   let errors: { name: FieldError; email: FieldError; message: FieldError };
   $: errors = { name: null, email: null, message: null };
 
@@ -107,7 +108,7 @@
           id="contact-name"
           placeholder="Blake Costa"
           title="Name"
-          error={errors?.email ?? null}
+          error={errors?.name ?? null}
           on:update={(event) => {
             name = event.detail;
           }}

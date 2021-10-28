@@ -16,6 +16,7 @@ export const container = style({
 export const themeButtonContainer = style({
   display: 'flex',
   width: [maxWidthFull],
+  // marginRight: [-spacing3],
 });
 
 export const themeButton = style({
@@ -24,6 +25,7 @@ export const themeButton = style({
   color: themeVars.colour.text,
   padding: [spacing3],
   marginLeft: 'auto',
+  marginRight: '-0.75rem',
   selectors: {
     ['&:hover, &:focus']: {
       color: themeVars.colour.text,
