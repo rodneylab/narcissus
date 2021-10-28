@@ -7,7 +7,7 @@ function getInitialTheme() {
   if (browser) {
     return (
       window.localStorage.getItem('theme') ??
-      (window.matchMedia('(prefers-color-scheme: dark)') ? 'dark' : 'light')
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
     );
   }
   return defaultTheme;
