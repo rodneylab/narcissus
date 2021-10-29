@@ -31,6 +31,7 @@
     "@typescript-eslint/parser": "^5.2.0",
     "@vanilla-extract/css": "^1.6.3",
     "@vanilla-extract/vite-plugin": "^3.0.0",
+    "crypto-js": "^4.1.1",
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",
     "eslint": "^8.1.0",
@@ -67,5 +68,8 @@
   "bugs": {
     "url": "https://github.com/rodneylab/narcissus-blog/issues"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "node-html-parser": "^5.1.0"
+  }
 }
