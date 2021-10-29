@@ -109,7 +109,7 @@
   <p class={extraSummaryText}>
     This demo <strong>Svelte</strong> site is static and uses Serverless
     <strong>Rust Cloudflare Workers</strong>
-    to read and create commments as well as other interactive elements using REST requests, adding spam
+    to read and create comments as well as other interactive elements using REST requests, adding spam
     detection and Captchas without the added hassle of adding spam detection and Captchas. The app is
     backed by a <strong>Supabase</strong> PostgreSQL database.
   </p>
