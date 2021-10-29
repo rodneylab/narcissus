@@ -1,12 +1,5 @@
 import '$lib/styles/vars/font.css';
-import {
-  fontSize2,
-  fontSize3,
-  fontWeightBlack,
-  fontWeightBold,
-  lineHeightNormal,
-  lineHeightRelaxed,
-} from '$lib/styles/vars/font.css';
+import { fontSize2, fontWeightBlack, lineHeightNormal } from '$lib/styles/vars/font.css';
 import { globalStyle, style } from '@vanilla-extract/css';
 import { themeVars } from './themes/theme.css';
 import {
