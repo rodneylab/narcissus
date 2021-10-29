@@ -14,17 +14,15 @@ const htmlSourceFile = path.join(__dirname, 'build/index.html');
 const htmlSource = fs.readFileSync(htmlSourceFile, { encoding: 'utf-8' });
 const root = parse(htmlSource);
 let styleSrcAttrHashes = new Set();
-root.getElementsByTagName('span').forEach((element) => {
-  if (element.hasAttribute('style')) {
-    const hash = sha256(element.getAttribute('style'));
-    styleSrcAttrHashes.add(hash.toString(Base64));
-  }
-});
-root.getElementsByTagName('div').forEach((element) => {
-  if (element.hasAttribute('style')) {
-    const hash = sha256(element.getAttribute('style'));
-    styleSrcAttrHashes.add(hash.toString(Base64));
-  }
+
+const styleAttributesTags = ['div', 'g', 'span', 'svg'];
+styleAttributesTags.forEach((tag) => {
+  root.getElementsByTagName(tag).forEach((element) => {
+    if (element.hasAttribute('style')) {
+      const hash = sha256(element.getAttribute('style'));
+      styleSrcAttrHashes.add(hash.toString(Base64));
+    }
+  });
 });
 
 const styleSrcAttrCsp = [...styleSrcAttrHashes].map((element) => `'sha-256-${element}'`).join(' ');
