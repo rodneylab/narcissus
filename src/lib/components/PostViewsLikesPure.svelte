@@ -153,7 +153,7 @@
 
 <aside class={`${container} ${containerClass ?? ''}`}>
   <div class={`${content} ${contentClass ?? ''}`}>
-    <span class={meta}><span class={icon}><ViewsIcon /></span>{displayViews}</span>
+    <span class={meta}><span class={icon}><ViewsIcon label="Views" /></span>{displayViews}</span>
     <span class={meta}
       ><span class={icon}>
         {#if interactive}
@@ -170,15 +170,15 @@
             }}
           >
             {#if liked || likeButtonHover}
-              <LikedIcon />
+              <LikedIcon label="likes - already liked by you" />
             {:else}
-              <NotYetLikedIcon />
+              <NotYetLikedIcon label="likes - not yet liked by you" />
             {/if}
           </button>
         {:else if liked}
-          <LikedIcon />
+          <LikedIcon label="likes - already liked by you" />
         {:else}
-          <NotYetLikedIcon />
+          <NotYetLikedIcon label="likes - not yet liked by you" />
         {/if}
       </span>
       {displayLikes}</span
@@ -186,7 +186,7 @@
     {#if displayComments > 0}
       <span class={meta}
         ><a aria-label="Jump to comments" class={link} href="#comments"
-          ><span class={icon}><CommentIcon /></span>
+          ><span class={icon}><CommentIcon label="comments" /></span>
           {displayComments}</a
         ></span
       >

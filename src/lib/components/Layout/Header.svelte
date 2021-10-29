@@ -25,15 +25,15 @@
       }}
       ><span class={screenReaderText}>{themeButtonText}</span>
       {#if lightThemeActive}
-        <MoonIcon />
+        <MoonIcon label="Switch to dark mode" />
       {:else}
-        <SunIcon />
+        <SunIcon label="Switch to light mode" />
       {/if}</button
     >
   </div>
   <div class={content}>
     <!-- svelte-ignore component-name-lowercase -->
-    <nav class={nav}>
+    <nav class={nav} aria-label="Site navigation">
       <ul class={navList}>
         <li class={navListItem}><a href="/.">Home</a></li>
         <li class={navListItem}><a href="/contact">Contact</a></li>

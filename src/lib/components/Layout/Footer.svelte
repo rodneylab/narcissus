@@ -29,7 +29,7 @@
         rel="noopener noreferrer">Rodney Lab</a
       >. Copyright {COPYRIGHT_ENTITY} 2021.
     </div>
-    <nav class={footerIcons}>
+    <nav class={footerIcons} aria-label="Navigate to Rodney Lab linked social sites">
       <ul class={footerIconsList}>
         <li class={footerIconsListItem}>
           <ExternalLink
