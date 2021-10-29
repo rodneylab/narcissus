@@ -54,9 +54,6 @@
   import { darkTheme } from '$lib/styles/themes/dark.css';
   import { lightTheme } from '$lib/styles/themes/light.css';
   import '@fontsource/lato/400.css';
-  import '@fontsource/lora/600.css';
-  import '@fontsource/lora/700-italic.css';
-  import '@fontsource/lora/700.css';
   import '@fontsource/roboto-slab/400.css';
   import '@fontsource/roboto-slab/700.css';
   import '@fontsource/roboto-slab/900.css';

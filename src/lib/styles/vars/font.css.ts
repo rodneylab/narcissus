@@ -91,7 +91,7 @@ globalStyle('html', {
 
 globalStyle('body', {
   vars: {
-    [fontFamilyBody]: 'BodyFont',
+    [fontFamilyBody]: 'Lato',
     [fontFamilyHeading]:
       '"Slabo 27px", "Roboto Slab", "Noto Serif", Merriweather, Georgia, Cambria, "Times New Roman", Times, serif',
   },

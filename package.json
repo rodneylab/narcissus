@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "@fontsource/lato": "^4.5.0",
-    "@fontsource/lora": "^4.5.0",
     "@fontsource/roboto-slab": "^4.5.1",
     "@fontsource/slabo-13px": "^4.5.0",
     "@fontsource/slabo-27px": "^4.5.0",
