@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "svelte-kit dev --port 3030",
-    "build": "npm run generate:manifest && svelte-kit build && cp ./headers ./build/_headers",
+    "build": "npm run generate:manifest && svelte-kit build && node ./generate-headers",
     "preview": "svelte-kit preview --port 3030",
     "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "lint:scss": "stylelint \"src/**/*.{css,scss,svelte}\"",
