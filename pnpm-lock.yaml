@@ -5,7 +5,6 @@ specifiers:
   '@fontsource/roboto-slab': ^4.5.1
   '@fontsource/slabo-13px': ^4.5.0
   '@fontsource/slabo-27px': ^4.5.0
-  '@fontsource/source-sans-pro': ^4.5.0
   '@fortawesome/free-regular-svg-icons': ^5.15.4
   '@fortawesome/free-solid-svg-icons': ^5.15.4
   '@rodneylab/svelte-social-icons': ^0.0.16
@@ -51,7 +50,6 @@ devDependencies:
   '@fontsource/roboto-slab': 4.5.1
   '@fontsource/slabo-13px': 4.5.0
   '@fontsource/slabo-27px': 4.5.0
-  '@fontsource/source-sans-pro': 4.5.0
   '@fortawesome/free-regular-svg-icons': 5.15.4
   '@fortawesome/free-solid-svg-icons': 5.15.4
   '@rodneylab/svelte-social-icons': 0.0.16
@@ -162,10 +160,6 @@ packages:
 
   /@fontsource/slabo-27px/4.5.0:
     resolution: {integrity: sha512-8vjEhAJMul0mt52qf5H2LFx/H3A57ii5IG2VH9uDoNpbWc1+YyyuxHIwdT4+5ku+DAW0rF5ze6AAnwBg6AiaYA==}
-    dev: true
-
-  /@fontsource/source-sans-pro/4.5.0:
-    resolution: {integrity: sha512-+ze+nO9dVN5pAVg9CdQmVgR6f8kDpq/elHMGcyx3qsW4+TN4mI7EuMdNzKP3E1xeZwTHSmHY5bezpfFHX7bQsg==}
     dev: true
 
   /@fortawesome/fontawesome-common-types/0.2.36:

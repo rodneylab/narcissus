@@ -54,12 +54,13 @@
   import { darkTheme } from '$lib/styles/themes/dark.css';
   import { lightTheme } from '$lib/styles/themes/light.css';
   import '@fontsource/lato/400.css';
+  import '@fontsource/lato/600.css';
+  import '@fontsource/lato/700.css';
   import '@fontsource/roboto-slab/400.css';
   import '@fontsource/roboto-slab/700.css';
   import '@fontsource/roboto-slab/900.css';
   import '@fontsource/slabo-13px/400.css';
   import '@fontsource/slabo-27px/400.css';
-  import '@fontsource/source-sans-pro/400-italic.css';
   import lazyload from 'vanilla-lazyload';
   import { container, main } from './layout.css';
 
