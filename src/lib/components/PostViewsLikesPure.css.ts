@@ -1,5 +1,5 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
-import { fontWeightSemibold } from '$lib/styles/vars/font.css';
+import { fontWeightBold } from '$lib/styles/vars/font.css';
 import { spacing12, spacing2, spacing6, spacing8, spacingPx2 } from '$lib/styles/vars/spacing.css';
 import { style } from '@vanilla-extract/css';
 
@@ -16,7 +16,7 @@ export const content = style({
   paddingLeft: [spacing6],
   borderColor: themeVars.colour.text,
   boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
-  fontWeight: [fontWeightSemibold],
+  fontWeight: [fontWeightBold],
 });
 
 export const icon = style({

@@ -1,5 +1,5 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
-import { fontFamilyHeading, fontWeightSemibold } from '$lib/styles/vars/font.css';
+import { fontFamilyHeading, fontWeightBold } from '$lib/styles/vars/font.css';
 import { spacing0, spacing12, spacing2, spacingPx } from '$lib/styles/vars/spacing.css';
 import { style } from '@vanilla-extract/css';
 
@@ -29,5 +29,5 @@ export const authorText = style({
 
 export const dateText = style({
   fontFamily: [fontFamilyHeading],
-  fontWeight: [fontWeightSemibold],
+  fontWeight: [fontWeightBold],
 });

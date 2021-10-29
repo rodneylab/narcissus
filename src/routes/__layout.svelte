@@ -53,8 +53,10 @@
   import '$lib/styles/styles.css';
   import { darkTheme } from '$lib/styles/themes/dark.css';
   import { lightTheme } from '$lib/styles/themes/light.css';
+  // Lato
+  // [100,300,400,700,900]
+  // [italic,normal]
   import '@fontsource/lato/400.css';
-  import '@fontsource/lato/600.css';
   import '@fontsource/lato/700.css';
   import '@fontsource/roboto-slab/400.css';
   import '@fontsource/roboto-slab/700.css';
