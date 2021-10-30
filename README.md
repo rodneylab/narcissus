@@ -134,10 +134,9 @@ Endpoints:
 - `post/data` get the likes, views and comments for a particular blog post:
     <dl>
       <dt>method</dt><dd>POST</dd>
-      <dt>input</dt><dd>JSON object: `{ "slug": "example-post-slug-to-identify-post" }`</dd>
+      <dt>input</dt><dd>JSON object: <code>{ "slug": "example-post-slug-to-identify-post" }</code></dd>
       <dt>response</dt><dd>JSON object:
-
-        ```json
+        <code>
         {
           "likes": 53,
           "views": 598 ,
@@ -160,7 +159,7 @@ Endpoints:
             ]
           ],
         }
-        ```
+        </code>
       </dd>
     </dl>
 
