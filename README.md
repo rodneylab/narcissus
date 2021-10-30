@@ -136,6 +136,7 @@ Endpoints:
       <dt>method</dt><dd>POST</dd>
       <dt>input</dt><dd>JSON object: `{ "slug": "example-post-slug-to-identify-post" }`</dd>
       <dt>response</dt><dd>JSON object:
+
         ```json
         {
           "likes": 53,
@@ -166,6 +167,7 @@ Endpoints:
     <dl>
       <dt>method</dt><dd>POST</dd>
       <dt>input</dt><dd>JSON object:
+
         ```json
         {
           "author": "River Costa",
@@ -184,6 +186,7 @@ Endpoints:
     <dl>
       <dt>method</dt><dd>POST</dd>
       <dt>input</dt><dd>JSON object:
+
         ```json
         {
           "id": "id of like being deleted or empty string for a new like",
@@ -193,6 +196,7 @@ Endpoints:
         ```
       </dd>
       <dt>response</dt><dd>JSON object:
+
         ```json
         {
           "likes": 53,
@@ -205,6 +209,7 @@ Endpoints:
     <dl>
       <dt>method</dt><dd>POST</dd>
       <dt>input</dt><dd>JSON object:
+
         ```json
         {
           "name": "River Costa",
@@ -223,6 +228,7 @@ Endpoints:
     <dl>
       <dt>method</dt><dd>POST</dd>
       <dt>input</dt><dd>JSON object:
+
         ```json
         {
           "slug": "example-post-slug-to-identify-post"
@@ -230,6 +236,7 @@ Endpoints:
         ```
       </dd>
       <dt>response</dt><dd>JSON object:
+
         ```json
         {
           "views": 599,
