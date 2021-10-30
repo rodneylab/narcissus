@@ -1,8 +1,8 @@
 ---
 postTitle: 'Folding Camera'
 focusKeyphrase: 'folding camera best kept secret'
-datePublished: '2021-04-05T15:38:49.000+0100'
-lastUpdated: '2021-04-14T10:17:52.000+0100'
+datePublished: '2021-10-29T15:38:49.000+0100'
+lastUpdated: '2021-10-29T15:38:49.000+0100'
 seoMetaDescription: 'Folding cameras have the benefits of high resolution negatives but are so much more compact and often have amazing optics'
 featuredImage: 'folding-camera.jpg'
 featuredImageAlt: 'Photograph of a classic folding camera'
