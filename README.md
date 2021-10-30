@@ -27,7 +27,7 @@ The demo site is <a aria-label="Open the demo site" href="https://narcissus-blog
 
 - **Static build** &mdash; the functionality all works on a static site. Latest like comment and view data is sourced at build time, so the browser can display this meta even if JavaScript is disabled. With JavaScript enabled, the users pulls in fresh meta updates made since the last build.
 
-- **Developer friendly** &mdash; you style the pages and implement any or all the feature the way you want. Just fetch data from the **API using REST** calls. Your site becomes **backendless** and you save on having to configure and connect multiple services.
+- **Developer friendly** &mdash; you style the pages and implement any or all of the features the way you want. Just fetch data from the **API using REST** calls. Your site becomes **backendless** and you save on having to configure and connect multiple services.
 
 ## Possible Future Features
 
@@ -57,7 +57,7 @@ cp .env.EXAMPLE .env
 3. Install packages with pnpm, npm or yarn:
 
 ```shell
-   pnpm install # or npm install
+pnpm install # or npm install
 ```
 
 4. Start up a development server:
@@ -70,4 +70,4 @@ pnpm run dev
 
 ## Troubleshooting
 
-- **CORS** &mdash; if you get CORS issues testing out hCaptcha, <a aria-label="See hCaptcha tips on avoiding CORS issues" href="https://docs.hcaptcha.com/#local-development">try their recommended solution</a>.
+- **CORS** &mdash; if you get CORS issues testing out hCaptcha locally, <a aria-label="See hCaptcha tips on avoiding CORS issues" href="https://docs.hcaptcha.com/#local-development">try their recommended solution</a>.
