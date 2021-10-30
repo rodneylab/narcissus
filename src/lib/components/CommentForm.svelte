@@ -47,12 +47,27 @@
     }
   });
 
-  let comment = '';
-  let name = '';
-  let email = '';
+  let comment = browser ? window.sessionStorage.getItem(`${slug}-comment`) ?? '' : '';
+  let name = browser ? window.sessionStorage.getItem(`${slug}-name`) ?? '' : '';
+  let email = browser ? window.sessionStorage.getItem(`${slug}-email`) ?? '' : '';
 
   let errors: { name: FieldError; email: FieldError; comment: FieldError };
   $: errors = { name: null, email: null, comment: null };
+
+  function clearForm() {
+    ['comment', 'name', 'email'].forEach((element) =>
+      sessionStorage.removeItem(`${slug}-${element}`),
+    );
+    name = '';
+    email = '';
+    comment = '';
+  }
+
+  function sessionStore(field: string, value: string) {
+    if (browser) {
+      window.sessionStorage.setItem(`${slug}-${field}`, value);
+    }
+  }
 
   function validateInputs() {
     errors = { ...errors, ...validEmail(email) };
@@ -85,6 +100,7 @@
         });
         await responsePromise;
         submitting = false;
+        clearForm();
         successfulCommentSubmission = true;
       }
     } catch (error) {
@@ -110,6 +126,7 @@
         title="Name"
         error={errors?.email ?? null}
         on:update={(event) => {
+          sessionStore('name', event.detail);
           name = event.detail;
         }}
         style="padding-bottom:1.25rem;margin-right:1rem"
@@ -121,6 +138,7 @@
         title="Email"
         error={errors?.email ?? null}
         on:update={(event) => {
+          sessionStore('email', event.detail);
           email = event.detail;
         }}
         style="padding-bottom:1.25rem;margin-right:1rem"
@@ -132,6 +150,7 @@
         title="Message"
         error={errors?.comment ?? null}
         on:update={(event) => {
+          sessionStore('comment', event.detail);
           comment = event.detail;
         }}
         style="padding-bottom:1.25rem;margin-right:1rem"

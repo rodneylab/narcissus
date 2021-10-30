@@ -49,13 +49,27 @@
     }
   });
 
-  let message = '';
-  let name = '';
-  let email = '';
+  let message = browser ? window.sessionStorage.getItem(`contact-message`) ?? '' : '';
+  let name = browser ? window.sessionStorage.getItem(`contact-name`) ?? '' : '';
+  let email = browser ? window.sessionStorage.getItem(`contact-email`) ?? '' : '';
 
-  // type FieldError = string | null;
   let errors: { name: FieldError; email: FieldError; message: FieldError };
   $: errors = { name: null, email: null, message: null };
+
+  function clearForm() {
+    ['message', 'name', 'email'].forEach((element) =>
+      sessionStorage.removeItem(`comment-${element}`),
+    );
+    name = '';
+    email = '';
+    message = '';
+  }
+
+  function sessionStore(field: string, value: string) {
+    if (browser) {
+      window.sessionStorage.setItem(`contact-${field}`, value);
+    }
+  }
 
   function validateInputs() {
     errors = { ...errors, ...validEmail(email) };
@@ -87,6 +101,7 @@
         });
         await responsePromise;
         submitting = false;
+        clearForm();
         successfulMessageSubmission = true;
       }
     } catch (error) {
@@ -114,6 +129,7 @@
           title="Name"
           error={errors?.name ?? null}
           on:update={(event) => {
+            sessionStore('name', event.detail);
             name = event.detail;
           }}
           style="padding-bottom:1.25rem;margin-right:1rem"
@@ -127,6 +143,7 @@
           title="Email"
           error={errors?.email ?? null}
           on:update={(event) => {
+            sessionStore('email', event.detail);
             email = event.detail;
           }}
           style="padding-bottom:1.25rem;margin-right:1rem"
@@ -140,6 +157,7 @@
           title="Message"
           error={errors?.message ?? null}
           on:update={(event) => {
+            sessionStore('message', event.detail);
             message = event.detail;
           }}
           style="padding-bottom:1.25rem;margin-right:1rem"
