@@ -185,10 +185,14 @@
     >
     {#if displayComments > 0}
       <span class={meta}
-        ><a aria-label="Jump to comments" class={link} href="#comments"
-          ><span class={icon}><CommentIcon label="comments" /></span>
-          {displayComments}</a
-        ></span
+        >{#if interactive}
+          <a aria-label="Jump to comments" class={link} href="#comments"
+            ><span class={icon}><CommentIcon label="comments" /></span>
+            {displayComments}</a
+          >{:else}
+          <span class={icon}><CommentIcon label="comments" /></span>
+          {displayComments}
+        {/if}</span
       >
     {/if}
   </div>
