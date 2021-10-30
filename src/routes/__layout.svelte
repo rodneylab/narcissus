@@ -62,6 +62,9 @@
   import '@fontsource/roboto-slab/700.css';
   import '@fontsource/roboto-slab/900.css';
   import '@fontsource/slabo-13px/400.css';
+  // Slabo 27px
+  // [400]
+  // [normal]
   import '@fontsource/slabo-27px/400.css';
   import lazyload from 'vanilla-lazyload';
   import { container, main } from './layout.css';

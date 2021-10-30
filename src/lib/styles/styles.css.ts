@@ -1,5 +1,10 @@
 import '$lib/styles/vars/font.css';
-import { fontSize2, fontWeightBlack, lineHeightNormal } from '$lib/styles/vars/font.css';
+import {
+  fontSize2,
+  fontWeightBlack,
+  fontWeightNormal,
+  lineHeightNormal,
+} from '$lib/styles/vars/font.css';
 import { globalStyle, style } from '@vanilla-extract/css';
 import { themeVars } from './themes/theme.css';
 import {
@@ -32,6 +37,7 @@ globalStyle('hr', {
 
 globalStyle('html & :is(h1, h2, h3, h4, h5, h6, h7)', {
   margin: [spacing12, spacing0, spacing6],
+  fontWeight: [fontWeightNormal],
 });
 
 globalStyle('ol, ul', {
@@ -63,10 +69,10 @@ globalStyle('button', {
   color: themeVars.colour.buttonText,
   '@media': {
     '(prefers-reduced-motion: no-preference)': {
-      transition: 'color 0.25s',
+      transition: 'color 0.25s, background-color 0.25s',
     },
     '(prefers-reduced-motion: reduce)': {
-      transition: 'color 2s',
+      transition: 'color 2s, background-color 2s',
     },
   },
 });
