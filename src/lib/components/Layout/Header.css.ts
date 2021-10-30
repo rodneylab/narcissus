@@ -82,9 +82,13 @@ export const navListItem = style({
 });
 
 export const navLink = style({
+  textUnderlineOffset: [spacing2],
   selectors: {
     [`${nav} &`]: {
       textDecoration: 'none',
+    },
+    [`${nav} &:hover`]: {
+      textDecoration: 'underline',
     },
   },
 });
@@ -93,7 +97,9 @@ export const navLinkActive = style({
   selectors: {
     [`${nav} &`]: {
       textDecoration: 'underline',
-      textUnderlineOffset: [spacing2],
+    },
+    [`${nav} &:hover`]: {
+      textUnderlineOffset: [spacing1],
     },
   },
 });
