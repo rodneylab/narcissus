@@ -12,13 +12,13 @@
 
       if (response.ok) {
         return {
-          props: { ...(await response.json()), post: null },
+          props: { ...(await response.json()), post: null, slug: '/' },
         };
       }
 
       return {};
     } else if (path === '/contact') {
-      return { props: { post: null } };
+      return { props: { post: null, slug: '/contact' } };
     }
 
     const { slug } = page.params;
@@ -89,6 +89,7 @@
     sources: { srcset: string; type: string }[];
     placeholder: string;
   };
+  export let slug: string;
 
   if (browser && !document.lazyloadInstance) {
     document.lazyloadInstance = new lazyload();
@@ -101,7 +102,7 @@
 
 <PWA />
 <div class={containerClass}>
-  <Header />
+  <Header {slug} />
   <!-- svelte-ignore component-name-lowercase -->
   <main class={main}>
     {#if isBlogPost}

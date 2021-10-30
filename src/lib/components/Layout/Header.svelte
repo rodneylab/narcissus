@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import SunIcon from '$lib/components/Icons/Sun.svelte';
   import MoonIcon from '$lib/components/Icons/Moon.svelte';
   import theme from '$lib/shared/stores/theme';
@@ -6,6 +6,8 @@
     container,
     content,
     nav,
+    navLink,
+    navLinkActive,
     navList,
     navListItem,
     themeButton,
@@ -14,6 +16,8 @@
   $: lightThemeActive = $theme === 'light';
   $: themeButtonText = `Switch to ${lightThemeActive ? 'dark' : 'light'} theme`;
   import { screenReaderText } from '$lib/styles/styles.css';
+
+  export let slug: string;
 </script>
 
 <header class={container}>
@@ -25,9 +29,9 @@
       }}
       ><span class={screenReaderText}>{themeButtonText}</span>
       {#if lightThemeActive}
-        <MoonIcon label="Switch to dark mode" />
+        <MoonIcon label="Switch to dark mode" scale={1.5} />
       {:else}
-        <SunIcon label="Switch to light mode" />
+        <SunIcon label="Switch to light mode" scale={1.5} />
       {/if}</button
     >
   </div>
@@ -35,8 +39,14 @@
     <!-- svelte-ignore component-name-lowercase -->
     <nav class={nav} aria-label="Site navigation">
       <ul class={navList}>
-        <li class={navListItem}><a href="/.">Home</a></li>
-        <li class={navListItem}><a href="/contact">Contact</a></li>
+        <li class={navListItem}>
+          <a class={`${navLink}${slug === '/' ? ` ${navLinkActive}` : ''}`} href="/.">Home</a>
+        </li>
+        <li class={navListItem}>
+          <a class={`${navLink}${slug === '/contact' ? ` ${navLinkActive}` : ''}`} href="/contact"
+            >Contact</a
+          >
+        </li>
       </ul>
     </nav>
   </div>

@@ -1,6 +1,13 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
-import { fontSize4 } from '$lib/styles/vars/font.css';
-import { spacing0, spacing1, spacing12, spacing3, spacing6 } from '$lib/styles/vars/spacing.css';
+import { fontFamilyHeading, fontSize4, fontSize5 } from '$lib/styles/vars/font.css';
+import {
+  spacing0,
+  spacing1,
+  spacing12,
+  spacing2,
+  spacing3,
+  spacing6,
+} from '$lib/styles/vars/spacing.css';
 import { maxWidthFull, maxWidthWrapper } from '$lib/styles/vars/widths.css';
 import { style } from '@vanilla-extract/css';
 
@@ -46,6 +53,7 @@ export const themeButton = style({
 export const content = style({
   flexDirection: 'row',
   width: [maxWidthFull],
+  fontFamily: [fontFamilyHeading],
 });
 
 export const nav = style({
@@ -58,12 +66,34 @@ export const navList = style({
   display: 'flex',
   alignItems: 'flex-end',
   paddingBottom: [spacing0],
-  marginBottom: [spacing0],
+  margin: [spacing0],
+  selectors: {
+    [`ul &`]: {
+      marginTop: [spacing0],
+    },
+  },
 });
 
 export const navListItem = style({
   display: 'flex',
-  fontSize: [fontSize4],
+  fontSize: [fontSize5],
   marginLeft: [spacing6],
   marginBottom: [spacing1],
+});
+
+export const navLink = style({
+  selectors: {
+    [`${nav} &`]: {
+      textDecoration: 'none',
+    },
+  },
+});
+
+export const navLinkActive = style({
+  selectors: {
+    [`${nav} &`]: {
+      textDecoration: 'underline',
+      textUnderlineOffset: [spacing2],
+    },
+  },
 });
