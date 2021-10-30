@@ -39,6 +39,7 @@ export const link = style({
   selectors: {
     [`${meta} &`]: {
       color: 'inherit',
+      textDecoration: 'none',
     },
   },
 });
