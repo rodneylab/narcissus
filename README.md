@@ -35,6 +35,8 @@ The demo site is <a aria-label="Open the demo site" href="https://narcissus-blog
 
 - GraphQL API.
 
+- Alternative <a aria-label="Learn more about Astro" href="https://astro.build/">demo site built with Astro</a>.
+
 ## Trying it Out
 
 You can clone and build this demo SvelteKit site locally yourself:
