@@ -161,6 +161,7 @@ Endpoints:
           ],
         }
         ```
+      </dd>
     </dl>
 
 - `post/comment` submit a new comment for a particular blog post:
@@ -178,7 +179,7 @@ Endpoints:
         }
         ```
       </dd>
-      <dt>response</dt><dd>400 status code if everything is good
+      <dt>response</dt><dd>400 status code if everything is good</dd>
     </dl>
     Email is only used with Akismet for spam detection as is not stored to the database.
 
@@ -203,6 +204,7 @@ Endpoints:
           "id": "string: id of new like (needed to rescind it later)",
         }
         ```
+      </dd>
     </dl>
 
 - `post/message` submit a message, for example from a contact page message form:
@@ -219,7 +221,7 @@ Endpoints:
         }
         ```
       </dd>
-      <dt>response</dt><dd>400 status code if everything is good
+      <dt>response</dt><dd>400 status code if everything is good</dd>
     </dl>
     The message details are forwarded by the Telegram bot including spam check result.
 
@@ -242,6 +244,7 @@ Endpoints:
           "views": 599,
         }
         ```
+        </dd>
     </dl>
 
 ## Setup
