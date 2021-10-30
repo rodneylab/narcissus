@@ -1,8 +1,8 @@
 <script lang="ts">
-  import defaultFeaturedImage from '$lib/assets/home/home.jpg';
-  import defaultOgImage from '$lib/assets/home/home-open-graph.jpg';
-  import defaultOgSquareImage from '$lib/assets/home/home-open-graph-square.jpg';
-  import defaultTwitterImage from '$lib/assets/home/home-twitter.jpg';
+  import defaultFeaturedImage from '$lib/assets/home/home.png';
+  import defaultOgImage from '$lib/assets/home/home-open-graph.png';
+  import defaultOgSquareImage from '$lib/assets/home/home-open-graph-square.png';
+  import defaultTwitterImage from '$lib/assets/home/home-twitter.png';
 
   import website from '$lib/config/website';
   import { VERTICAL_LINE_ENTITY } from '$lib/constants/entities';
