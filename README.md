@@ -136,7 +136,7 @@ Endpoints:
       <dt>method</dt><dd>POST</dd>
       <dt>input</dt><dd>JSON object: <code>{ "slug": "example-post-slug-to-identify-post" }</code></dd>
       <dt>response</dt><dd>JSON object:
-        <code>
+        <code class="language-json">
         {
           "likes": 53,
           "views": 598 ,
