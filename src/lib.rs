@@ -43,11 +43,11 @@ struct LikeRequest {
     unlike: bool,
 }
 
-#[derive(Deserialize)]
-struct PostCreateRequest {
-    slug: String,
-    title: String,
-}
+// #[derive(Deserialize)]
+// struct PostCreateRequest {
+//     slug: String,
+//     title: String,
+// }
 
 #[derive(Deserialize)]
 struct IdResponse {
@@ -262,9 +262,9 @@ fn email_valid(email: &str) -> Option<String> {
     Some("Check the email address".to_string())
 }
 
-fn title_valid(title: &str) -> bool {
-    contains_only_printable_characters(title)
-}
+// fn title_valid(title: &str) -> bool {
+//     contains_only_printable_characters(title)
+// }
 
 fn get_header_value(headers: &worker::Headers, header: &str) -> Option<String> {
     match headers.get(header) {
@@ -459,36 +459,36 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
     // functionality and a `RouteContext` which you can use to  and get route parameters and
     // Enviornment bindings like KV Stores, Durable Objects, Secrets, and Variables.
     router
-        .post_async("/post/create", |mut req, ctx| async move {
-            let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
-            let api_key = ctx.var("SUPABASE_SERVICE_API_KEY")?.to_string();
-            let client = match get_supabase_client(&supabase_url, &api_key) {
-                Ok(res) => res,
-                Err(_) => return Response::error("Error connecting to database", 400),
-            };
-            let data: PostCreateRequest;
-            match req.json().await {
-                Ok(res) => data = res,
-                Err(_) => return Response::error("Bad request", 400),
-            }
-            let slug = data.slug;
-            if !slug_valid(&slug) {
-                return Response::error("Bad request", 400);
-            }
-            let title = &data.title;
-            if !title_valid(&slug) {
-                return Response::error("Bad request", 400);
-            }
-            let insert_query = format!("[{{ \"slug\": \"{}\", \"title\": \"{}\" }}]", slug, title);
-            let response = match client.from("Post").insert(insert_query).execute().await {
-                Ok(res) => res,
-                Err(_) => return Response::error("Error creating post", 400),
-            };
-            match response.text().await {
-                Ok(_) => Response::ok("Post created. Thankee!"),
-                Err(_) => Response::error("Error creating post", 400),
-            }
-        })
+        // .post_async("/post/create", |mut req, ctx| async move {
+        //     let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
+        //     let api_key = ctx.var("SUPABASE_SERVICE_API_KEY")?.to_string();
+        //     let client = match get_supabase_client(&supabase_url, &api_key) {
+        //         Ok(res) => res,
+        //         Err(_) => return Response::error("Error connecting to database", 400),
+        //     };
+        //     let data: PostCreateRequest;
+        //     match req.json().await {
+        //         Ok(res) => data = res,
+        //         Err(_) => return Response::error("Bad request", 400),
+        //     }
+        //     let slug = data.slug;
+        //     if !slug_valid(&slug) {
+        //         return Response::error("Bad request", 400);
+        //     }
+        //     let title = &data.title;
+        //     if !title_valid(&slug) {
+        //         return Response::error("Bad request", 400);
+        //     }
+        //     let insert_query = format!("[{{ \"slug\": \"{}\", \"title\": \"{}\" }}]", slug, title);
+        //     let response = match client.from("Post").insert(insert_query).execute().await {
+        //         Ok(res) => res,
+        //         Err(_) => return Response::error("Error creating post", 400),
+        //     };
+        //     match response.text().await {
+        //         Ok(_) => Response::ok("Post created. Thankee!"),
+        //         Err(_) => Response::error("Error creating post", 400),
+        //     }
+        // })
         .options("/post/data", |req, ctx| {
             preflight_response(req.headers(), &ctx.var("CORS_ORIGIN")?.to_string())
         })
