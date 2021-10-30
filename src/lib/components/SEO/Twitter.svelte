@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   export let article = false;
-  export let author;
-  export let twitterUsername;
-  export let image;
-  export let timeToRead = 0;
+  export let author: string;
+  export let twitterUsername: string;
+  export let image: { url: string };
+  export let timeToRead: number = 0;
 
   /*
    * When there is an equivalent og tag present, Twitter takes that so check OpenGraph before

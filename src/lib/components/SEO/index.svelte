@@ -56,7 +56,7 @@
     url: defaultOgSquareImage,
     alt: defaultAlt,
   };
-  export let twitterImage = {
+  export let twitterImage: { url: string; alt: string } = {
     url: defaultTwitterImage,
     alt: defaultAlt,
   };
