@@ -3,10 +3,10 @@ import { fontFamilyHeading, fontSize2, fontSize3 } from '$lib/styles/vars/font.c
 import {
   spacing0,
   spacing1,
+  spacing10,
   spacing12,
   spacing2,
   spacing4,
-  spacing8,
   spacingPx2,
 } from '$lib/styles/vars/spacing.css';
 import { maxWidthFull } from '$lib/styles/vars/widths.css';
@@ -16,18 +16,32 @@ export const container = style({
   display: 'flex',
   width: [maxWidthFull],
   marginTop: [spacing12],
+
+  '@media': {
+    '(min-width: 768px)': {
+      paddingLeft: 'auto',
+      paddingRight: 'auto',
+    },
+  },
 });
 
 export const content = style({
   border: [spacingPx2],
-  borderRadius: [spacing1],
+  width: [maxWidthFull],
   margin: [spacing0, 'auto'],
-  padding: [spacing4],
+  paddingLeft: [spacing10],
+  paddingRight: [spacing10],
   selectors: {
     ['&:hover, &:focus']: {
       borderColor: themeVars.colour.text,
       backgroundColor: themeVars.colour.text,
       boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
+    },
+  },
+  '@media': {
+    '(min-width: 768px)': {
+      borderRadius: [spacing1],
+      padding: [spacing4],
     },
   },
 });

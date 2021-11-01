@@ -1,6 +1,7 @@
 <script lang="ts">
   import BlogPostSummary from '$lib/components/BlogPostSummary.svelte';
   import { H_ELLIPSIS_ENTITY } from '$lib/constants/entities';
+  import { postSummary } from '$lib/components/BlogRoll.css';
 
   export let initialPosts: number = 4;
   export let posts: {
@@ -25,7 +26,7 @@
 <section role="feed">
   <h2>BLOG POSTS</h2>
   {#each displayPosts as post, index}
-    <article aria-posinset={index + 1} aria-setsize={postCount}>
+    <article class={postSummary} aria-posinset={index + 1} aria-setsize={postCount}>
       <BlogPostSummary
         datePublished={post.datePublished}
         postTitle={post.postTitle}

@@ -1,11 +1,12 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
-import { fontFamilyHeading, fontSize4, fontSize5 } from '$lib/styles/vars/font.css';
+import { fontFamilyHeading, fontSize5 } from '$lib/styles/vars/font.css';
 import {
   spacing0,
   spacing1,
   spacing12,
   spacing2,
   spacing3,
+  spacing4,
   spacing6,
 } from '$lib/styles/vars/spacing.css';
 import { maxWidthFull, maxWidthWrapper } from '$lib/styles/vars/widths.css';
@@ -15,15 +16,25 @@ export const container = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-end',
-  maxWidth: [maxWidthWrapper],
   width: [maxWidthFull],
-  margin: [spacing0, 'auto', spacing12],
+  marginBottom: [spacing12],
+  '@media': {
+    '(min-width: 768px)': {
+      maxWidth: [maxWidthWrapper],
+      margin: [spacing0, 'auto', spacing12],
+    },
+  },
 });
 
 export const themeButtonContainer = style({
   display: 'flex',
   width: [maxWidthFull],
-  // marginRight: [-spacing3],
+  padding: [spacing4],
+  '@media': {
+    '(min-width: 768px)': {
+      paddingRight: [spacing0],
+    },
+  },
 });
 
 export const themeButton = style({
@@ -54,6 +65,12 @@ export const content = style({
   flexDirection: 'row',
   width: [maxWidthFull],
   fontFamily: [fontFamilyHeading],
+  paddingRight: [spacing4],
+  '@media': {
+    '(min-width: 768px)': {
+      paddingRight: [spacing0],
+    },
+  },
 });
 
 export const nav = style({

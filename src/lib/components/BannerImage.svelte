@@ -32,5 +32,5 @@
   {sources}
   {placeholder}
   {sizes}
-  style={'border-radius:12px;margin-bottom:48px'}
+  style={'border-radius:12px;margin-bottom:48px;width:100%'}
 />

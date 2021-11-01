@@ -1,5 +1,5 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
-import { spacing0, spacing4 } from '$lib/styles/vars/spacing.css';
+import { spacing0, spacing6 } from '$lib/styles/vars/spacing.css';
 import { maxWidthFull, maxWidthWrapper } from '$lib/styles/vars/widths.css';
 import { style } from '@vanilla-extract/css';
 
@@ -9,7 +9,6 @@ export const container = style({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: [spacing4, spacing4],
   minHeight: '100vh',
   backgroundColor: themeVars.colour.background,
   color: themeVars.colour.text,
@@ -24,7 +23,13 @@ export const container = style({
 
 export const main = style({
   maxWidth: [maxWidthWrapper],
-  width: [maxWidthFull],
-  padding: [spacing0, 'auto'],
-  margin: ['auto'],
+  marginLeft: [spacing6],
+  marginRight: [spacing6],
+  '@media': {
+    '(min-width: 768px)': {
+      width: [maxWidthFull],
+      padding: [spacing0, 'auto'],
+      margin: ['auto'],
+    },
+  },
 });
