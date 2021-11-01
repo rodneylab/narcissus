@@ -1,7 +1,16 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
 import { fontWeightBold } from '$lib/styles/vars/font.css';
-import { spacing12, spacing2, spacing6, spacing8, spacingPx2 } from '$lib/styles/vars/spacing.css';
+import {
+  spacing12,
+  spacing2,
+  spacing4,
+  spacing5,
+  spacing6,
+  spacing8,
+  spacingPx2,
+} from '$lib/styles/vars/spacing.css';
 import { style } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 
 export const container = style({
   display: 'flex',
@@ -46,8 +55,8 @@ export const link = style({
 
 export const likeButton = style({
   borderStyle: 'none',
-  marginLeft: '-1rem',
-  marginRight: '-1.25rem',
+  marginLeft: `${calc(spacing4).negate()}`,
+  marginRight: `${calc(spacing5).negate()}`,
   background: 'transparent',
   color: 'inherit',
 });

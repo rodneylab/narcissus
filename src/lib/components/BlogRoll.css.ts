@@ -1,9 +1,10 @@
-import { spacing0 } from '$lib/styles/vars/spacing.css';
+import { spacing0, spacing6 } from '$lib/styles/vars/spacing.css';
 import { style } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 
 export const postSummary = style({
-  marginLeft: '-1.5rem',
-  marginRight: '-1.5rem',
+  marginLeft: `${calc(spacing6).negate()}`,
+  marginRight: `${calc(spacing6).negate()}`,
   '@media': {
     '(min-width: 768px)': {
       marginLeft: [spacing0],

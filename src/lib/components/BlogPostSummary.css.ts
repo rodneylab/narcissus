@@ -16,7 +16,6 @@ export const container = style({
   display: 'flex',
   width: [maxWidthFull],
   marginTop: [spacing12],
-
   '@media': {
     '(min-width: 768px)': {
       paddingLeft: 'auto',
@@ -29,8 +28,10 @@ export const content = style({
   border: [spacingPx2],
   width: [maxWidthFull],
   margin: [spacing0, 'auto'],
-  paddingLeft: [spacing10],
+  paddingTop: [spacing4],
   paddingRight: [spacing10],
+  paddingBottom: [spacing4],
+  paddingLeft: [spacing10],
   selectors: {
     ['&:hover, &:focus']: {
       borderColor: themeVars.colour.text,
@@ -71,32 +72,59 @@ export const contentBody = style({
       color: themeVars.colour.text,
     },
     [`${content}:hover &,${content}:focus & `]: {
-      color: themeVars.colour.secondary,
+      color: themeVars.colour.background,
     },
   },
 });
 
 export const postMeta = style({
-  display: 'flex',
-  flexDirection: 'row',
+  display: 'grid',
+  gridTemplateAreas: "'meta-date' 'meta-data'",
+  width: [maxWidthFull],
   alignItems: 'baseline',
-  justifyContent: 'flex-start',
+  '@media': {
+    '(min-width: 768px)': {
+      gridTemplateColumns: '1fr auto auto',
+      gridTemplateAreas: "'meta-date . meta-data'",
+    },
+  },
 });
 
 export const viewsLikesContainer = style({
   display: 'flex',
+  gridArea: 'meta-data',
   margin: [spacing0],
+  paddingLeft: 'auto',
   backgroundColor: 'transparent',
+  paddingBottom: [spacing0],
+  '@media': {
+    '(min-width: 768px)': {
+      paddingBottom: [spacing4],
+    },
+  },
 });
 
 export const viewsLikesContent = style({
   borderStyle: 'none',
   boxShadow: 'none',
   backgroundColor: 'transparent',
+  marginLeft: [spacing0],
+  paddingLeft: [spacing0],
+  '@media': {
+    '(min-width: 768px)': {
+      marginLeft: 'auto',
+    },
+  },
 });
 
 export const dateText = style({
+  gridArea: 'meta-date',
   fontFamily: [fontFamilyHeading],
   fontSize: [fontSize3],
-  marginRight: 'auto',
+  marginBottom: [spacing4],
+  '@media': {
+    '(min-width: 768px)': {
+      marginBottom: [spacing0],
+    },
+  },
 });

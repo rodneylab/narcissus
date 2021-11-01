@@ -11,6 +11,7 @@ import {
 } from '$lib/styles/vars/spacing.css';
 import { maxWidthFull, maxWidthWrapper } from '$lib/styles/vars/widths.css';
 import { style } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 
 export const container = style({
   display: 'flex',
@@ -29,7 +30,10 @@ export const container = style({
 export const themeButtonContainer = style({
   display: 'flex',
   width: [maxWidthFull],
-  padding: [spacing4],
+  paddingTop: [spacing4],
+  paddingBottom: [spacing4],
+  paddingLeft: [spacing6],
+  paddingRight: [spacing6],
   '@media': {
     '(min-width: 768px)': {
       paddingRight: [spacing0],
@@ -43,7 +47,7 @@ export const themeButton = style({
   color: themeVars.colour.text,
   padding: [spacing3],
   marginLeft: 'auto',
-  marginRight: '-0.75rem',
+  marginRight: `${calc(spacing3).negate()}`,
   selectors: {
     ['&:hover, &:focus']: {
       color: themeVars.colour.text,
@@ -65,7 +69,7 @@ export const content = style({
   flexDirection: 'row',
   width: [maxWidthFull],
   fontFamily: [fontFamilyHeading],
-  paddingRight: [spacing4],
+  paddingRight: [spacing6],
   '@media': {
     '(min-width: 768px)': {
       paddingRight: [spacing0],
