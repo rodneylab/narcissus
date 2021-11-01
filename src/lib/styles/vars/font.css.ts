@@ -102,6 +102,7 @@ globalStyle('body', {
 
 globalStyle('h1, h2, h3, h4, h5, h6, h7', {
   fontFamily: [fontFamilyHeading],
+  fontWeight: [fontWeightNormal],
 });
 
 globalStyle('h1, h2, h3, h4, h5, h6, h7', {
@@ -113,7 +114,6 @@ globalStyle('h3, h4, h5, h6', {
 });
 
 globalStyle('h1', {
-  fontWeight: [fontWeightBlack],
   fontSize: [mobileFontSize6],
   fontFamily: 'Slabo 13',
   '@media': {
