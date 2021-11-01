@@ -56,6 +56,7 @@ export const contentHeading = style({
   selectors: {
     [`${content} &`]: {
       color: themeVars.colour.alternative,
+      textUnderlineOffset: [spacing2],
     },
     [`${content}:hover &,${content}:focus & `]: {
       color: themeVars.colour.secondary,
