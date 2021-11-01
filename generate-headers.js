@@ -28,7 +28,7 @@ function getStyleSrcAttrCsp(filename) {
     });
   });
 
-  return [...styleSrcAttrHashes].map((element) => `'sha-256-${element}'`).join(' ');
+  return [...styleSrcAttrHashes].map((element) => `'sha256-${element}'`).join(' ');
 }
 
 let pageCspElements = [];
