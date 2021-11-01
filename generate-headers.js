@@ -13,6 +13,24 @@ const rootDomain = process.env.VITE_DOMAIN;
 const buildDir = path.join(__dirname, 'build');
 const buildPathLength = path.dirname(buildDir).length + path.basename(buildDir).length + 1;
 
+function getStyleSrcAttrCsp(filename) {
+  const htmlSource = fs.readFileSync(filename, { encoding: 'utf-8' });
+  const root = parse(htmlSource);
+  let styleSrcAttrHashes = new Set();
+
+  const styleAttributesTags = ['div', 'g', 'img', 'span', 'svg'];
+  styleAttributesTags.forEach((tag) => {
+    root.getElementsByTagName(tag).forEach((element) => {
+      if (element.hasAttribute('style')) {
+        const hash = sha256(element.getAttribute('style'));
+        styleSrcAttrHashes.add(hash.toString(Base64));
+      }
+    });
+  });
+
+  return [...styleSrcAttrHashes].map((element) => `'sha-256-${element}'`).join(' ');
+}
+
 let pageCspElements = [];
 function findHtmlFiles(startPath, filter = /\.html$/) {
   if (!fs.existsSync(startPath)) {
@@ -34,27 +52,14 @@ function findHtmlFiles(startPath, filter = /\.html$/) {
         process.env.VITE_WORKER_URL
       }; img-src 'self' data\:; font-src 'self' data\:; form-action 'self'; frame-ancestors 'self'; frame-src 'self' https://hcaptcha.com https://*.hcaptcha.com; manifest-src 'self'; media-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline' https://hcaptcha.com https://*.hcaptcha.com; worker-src 'self'; report-to csp-endpoint; report-uri https://sentry.io/api/${
         process.env.SENTRY_PROJECT_ID
-      }/security/?sentry_key=${process.env.SENTRY_KEY};`);
+      }/security/?sentry_key=${
+        process.env.SENTRY_KEY
+      }; style-src 'self' 'unsafe-hashes' ${getStyleSrcAttrCsp(
+        filename,
+      )} https://hcaptcha.com https://*.hcaptcha.com;`);
     }
   });
 }
-
-const htmlSourceFile = path.join(__dirname, 'build/index.html');
-const htmlSource = fs.readFileSync(htmlSourceFile, { encoding: 'utf-8' });
-const root = parse(htmlSource);
-let styleSrcAttrHashes = new Set();
-
-const styleAttributesTags = ['div', 'g', 'img', 'span', 'svg'];
-styleAttributesTags.forEach((tag) => {
-  root.getElementsByTagName(tag).forEach((element) => {
-    if (element.hasAttribute('style')) {
-      const hash = sha256(element.getAttribute('style'));
-      styleSrcAttrHashes.add(hash.toString(Base64));
-    }
-  });
-});
-
-const styleSrcAttrCsp = [...styleSrcAttrHashes].map((element) => `'sha-256-${element}'`).join(' ');
 
 function createHeaders() {
   const headers = `/*
@@ -77,9 +82,8 @@ ${pageCspElements.join('\n')}
 
 async function main() {
   findHtmlFiles(buildDir);
-  console.log(pageCspElements);
   createHeaders();
-  console.log(pageCspElements);
+  // console.log(pageCspElements);
 }
 
 main();
