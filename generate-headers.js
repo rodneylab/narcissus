@@ -32,7 +32,9 @@ function findHtmlFiles(startPath, filter = /\.html$/) {
     process.env.VITE_DOMAIN
   } https://hcaptcha.com https://*.hcaptcha.com ${
         process.env.VITE_WORKER_URL
-      }; img-src 'self' data\:; font-src 'self' data\:; form-action 'self'; frame-ancestors 'self'; frame-src 'self' https://hcaptcha.com https://*.hcaptcha.com; manifest-src 'self'; media-src 'self' data\:; object-src 'none';`);
+      }; img-src 'self' data\:; font-src 'self' data\:; form-action 'self'; frame-ancestors 'self'; frame-src 'self' https://hcaptcha.com https://*.hcaptcha.com; manifest-src 'self'; media-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline' https://hcaptcha.com https://*.hcaptcha.com; worker-src 'self'; report-to csp-endpoint; report-uri https://sentry.io/api/${
+        process.env.SENTRY_PROJECT_ID
+      }/security/?sentry_key=${process.env.SENTRY_KEY};`);
     }
   });
 }
