@@ -1,6 +1,13 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
 import { fontFamilyHeading, fontWeightBold } from '$lib/styles/vars/font.css';
-import { spacing0, spacing12, spacing2, spacingPx } from '$lib/styles/vars/spacing.css';
+import {
+  spacing0,
+  spacing1,
+  spacing12,
+  spacing2,
+  spacingPx,
+  spacingPx2,
+} from '$lib/styles/vars/spacing.css';
 import { style } from '@vanilla-extract/css';
 
 export const commentListItem = style({
@@ -16,7 +23,7 @@ export const commentContent = style({
   borderWidth: [spacingPx],
   width: '70%',
   borderColor: themeVars.colour.secondary,
-  boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
+  boxShadow: `${spacingPx2} ${spacing1} ${spacing1} ${themeVars.colour.shadow}`,
   backgroundColor: themeVars.colour.accent,
   paddingTop: spacing2,
   color: themeVars.colour.textSecondary,

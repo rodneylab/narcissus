@@ -1,6 +1,7 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
 import { fontSize3, fontWeightBlack } from '$lib/styles/vars/font.css';
 import {
+  spacing1,
   spacing12,
   spacing20,
   spacing3,
@@ -8,6 +9,7 @@ import {
   spacing5,
   spacing8,
   spacingPx,
+  spacingPx2,
 } from '$lib/styles/vars/spacing.css';
 import { maxWidthFull } from '$lib/styles/vars/widths.css';
 import { style } from '@vanilla-extract/css';
@@ -22,7 +24,7 @@ export const content = style({
   borderWidth: [spacingPx],
   width: '70%',
   borderColor: themeVars.colour.secondary,
-  boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
+  boxShadow: `${spacingPx2} ${spacing1} ${spacing1} ${themeVars.colour.shadow}`,
   backgroundColor: themeVars.colour.accent,
   color: themeVars.colour.textSecondary,
   accentColor: themeVars.colour.textSecondary,

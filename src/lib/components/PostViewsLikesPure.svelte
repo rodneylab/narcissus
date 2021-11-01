@@ -1,12 +1,9 @@
 <script lang="ts">
-  import ViewsIcon from '$lib/components/Icons/View.svelte';
-  import LikedIcon from '$lib/components/Icons/HeartSolid.svelte';
+  import { browser } from '$app/env';
   import CommentIcon from '$lib/components/Icons/Comment.svelte';
   import NotYetLikedIcon from '$lib/components/Icons/HeartOutline.svelte';
-  import { postLikedViewed } from '$lib/shared/stores/postLikedViewed';
-  import { onMount, onDestroy } from 'svelte';
-  import { browser } from '$app/env';
-  import website from '$lib/config/website';
+  import LikedIcon from '$lib/components/Icons/HeartSolid.svelte';
+  import ViewsIcon from '$lib/components/Icons/View.svelte';
   import {
     container,
     content,
@@ -15,6 +12,9 @@
     link,
     meta,
   } from '$lib/components/PostViewsLikesPure.css';
+  import website from '$lib/config/website';
+  import { postLikedViewed } from '$lib/shared/stores/postLikedViewed';
+  import { onDestroy, onMount } from 'svelte';
 
   export let likes: number;
   export let slug: string;

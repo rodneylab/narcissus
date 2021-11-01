@@ -1,6 +1,13 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
 import { fontSize2 } from '$lib/styles/vars/font.css';
-import { spacing12, spacing2, spacing4, spacingPx } from '$lib/styles/vars/spacing.css';
+import {
+  spacing1,
+  spacing12,
+  spacing2,
+  spacing4,
+  spacingPx,
+  spacingPx2,
+} from '$lib/styles/vars/spacing.css';
 import { style } from '@vanilla-extract/css';
 
 export const summaryText = style({
@@ -16,7 +23,7 @@ export const cardContent = style({
   borderStyle: 'solid',
   borderWidth: [spacingPx],
   borderColor: themeVars.colour.secondary,
-  boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
+  boxShadow: `${spacingPx2} ${spacing1} ${spacing1} ${themeVars.colour.shadow}`,
   backgroundColor: themeVars.colour.accent,
   width: '60%',
 });

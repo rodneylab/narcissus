@@ -3,9 +3,7 @@ import {
   spacing0,
   spacing1,
   spacing12,
-  spacing2,
   spacing24,
-  spacing4,
   spacing6,
   spacing8,
 } from '$lib/styles/vars/spacing.css';

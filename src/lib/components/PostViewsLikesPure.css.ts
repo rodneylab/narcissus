@@ -1,6 +1,7 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
 import { fontWeightBold } from '$lib/styles/vars/font.css';
 import {
+  spacing1,
   spacing12,
   spacing2,
   spacing4,
@@ -24,7 +25,7 @@ export const content = style({
   borderRadius: [spacing2],
   paddingLeft: [spacing6],
   borderColor: themeVars.colour.text,
-  boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
+  boxShadow: `${spacingPx2} ${spacing1} ${spacing1} ${themeVars.colour.shadow}`,
   fontWeight: [fontWeightBold],
 });
 

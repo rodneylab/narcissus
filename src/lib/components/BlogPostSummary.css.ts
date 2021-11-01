@@ -36,7 +36,7 @@ export const content = style({
     ['&:hover, &:focus']: {
       borderColor: themeVars.colour.text,
       backgroundColor: themeVars.colour.text,
-      boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
+      boxShadow: `${spacingPx2} ${spacing1} ${spacing1} ${themeVars.colour.shadow}`,
     },
   },
   '@media': {

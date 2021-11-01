@@ -1,12 +1,14 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
 import { fontSize3, fontWeightBlack } from '$lib/styles/vars/font.css';
 import {
+  spacing1,
   spacing12,
   spacing3,
   spacing4,
   spacing5,
   spacing8,
   spacingPx,
+  spacingPx2,
 } from '$lib/styles/vars/spacing.css';
 import { maxWidthFull } from '$lib/styles/vars/widths.css';
 import { style } from '@vanilla-extract/css';
@@ -20,7 +22,7 @@ export const content = style({
   borderStyle: 'solid',
   borderWidth: [spacingPx],
   borderColor: themeVars.colour.secondary,
-  boxShadow: `0.125rem 0.25rem 0.25rem ${themeVars.colour.shadow}`,
+  boxShadow: `${spacingPx2} ${spacing1} ${spacing1} ${themeVars.colour.shadow}`,
   width: '60%',
   backgroundColor: themeVars.colour.accent,
   color: themeVars.colour.textSecondary,
