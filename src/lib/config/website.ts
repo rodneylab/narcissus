@@ -13,7 +13,7 @@ const website = {
   siteUrl: import.meta.env ? (import.meta.env.VITE_SITE_URL as string) : '',
   icon: 'static/icon.png',
   backgroundColor: '#1b4079',
-  themeColor: '#d62828',
+  themeColor: '#fcfdfd',
   contactEmail: import.meta.env ? (import.meta.env.VITE_CONTACT_EMAIL as string) : '',
   facebookAuthorPage: `https://www.facebook.com/${facebookAuthorPageName}`,
   facebookAuthorPageName,
