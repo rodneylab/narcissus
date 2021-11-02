@@ -12,7 +12,7 @@
     heading,
   } from '$lib/components/CommentForm.css';
   import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
-  import { FieldError, validEmail } from '$lib/utilities/form';
+  import { FieldError, validEmail, validComment } from '$lib/utilities/form';
   import type { HCaptchaExecuteResponse } from 'src/global';
 
   export let slug: string;
@@ -51,8 +51,9 @@
   let name = browser ? window.sessionStorage.getItem(`${slug}-name`) ?? '' : '';
   let email = browser ? window.sessionStorage.getItem(`${slug}-email`) ?? '' : '';
 
-  let errors: { name: FieldError; email: FieldError; comment: FieldError };
-  $: errors = { name: null, email: null, comment: null };
+  let errors: { name?: FieldError; email?: FieldError; comment?: FieldError };
+  // $: errors = { name: null, email: null, comment: null };
+  $: errors = null;
 
   function clearForm() {
     ['comment', 'name', 'email'].forEach((element) =>
@@ -70,7 +71,19 @@
   }
 
   function validateInputs() {
-    errors = { ...errors, ...validEmail(email) };
+    errors = { ...errors, ...validEmail(email), ...validComment(comment) };
+  }
+
+  function noErrors() {
+    validateInputs();
+    if (errors == null) {
+      return true;
+    }
+    const { name: nameError, email: emailError, comment: commentError } = errors;
+    if (!nameError && !emailError && !commentError) {
+      return true;
+    }
+    return false;
   }
 
   $: submitting = false;
@@ -79,7 +92,7 @@
   async function handleSubmit() {
     try {
       validateInputs();
-      if (browser) {
+      if (noErrors() && browser) {
         submitting = true;
         const { response } = await hcaptcha.execute(hcaptchaWidgetID, {
           async: true,
@@ -133,7 +146,7 @@
       />
       <EmailInputField
         value={email}
-        id="contact-email"
+        id="comment-email"
         placeholder="blake@example.com"
         title="Email"
         error={errors?.email ?? null}
@@ -145,13 +158,13 @@
       />
       <TextArea
         value={comment}
-        id="contact-message"
+        id="comment-comment"
         placeholder="Enter your comment here"
-        title="Message"
+        title="Comment"
         error={errors?.comment ?? null}
         on:update={(event) => {
-          sessionStore('comment', event.detail);
-          comment = event.detail;
+          sessionStore('comment', event.detail.trim());
+          comment = event.detail.trim();
         }}
         style="padding-bottom:1.25rem;margin-right:1rem"
       />
