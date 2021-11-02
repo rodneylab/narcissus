@@ -1,5 +1,7 @@
 use ::regex::Regex;
+use ammonia::clean;
 use postgrest::Postgrest;
+use pulldown_cmark::{html::push_html, Options, Parser};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use worker::*;
@@ -103,6 +105,16 @@ struct ViewResponse {
 #[derive(Deserialize)]
 struct ViewRequest {
     slug: String,
+}
+
+fn clean_comment_text(text: &str) -> String {
+    let mut options = Options::empty();
+    options.insert(Options::ENABLE_TABLES);
+
+    let md_parse = Parser::new_ext(text, options);
+    let mut unsafe_html = String::new();
+    push_html(&mut unsafe_html, md_parse);
+    clean(&*unsafe_html)
 }
 
 fn log_request(req: &Request) {
@@ -563,6 +575,7 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             let response = &data.response;
             let slug = &data.slug;
             let text = &data.text;
+            // let text = clean_comment_text(&data.text);
             let hcaptcha_sitekey = ctx.var("HCAPTCHA_SITEKEY")?.to_string();
             let hcaptcha_secretkey = ctx.var("HCAPTCHA_SECRETKEY")?.to_string();
             if let Some(value) = author_valid(author) { return Response::error(value, 400)};
@@ -812,6 +825,24 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
 }
 
 #[test]
+fn test_clean_comment_text() {
+    let comment_text = "[a link](http://www.notriddle.com/)";
+    assert_eq!(
+        clean_comment_text(&comment_text),
+        "<p><a href=\"http://www.notriddle.com/\" rel=\"noopener noreferrer\">a link</a></p>\n"
+    );
+
+    let comment_text = "<img src=x onerror=alert(1)//>";
+    assert_eq!(clean_comment_text(&comment_text), "<img src=\"x\">");
+
+    let comment_text = "<svg><g/onload=alert(2)//<p>";
+    assert_eq!(clean_comment_text(&comment_text), "<p>&lt;g/onload=alert(2)//\n</p>");
+
+    let comment_text = "already clean";
+    assert_eq!(clean_comment_text(&comment_text), "<p>already clean</p>\n");
+}
+
+#[test]
 fn test_comment_text_valid() {
     // let valid_comments = ["Lovely post!", "Really\ngood\tpost.", "Simply amazing ❤️"];
     let valid_comments = ["Lovely post!", "Really\ngood\tpost.", "Simply amazing "];
@@ -935,18 +966,18 @@ fn test_get_count_from_supabase_response_header() {
     assert_eq!(get_count_from_supabase_response_header(&headers), Some(24));
 }
 
-#[test]
-fn test_title_valid() {
-    let valid_titles = ["My New Title", "My New Title 1", "My New Title: 1"];
-    for element in valid_titles.iter() {
-        assert!(title_valid(element));
-    }
+// #[test]
+// fn test_title_valid() {
+//     let valid_titles = ["My New Title", "My New Title 1", "My New Title: 1"];
+//     for element in valid_titles.iter() {
+//         assert!(title_valid(element));
+//     }
 
-    let invalid_titles = ["My\nNew\nTitle"];
-    for element in &invalid_titles {
-        assert!(!title_valid(element));
-    }
-}
+//     let invalid_titles = ["My\nNew\nTitle"];
+//     for element in &invalid_titles {
+//         assert!(!title_valid(element));
+//     }
+// }
 
 #[test]
 fn test_verify_captcha() {

@@ -1,0 +1,10 @@
+{
+  "name": "@narcissus/root",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "demos/*",
+    "services/*"
+  ]
+}

@@ -6,8 +6,6 @@ compatibility_flags = [ "formdata_parser_supports_files" ] # required
 
 [vars]
 WORKERS_RS_VERSION = "0.0.6"
-# CORS_ORIGIN = "http://example.com:3030"
-# SITE_URL = https://example.com
 
 [build]
 command = "cargo install -q worker-build && worker-build --release" # required
