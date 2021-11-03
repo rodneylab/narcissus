@@ -2,3 +2,5 @@ node_modules
 .next
 dist
 
+demos/narcissus-astro
+apps/narcissus-dashboard

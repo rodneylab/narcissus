@@ -11,3 +11,7 @@ target/**
 
 
 README.html
+
+prisma
+package.json
+package-lock.json
