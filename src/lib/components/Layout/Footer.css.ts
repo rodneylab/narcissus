@@ -1,4 +1,5 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
+import { fontWeightBold } from '$lib/styles/vars/font.css';
 import {
   spacing0,
   spacing1,
@@ -34,6 +35,8 @@ export const copyrightText = style({
 export const footerLink = style({
   selectors: {
     [`${content} &`]: {
+      fontWeight: [fontWeightBold],
+      textUnderlineOffset: [spacing1],
       color: themeVars.colour.background,
     },
   },
@@ -51,7 +54,6 @@ export const footerIconsList = style({
 
 export const footerIconsListItem = style({
   display: 'flex',
-  // margin: [spacing0, spacing4, spacing0, spacing0],
   marginLeft: [spacing1],
   marginRight: [spacing1],
   selectors: {

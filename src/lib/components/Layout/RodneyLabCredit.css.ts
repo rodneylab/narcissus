@@ -1,5 +1,5 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
-import { spacing2 } from '$lib/styles/vars/spacing.css';
+import { spacing1, spacing2 } from '$lib/styles/vars/spacing.css';
 import { style } from '@vanilla-extract/css';
 
 export const container = style({
@@ -23,6 +23,7 @@ export const link = style({
   selectors: {
     [`${container} &`]: {
       color: themeVars.colour.background,
+      textUnderlineOffset: [spacing1],
     },
   },
 });
