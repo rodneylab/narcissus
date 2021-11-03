@@ -8,6 +8,7 @@
     "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "lint:scss": "stylelint \"src/**/*.{css,scss,svelte}\"",
     "format": "prettier --write --plugin-search-dir=. .",
+    "generate:headers": "node ./generate-headers.js",
     "generate:images": "node ./generate-responsive-image-data.js",
     "generate:manifest": "node ./generate-manifest.js",
     "generate:sitemap": "node ./generate-sitemap.js",
