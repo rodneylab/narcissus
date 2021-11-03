@@ -1,5 +1,10 @@
 import { themeVars } from '$lib/styles/themes/theme.css';
-import { fontFamilyHeading, fontSize2, fontSize3 } from '$lib/styles/vars/font.css';
+import {
+  fontFamilyHeading,
+  fontSize2,
+  fontSize3,
+  fontWeightNormal,
+} from '$lib/styles/vars/font.css';
 import {
   spacing0,
   spacing1,
@@ -56,6 +61,7 @@ export const contentHeading = style({
   selectors: {
     [`${content} &`]: {
       color: themeVars.colour.alternative,
+      fontWeight: [fontWeightNormal],
       textUnderlineOffset: [spacing2],
     },
     [`${content}:hover &,${content}:focus & `]: {
