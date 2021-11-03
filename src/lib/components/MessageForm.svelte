@@ -13,7 +13,7 @@
     heading,
   } from '$lib/components/MessageForm.css';
   import website from '$lib/config/website';
-  import { validEmail } from '$lib/utilities/form';
+  import { validEmail, validMessage, validName } from '$lib/utilities/form';
   import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
   import { onDestroy, onMount } from 'svelte';
   import type { FieldError } from '$lib/utilities/form';
@@ -72,7 +72,19 @@
   }
 
   function validateInputs() {
-    errors = { ...errors, ...validEmail(email) };
+    errors = { ...errors, ...validName(name), ...validEmail(email), ...validMessage(message) };
+  }
+
+  function noErrors() {
+    validateInputs();
+    if (errors == null) {
+      return true;
+    }
+    const { name: nameError, email: emailError, message: messageError } = errors;
+    if (!nameError && !emailError && !messageError) {
+      return true;
+    }
+    return false;
   }
 
   $: submitting = false;
@@ -81,7 +93,7 @@
   async function handleSubmit() {
     try {
       validateInputs();
-      if (browser) {
+      if (noErrors() && browser) {
         submitting = true;
         const { response } = await hcaptcha.execute(hcaptchaWidgetID, {
           async: true,
@@ -127,10 +139,12 @@
           id="contact-name"
           placeholder="Blake Costa"
           title="Name"
+          required
           error={errors?.name ?? null}
           on:update={(event) => {
-            sessionStore('name', event.detail);
-            name = event.detail;
+            const value = event.detail.trim();
+            sessionStore('name', value);
+            name = value;
           }}
           style="padding-bottom:1.25rem;margin-right:1rem"
         />
@@ -141,8 +155,10 @@
           id="contact-email"
           placeholder="blake@example.com"
           title="Email"
+          required
           error={errors?.email ?? null}
           on:update={(event) => {
+            const value = event.detail.trim();
             sessionStore('email', event.detail);
             email = event.detail;
           }}
@@ -155,10 +171,12 @@
           id="contact-message"
           placeholder="Enter your message here"
           title="Message"
+          required
           error={errors?.message ?? null}
           on:update={(event) => {
-            sessionStore('message', event.detail);
-            message = event.detail;
+            const value = event.detail.trim();
+            sessionStore('message', value);
+            message = value;
           }}
           style="padding-bottom:1.25rem;margin-right:1rem"
         />

@@ -7,7 +7,7 @@ export function validComment(comment: string) {
     errors = { ...errors, comment: "Don't forget to leave a comment!" };
   }
   if (comment.length > 1024) {
-    errors = { ...errors, comment: 'You comment looks a little long!' };
+    errors = { ...errors, comment: 'Your comment looks a little long!' };
   }
   return errors;
 }
@@ -26,7 +26,15 @@ export function validMessage(message: string) {
     errors = { ...errors, message: "Don't forget to leave a message!" };
   }
   if (message.length > 1024) {
-    errors = { ...errors, message: 'You message looks a little long!' };
+    errors = { ...errors, message: 'Your message looks a little long!' };
+  }
+  return errors;
+}
+
+export function validName(message: string) {
+  let errors = {};
+  if (message.length === 0) {
+    errors = { ...errors, name: "Don't forget to tell us your name!" };
   }
   return errors;
 }

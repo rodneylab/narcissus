@@ -12,7 +12,7 @@
     heading,
   } from '$lib/components/CommentForm.css';
   import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
-  import { FieldError, validEmail, validComment } from '$lib/utilities/form';
+  import { FieldError, validEmail, validComment, validName } from '$lib/utilities/form';
   import type { HCaptchaExecuteResponse } from 'src/global';
 
   export let slug: string;
@@ -52,7 +52,6 @@
   let email = browser ? window.sessionStorage.getItem(`${slug}-email`) ?? '' : '';
 
   let errors: { name?: FieldError; email?: FieldError; comment?: FieldError };
-  // $: errors = { name: null, email: null, comment: null };
   $: errors = null;
 
   function clearForm() {
@@ -71,7 +70,7 @@
   }
 
   function validateInputs() {
-    errors = { ...errors, ...validEmail(email), ...validComment(comment) };
+    errors = { ...errors, ...validName(name), ...validEmail(email), ...validComment(comment) };
   }
 
   function noErrors() {
@@ -137,6 +136,7 @@
         id="comment-name"
         placeholder="Blake Costa"
         title="Name"
+        required
         error={errors?.email ?? null}
         on:update={(event) => {
           sessionStore('name', event.detail);
@@ -149,6 +149,7 @@
         id="comment-email"
         placeholder="blake@example.com"
         title="Email"
+        required
         error={errors?.email ?? null}
         on:update={(event) => {
           sessionStore('email', event.detail);
@@ -161,6 +162,7 @@
         id="comment-comment"
         placeholder="Enter your comment here"
         title="Comment"
+        required
         error={errors?.comment ?? null}
         on:update={(event) => {
           sessionStore('comment', event.detail.trim());

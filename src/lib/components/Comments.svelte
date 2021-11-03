@@ -27,7 +27,8 @@
         <li class={commentListItem}>
           <Card containerClass={commentContainer} contentClass={commentContent}>
             <h3 class={authorText}>{author}</h3>
-            <p>{text}</p>
+            <!-- {@html text} -->
+            {text}
             <div>
               <small class={dateText}>
                 {dayjs(date).fromNow()}
