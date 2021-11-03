@@ -13,7 +13,7 @@ Narcissus is a proof of concept **backend as a service** app which lets you crea
 
 This demo **Svelte** site is static and uses Serverless **Rust Cloudflare Workers** to read and create comments as well as other interactive elements using REST requests, adding spam detection and Captchas without the added hassle of adding spam detection and Captchas. The app is backed by a **Supabase** PostgreSQL database.
 
-The demo site is <a aria-label="Open the demo site" href="https://narcissus-blog.rodneylab.com/contact/">running on Cloudflare Pages at narcissus-blog.rodneylab.com/</a>.
+The demo site is <a aria-label="Open the demo site" href="https://narcissus-blog.rodneylab.com/">running on Cloudflare Pages at narcissus-blog.rodneylab.com/</a>.
 
 ## Features
 
