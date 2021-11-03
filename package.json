@@ -17,6 +17,7 @@
     "svelte-check": "svelte-check"
   },
   "devDependencies": {
+    "@commitlint/config-conventional": "^14.1.0",
     "@fontsource/lato": "^4.5.0",
     "@fontsource/roboto-slab": "^4.5.1",
     "@fontsource/slabo-13px": "^4.5.0",
