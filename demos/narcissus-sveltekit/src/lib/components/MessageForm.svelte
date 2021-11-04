@@ -19,6 +19,8 @@
   import type { FieldError } from '$lib/utilities/form';
   import type { HCaptchaExecuteResponse } from 'src/global';
 
+  import theme from '$lib/shared/stores/theme';
+
   const { hcaptchaSitekey, workerUrl } = website;
 
   let hcaptchaWidgetID: string;
@@ -27,8 +29,7 @@
     render(id: string, config: { sitekey: string; size: string; theme: string }): string;
   } | null;
 
-  const darkMode =
-    browser && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const darkMode = $theme === 'dark';
 
   onMount(() => {
     if (browser) {
@@ -49,9 +50,9 @@
     }
   });
 
-  let message = browser ? window.sessionStorage.getItem(`contact-message`) ?? '' : '';
-  let name = browser ? window.sessionStorage.getItem(`contact-name`) ?? '' : '';
-  let email = browser ? window.sessionStorage.getItem(`contact-email`) ?? '' : '';
+  let message = browser ? window.sessionStorage.getItem('contact-message') ?? '' : '';
+  let name = browser ? window.sessionStorage.getItem('contact-name') ?? '' : '';
+  let email = browser ? window.sessionStorage.getItem('contact-email') ?? '' : '';
 
   let errors: { name: FieldError; email: FieldError; message: FieldError };
   $: errors = { name: null, email: null, message: null };
