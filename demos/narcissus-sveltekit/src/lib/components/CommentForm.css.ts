@@ -22,7 +22,6 @@ export const container = style({
 export const content = style({
   borderStyle: 'solid',
   borderWidth: [spacingPx],
-  width: '70%',
   borderColor: themeVars.colour.secondary,
   boxShadow: `${spacingPx2} ${spacing1} ${spacing1} ${themeVars.colour.shadow}`,
   backgroundColor: themeVars.colour.accent,

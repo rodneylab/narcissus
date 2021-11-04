@@ -23,7 +23,6 @@ export const content = style({
   borderWidth: [spacingPx],
   borderColor: themeVars.colour.secondary,
   boxShadow: `${spacingPx2} ${spacing1} ${spacing1} ${themeVars.colour.shadow}`,
-  width: '60%',
   backgroundColor: themeVars.colour.accent,
   color: themeVars.colour.textSecondary,
   accentColor: themeVars.colour.textSecondary,
