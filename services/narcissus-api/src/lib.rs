@@ -1,7 +1,7 @@
 use ::regex::Regex;
-use ammonia::clean;
+// use ammonia::clean;
 use postgrest::Postgrest;
-use pulldown_cmark::{html::push_html, Options, Parser};
+// use pulldown_cmark::{html::push_html, Options, Parser};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use worker::*;
@@ -28,6 +28,11 @@ struct MessageRequest {
     text: String,
     email: String,
     response: String,
+}
+
+#[derive(Serialize)]
+struct PostsResponse {
+    posts: Vec<PostRow>,
 }
 
 #[derive(Serialize)]
@@ -72,6 +77,15 @@ struct LikeRow {
     uid: String,
 }
 
+#[derive(Deserialize, Serialize)]
+struct PostRow {
+    uid: String,
+    created_at: String,
+    updated_at: String,
+    title: String,
+    slug: String,
+}
+
 //Expected response
 // {
 //  "success": true|false, // is the passcode valid, and does it meet security criteria you specified, e.g. sitekey?
@@ -107,15 +121,15 @@ struct ViewRequest {
     slug: String,
 }
 
-fn clean_comment_text(text: &str) -> String {
-    let mut options = Options::empty();
-    options.insert(Options::ENABLE_TABLES);
+// fn clean_comment_text(text: &str) -> String {
+//     let mut options = Options::empty();
+//     options.insert(Options::ENABLE_TABLES);
 
-    let md_parse = Parser::new_ext(text, options);
-    let mut unsafe_html = String::new();
-    push_html(&mut unsafe_html, md_parse);
-    clean(&*unsafe_html)
-}
+//     let md_parse = Parser::new_ext(text, options);
+//     let mut unsafe_html = String::new();
+//     push_html(&mut unsafe_html, md_parse);
+//     clean(&*unsafe_html)
+// }
 
 fn log_request(req: &Request) {
     console_log!(
@@ -438,6 +452,35 @@ async fn likes(client: &Postgrest, post_id: &i32) -> Option<i32> {
         Ok(response) => get_count_from_supabase_response_header(response.headers()),
         Err(_) => None,
     }
+}
+
+async fn posts(client: &Postgrest, limit: Option<u32>) -> Vec<PostRow> {
+    let default_limit = 10u32;
+    let limit_used = match limit {
+        Some(value) => value,
+        None => default_limit,
+    };
+    let response = match client
+        .from("Post")
+        .select("uid,created_at,updated_at,title,slug")
+        .order("created_at.desc")
+        .limit(limit_used as usize)
+        .execute()
+        .await
+    {
+        Ok(value) => value,
+        Err(_) => return Vec::<PostRow>::new(),
+    };
+    let body = match response.text().await {
+        Ok(res) => res,
+        Err(_) => return Vec::<PostRow>::new(),
+    };
+    let result: Vec<PostRow>;
+    match serde_json::from_str(&body) {
+        Ok(res) => result = res,
+        Err(_) => result = Vec::<PostRow>::new(),
+    };
+    result
 }
 
 async fn views(client: &Postgrest, post_id: &i32) -> Option<i32> {
@@ -820,27 +863,48 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 .unwrap()
                 .with_headers(headers))
         })
+        .get_async("/posts", |req, ctx| async move {
+            let authorisation_token = match req.headers().get("Authorization").unwrap() {
+                Some(value) => value,
+                None => return Response::error("Bad request", 400),
+            };
+            let api_key = match http_auth_basic::Credentials::from_header(authorisation_token) {
+                Ok(value) => value.password,
+                Err(_) => return Response::error("Bad request", 400),
+            };
+            let supabase_url = ctx.var("SUPABASE_URL")?.to_string();
+            let client = match get_supabase_client(&supabase_url, &api_key) {
+                Ok(res) => res,
+                Err(_) => panic!("Error creating PostgREST Supabase client"),
+            };
+            let posts = posts(&client, Some(12)).await;
+            let data: PostsResponse = PostsResponse { posts };
+            Response::ok(serde_json::to_string(&data).unwrap())
+            })
         .run(req, env)
         .await
 }
 
-#[test]
-fn test_clean_comment_text() {
-    let comment_text = "[a link](http://www.notriddle.com/)";
-    assert_eq!(
-        clean_comment_text(&comment_text),
-        "<p><a href=\"http://www.notriddle.com/\" rel=\"noopener noreferrer\">a link</a></p>\n"
-    );
+// #[test]
+// fn test_clean_comment_text() {
+//     let comment_text = "[a link](http://www.notriddle.com/)";
+//     assert_eq!(
+//         clean_comment_text(&comment_text),
+//         "<p><a href=\"http://www.notriddle.com/\" rel=\"noopener noreferrer\">a link</a></p>\n"
+//     );
 
-    let comment_text = "<img src=x onerror=alert(1)//>";
-    assert_eq!(clean_comment_text(&comment_text), "<img src=\"x\">");
+//     let comment_text = "<img src=x onerror=alert(1)//>";
+//     assert_eq!(clean_comment_text(&comment_text), "<img src=\"x\">");
 
-    let comment_text = "<svg><g/onload=alert(2)//<p>";
-    assert_eq!(clean_comment_text(&comment_text), "<p>&lt;g/onload=alert(2)//\n</p>");
+//     let comment_text = "<svg><g/onload=alert(2)//<p>";
+//     assert_eq!(
+//         clean_comment_text(&comment_text),
+//         "<p>&lt;g/onload=alert(2)//\n</p>"
+//     );
 
-    let comment_text = "already clean";
-    assert_eq!(clean_comment_text(&comment_text), "<p>already clean</p>\n");
-}
+//     let comment_text = "already clean";
+//     assert_eq!(clean_comment_text(&comment_text), "<p>already clean</p>\n");
+// }
 
 #[test]
 fn test_comment_text_valid() {
