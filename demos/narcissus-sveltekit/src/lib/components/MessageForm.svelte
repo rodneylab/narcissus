@@ -13,13 +13,12 @@
     heading,
   } from '$lib/components/MessageForm.css';
   import website from '$lib/config/website';
+  import theme from '$lib/shared/stores/theme';
+  import type { FieldError } from '$lib/utilities/form';
   import { validEmail, validMessage, validName } from '$lib/utilities/form';
   import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
-  import { onDestroy, onMount } from 'svelte';
-  import type { FieldError } from '$lib/utilities/form';
   import type { HCaptchaExecuteResponse } from 'src/global';
-
-  import theme from '$lib/shared/stores/theme';
+  import { onDestroy, onMount } from 'svelte';
 
   const { hcaptchaSitekey, workerUrl } = website;
 
@@ -29,8 +28,6 @@
     render(id: string, config: { sitekey: string; size: string; theme: string }): string;
   } | null;
 
-  const darkMode = $theme === 'dark';
-
   onMount(() => {
     if (browser) {
       hcaptcha = window.hcaptcha;
@@ -38,7 +35,7 @@
         hcaptchaWidgetID = hcaptcha.render('hcaptcha', {
           sitekey: hcaptchaSitekey,
           size: 'invisible',
-          theme: darkMode ? 'dark' : 'light',
+          theme: $theme,
         });
       }
     }
