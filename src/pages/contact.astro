@@ -1,0 +1,33 @@
+---
+import {summaryText} from './contact.css';
+import Layout from '../components/Layout/';
+import MessageForm from '../components/MessageForm';
+import Card from '../components/Card.jsx';
+
+const slug = "/contact";
+---
+
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    
+
+    <style>
+        header {
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            max-width: min(100%, 68ch);
+        }
+    </style>
+</head>
+<body>
+    <Layout slug={slug}>
+  	<h1>Contact me</h1>
+    <p className={summaryText}>I would love to hear from you. Please get in touch!</p>
+    <MessageForm />
+    <Card>Card content</Card>
+    </Layout>
+</body>
+</html>
