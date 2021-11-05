@@ -55,7 +55,7 @@ export const footerIconsListItem = style({
   marginLeft: [spacing1],
   marginRight: [spacing1],
   selectors: {
-    ['&:hover, &:focus']: {
+    '&:hover, &:focus': {
       transform: 'translateY(-0.5rem)',
     },
   },

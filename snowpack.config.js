@@ -4,9 +4,9 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
   mount: {
-    /* ... */
+    'node_modules/@fontsource/slabo-27px/files': '/files',
   },
-  plugins: ['@vanilla-extract/snowpack-plugin'],
+  plugins: ['@vanilla-extract/snowpack-plugin', '@snowpack/plugin-dotenv'],
   packageOptions: {
     /* ... */
   },

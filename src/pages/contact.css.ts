@@ -25,7 +25,6 @@ export const cardContent = style({
   borderColor: themeVars.colour.secondary,
   boxShadow: `${spacingPx2} ${spacing1} ${spacing1} ${themeVars.colour.shadow}`,
   backgroundColor: themeVars.colour.accent,
-  width: '60%',
 });
 
 export const contactDetails = style({
