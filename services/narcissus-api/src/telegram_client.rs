@@ -47,7 +47,7 @@ mod tests {
     pub async fn test_send_message() {
         use httptest::{
             matchers::{all_of, eq, json_decoded, request},
-            responders::*,
+            responders::status_code,
             Expectation, Server,
         };
         pub use serde_json::json;
