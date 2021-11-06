@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use worker::*;
 
+mod hcaptcha_client;
 mod telegram_client;
 mod utils;
 
@@ -1044,16 +1045,16 @@ fn test_get_count_from_supabase_response_header() {
 //     }
 // }
 
-#[test]
-fn test_verify_captcha() {
-    let client_response = "10000000-aaaa-bbbb-cccc-000000000001";
-    let secret = "0x0000000000000000000000000000000000000000";
-    let sitekey = "10000000-ffff-ffff-ffff-000000000001";
-    async {
-        let result = match verify_captcha(&client_response, &secret, &sitekey).await {
-            Some(res) => res,
-            None => false,
-        };
-        assert!(result);
-    };
-}
+// #[test]
+// fn test_verify_captcha() {
+//     let client_response = "10000000-aaaa-bbbb-cccc-000000000001";
+//     let secret = "0x0000000000000000000000000000000000000000";
+//     let sitekey = "10000000-ffff-ffff-ffff-000000000001";
+//     async {
+//         let result = match verify_captcha(&client_response, &secret, &sitekey).await {
+//             Some(res) => res,
+//             None => false,
+//         };
+//         assert!(result);
+//     };
+// }
