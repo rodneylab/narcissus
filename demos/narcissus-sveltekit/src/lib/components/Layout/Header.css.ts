@@ -49,7 +49,7 @@ export const themeButton = style({
   marginLeft: 'auto',
   marginRight: `${calc(spacing3).negate()}`,
   selectors: {
-    ['&:hover, &:focus']: {
+    '&:hover, &:focus': {
       color: themeVars.colour.text,
       backgroundColor: 'transparent',
       transform: 'translateY(-0.5rem)',
