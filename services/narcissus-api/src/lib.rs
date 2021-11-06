@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use worker::*;
 
+mod akismet_client;
 mod hcaptcha_client;
 mod telegram_client;
 mod utils;
