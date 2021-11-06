@@ -6,6 +6,7 @@ description = "API using PostgREST to query and update supabase database"
 license = "BSD-3-Clause"
 repository = "https://github.com/rodneylab/narcissus"
 edition = "2018"
+resolver = "2"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -37,6 +38,11 @@ console_error_panic_hook = { version = "0.1.1", optional = true }
 # compared to the default allocator's ~10K. It is slower than the default
 # allocator, however.
 wee_alloc = { version = "0.4.2", optional = true }
+
+[dev-dependencies]
+httptest = "0.15"
+pretty_env_logger = "0.4"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.
