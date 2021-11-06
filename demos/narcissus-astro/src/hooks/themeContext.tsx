@@ -3,7 +3,16 @@ import type { ReactNode } from 'react';
 
 type Dispatch = () => void;
 type State = { theme: string };
-// type ThemeProviderProps = { children: ReactNode };
+interface ThemeProviderProps {
+  children: ReactNode;
+}
+
+function defaultTheme() {
+  if (import.meta.env.SSR) {
+    return 'light';
+  }
+  return window?.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
 
 const ThemeContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
 
@@ -11,8 +20,10 @@ function themeReducer(state: State) {
   return { theme: state.theme === 'light' ? 'dark' : 'light' };
 }
 
-function ThemeProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(themeReducer, { theme: 'light' });
+function ThemeProvider({ children }: ThemeProviderProps) {
+  const [state, dispatch] = useReducer(themeReducer, {
+    theme: defaultTheme(),
+  });
   const value = { state, dispatch };
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

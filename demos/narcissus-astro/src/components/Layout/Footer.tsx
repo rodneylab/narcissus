@@ -15,11 +15,15 @@ import {
   footerLink,
 } from './Footer.css';
 import RodneyLabCredit from './RodneyLabCredit';
+import { ThemeProvider, useTheme } from '../../hooks/themeContext';
 
 const Footer: FC<{}> = () => {
   const { facebookPage, githubPage, linkedinProfile, tiktokUsername, twitterUsername } = website;
-  const theme: string = 'dark';
+  const {
+    state: { theme },
+  } = useTheme();
   const fgColor = theme === 'light' ? '#433633' : '#32021f';
+
   return (
     <footer className={container}>
       <div className={content}>
@@ -87,4 +91,14 @@ const Footer: FC<{}> = () => {
   );
 };
 
-export { Footer as default };
+// export { Footer as default };
+
+function ThemeWrapper() {
+  return (
+    <ThemeProvider>
+      <Footer />
+    </ThemeProvider>
+  );
+}
+
+export { ThemeWrapper as default };

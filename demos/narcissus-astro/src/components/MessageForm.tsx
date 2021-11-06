@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import website from '../configuration/website';
 import Card from './Card';
-import ExternalLink from './ExternalLink';
 import {
   button,
   buttonContainer,
@@ -18,6 +17,8 @@ import {
 import TextArea from './TextArea';
 import TextInputField from './TextInputField';
 import React from 'react';
+import { useTheme } from '../hooks/themeContext';
+import { ThemeProvider } from '../hooks/themeContext';
 
 const ssr = import.meta.env.SSR;
 
@@ -26,7 +27,7 @@ const { hcaptchaSitekey, workerUrl } = website;
 const MessageForm: FC<{}> = () => {
   // const [errors, setErrors] = useState(null);
   const [serverState, setServerState] = useState({ ok: true, message: '' });
-  const [successfulMessageSubmission, setSuccessfulMessageSubmission] = useState(false);
+  const [successfulMessageSubmission, setSuccessfulMessageSubmission] = useState<boolean>(false);
   // const [name, setName] = useState(ssr ? '' : window.sessionStorage.getItem('contact-name') ?? '');
   // const [email, setEmail] = useState(
   //   ssr ? '' : window.sessionStorage.getItem('contact-email') ?? '',
@@ -34,7 +35,7 @@ const MessageForm: FC<{}> = () => {
   // const [message, setMessage] = useState(
   //   ssr ? '' : window.sessionStorage.getItem('contact-message') ?? '',
   // );
-  const [submitting, setSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -44,9 +45,13 @@ const MessageForm: FC<{}> = () => {
   let hcaptcha;
   let hcaptchaWidgetID: string;
 
-  const darkMode = ssr
-    ? false
-    : window?.matchMedia('(prefers-color-scheme: dark)').matches ?? false;
+  const {
+    state: { theme },
+  } = useTheme();
+
+  // const darkMode = ssr
+  //   ? false
+  //   : window?.matchMedia('(prefers-color-scheme: dark)').matches ?? false;
 
   useEffect(() => {
     if (!ssr) {
@@ -55,7 +60,7 @@ const MessageForm: FC<{}> = () => {
         hcaptchaWidgetID = hcaptcha.render('hcaptcha', {
           sitekey: hcaptchaSitekey,
           size: 'invisible',
-          theme: darkMode ? 'dark' : 'light',
+          theme,
         });
       }
     }
@@ -218,11 +223,21 @@ const MessageForm: FC<{}> = () => {
             className="h-captcha"
             data-sitekey={hcaptchaSitekey}
             data-size="invisible"
-            data-theme="dark"
+            data-theme={theme}
           />
         </form>
       )}
     </Card>
   );
 };
-export { MessageForm as default };
+// export { MessageForm as default };
+
+function ThemeWrapper() {
+  return (
+    <ThemeProvider>
+      <MessageForm />
+    </ThemeProvider>
+  );
+}
+
+export { ThemeWrapper as default };

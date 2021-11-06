@@ -38,10 +38,10 @@ function Layout({ children, slug }: { children: ReactNode; slug: string }) {
   );
 }
 
-function ThemeWrapper({ children }: { children: ReactNode }) {
+function ThemeWrapper({ children, slug }: { children: ReactNode; slug: string }) {
   return (
     <ThemeProvider>
-      <Layout>{children}</Layout>
+      <Layout slug={slug}>{children}</Layout>
     </ThemeProvider>
   );
 }
