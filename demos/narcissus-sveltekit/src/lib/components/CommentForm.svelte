@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
-  import website from '$lib/config/website';
   import { browser } from '$app/env';
   import Card from '$lib/components/Card.svelte';
   import {
@@ -11,9 +9,12 @@
     formLink,
     heading,
   } from '$lib/components/CommentForm.css';
+  import website from '$lib/config/website';
+  import theme from '$lib/shared/stores/theme';
+  import { FieldError, validComment, validEmail, validName } from '$lib/utilities/form';
   import { EmailInputField, TextArea, TextInputField } from '@rodneylab/sveltekit-components';
-  import { FieldError, validEmail, validComment, validName } from '$lib/utilities/form';
   import type { HCaptchaExecuteResponse } from 'src/global';
+  import { onDestroy, onMount } from 'svelte';
 
   export let slug: string;
 
@@ -35,7 +36,7 @@
         hcaptchaWidgetID = hcaptcha.render('hcaptcha', {
           sitekey: hcaptchaSitekey,
           size: 'invisible',
-          theme: darkMode ? 'dark' : 'light',
+          theme: $theme,
         });
       }
     }
@@ -214,7 +215,7 @@
         class="h-captcha"
         data-sitekey={hcaptchaSitekey}
         data-size="invisible"
-        data-theme="dark"
+        data-theme={$theme}
       />
     </form>
   {/if}

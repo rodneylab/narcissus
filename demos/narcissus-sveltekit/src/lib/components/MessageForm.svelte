@@ -223,7 +223,7 @@
         class="h-captcha"
         data-sitekey={hcaptchaSitekey}
         data-size="invisible"
-        data-theme="dark"
+        data-theme={$theme}
       />
     </form>
   {/if}
