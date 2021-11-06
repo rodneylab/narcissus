@@ -22,6 +22,18 @@ impl TelegramClient {
         }
     }
 
+    pub fn base_url(&self) -> &str {
+        &self.base_url
+    }
+
+    pub fn bot_api_token(&self) -> &str {
+        &self.bot_api_token
+    }
+
+    pub fn bot_chat_id(&self) -> &str {
+        &self.bot_chat_id
+    }
+
     pub async fn send_message(&self, message: &str) -> bool {
         let client = reqwest::Client::new();
         let mut map = HashMap::<&str, &str>::new();
@@ -43,6 +55,23 @@ impl TelegramClient {
 mod tests {
     use crate::telegram_client::TelegramClient;
 
+    #[test]
+    pub fn test_new() {
+        let url = "https://example.com/";
+        let bot_api_token = "123456789:AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQq";
+        let bot_chat_id = "-123456789";
+        let client = TelegramClient::new(bot_api_token, bot_chat_id, Some(url));
+
+        assert_eq!(client.bot_api_token(), bot_api_token);
+        assert_eq!(client.bot_chat_id(), bot_chat_id);
+        assert_eq!(client.base_url(), url);
+
+        let client = TelegramClient::new(bot_api_token, bot_chat_id, None);
+        assert_eq!(client.bot_api_token(), bot_api_token);
+        assert_eq!(client.bot_chat_id(), bot_chat_id);
+        assert_eq!(client.base_url(), "https://api.telegram.org/");
+    }
+
     #[tokio::test]
     pub async fn test_send_message() {
         use httptest::{
@@ -50,7 +79,7 @@ mod tests {
             responders::status_code,
             Expectation, Server,
         };
-        pub use serde_json::json;
+        use serde_json::json;
 
         let _ = pretty_env_logger::try_init();
         let server = Server::run();
