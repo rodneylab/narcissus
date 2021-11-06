@@ -114,7 +114,6 @@ mod tests {
             }))),
         );
         let url: &str = &server.url_str("");
-        println!("url: {}", url);
         let client = HcaptchaClient::new(secret, sitekey, Some(url));
         let result = client.verify(client_response).await;
         assert_eq!(result, Some(true));
