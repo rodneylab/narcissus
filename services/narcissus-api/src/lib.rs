@@ -1,3 +1,4 @@
+use crate::hcaptcha_client::HcaptchaClient;
 use ::regex::Regex;
 // use ammonia::clean;;
 use postgrest::Postgrest;
@@ -10,6 +11,8 @@ mod akismet_client;
 mod hcaptcha_client;
 mod telegram_client;
 mod utils;
+
+use telegram_client::TelegramClient;
 
 #[derive(Deserialize)]
 struct CommentRequest {
@@ -87,25 +90,6 @@ struct PostRow {
     updated_at: String,
     title: String,
     slug: String,
-}
-
-//Expected response
-// {
-//  "success": true|false, // is the passcode valid, and does it meet security criteria you specified, e.g. sitekey?
-//  "challenge_ts": timestamp, // timestamp of the challenge (ISO format yyyy-MM-dd'T'HH:mm:ssZZ)
-//  "hostname": string, // the hostname of the site where the challenge was solved
-//  "credit": true|false, // optional: whether the response will be credited
-//  "error-codes": [...] // optional: any error codes
-//  "score": float, // ENTERPRISE feature: a score denoting malicious activity.
-//  "score_reason": [...] // ENTERPRISE feature: reason(s) for score.
-// }
-#[derive(Deserialize)]
-struct HcaptchaResponse {
-    success: bool,
-    // challenge_ts: String, // timestamp
-    // hostname: String,
-    // credit: bool,
-    // error-codes: [String],
 }
 
 #[derive(Serialize)]
@@ -302,28 +286,6 @@ fn get_header_value(headers: &worker::Headers, header: &str) -> Option<String> {
     }
 }
 
-async fn notify_via_telegram(
-    message: &str,
-    telegram_bot_api_token: &str,
-    telegram_bot_chat_id: &str,
-) -> bool {
-    let client = reqwest::Client::new();
-    let mut map = HashMap::new();
-    map.insert("chat_id", telegram_bot_chat_id);
-    map.insert("text", message);
-    let url = format!(
-        "https://api.telegram.org/bot{}/sendMessage",
-        telegram_bot_api_token
-    );
-    match client.post(url).json(&map).send().await {
-        Ok(_) => true,
-        Err(_) => {
-            console_log!("Telegram API response error");
-            false
-        }
-    }
-}
-
 async fn spam_check(
     site_url: &str,
     email: &str,
@@ -390,26 +352,6 @@ async fn spam_check(
     }
 }
 
-async fn verify_captcha(client_response: &str, secret: &str, sitekey: &str) -> Option<bool> {
-    let mut map = HashMap::new();
-    map.insert("response", client_response);
-    map.insert("secret", secret);
-    map.insert("sitekey", sitekey);
-    let client = reqwest::Client::new();
-    let response = match client
-        .post("https://hcaptcha.com/siteverify")
-        .form(&map)
-        .send()
-        .await
-    {
-        Ok(res) => res,
-        Err(_) => return None,
-    };
-    match response.json::<HcaptchaResponse>().await {
-        Ok(res) => Some(res.success),
-        Err(_) => None,
-    }
-}
 
 // todo(rodneylab): add pagination cursor
 async fn comments(client: &Postgrest, post_id: &i32, limit: Option<u32>) -> Vec<CommentRow> {
@@ -622,15 +564,19 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             let slug = &data.slug;
             let text = &data.text;
             // let text = clean_comment_text(&data.text);
-            let hcaptcha_sitekey = ctx.var("HCAPTCHA_SITEKEY")?.to_string();
-            let hcaptcha_secretkey = ctx.var("HCAPTCHA_SECRETKEY")?.to_string();
+
+
             if let Some(value) = author_valid(author) { return Response::error(value, 400)};
             if let Some(value) = email_valid(email) { return Response::error(value, 400)};
             if let Some(value) = comment_text_valid(text) { return Response::error(value, 400)};
             if !slug_valid(slug) {
                 return Response::error("Bad request", 400);
             }
-            let verify_captcha_future = verify_captcha(response, &hcaptcha_secretkey, &hcaptcha_sitekey);
+            let hcaptcha_sitekey = ctx.var("HCAPTCHA_SITEKEY")?.to_string();
+            let hcaptcha_secretkey = ctx.var("HCAPTCHA_SECRETKEY")?.to_string();
+            let hcaptcha_client = HcaptchaClient::new(&hcaptcha_secretkey, &hcaptcha_sitekey, None);
+            let verify_captcha_future = hcaptcha_client.verify(response);
+
             let blog = ctx.var("SITE_URL")?.to_string();
             let akismet_api_key = ctx.var("AKISMET_API_KEY")?.to_string();
             let spam_check_future = spam_check(&blog, email, author, text, req.headers(),&akismet_api_key);
@@ -775,11 +721,14 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
             let response = &data.response;
             let text = &data.text;
             let hcaptcha_sitekey = ctx.var("HCAPTCHA_SITEKEY")?.to_string();
-            let hcaptcha_secretkey = ctx.var("HCAPTCHA_SECRETKEY")?.to_string();
+
             if let Some(value) = author_valid(name) { return Response::error(value, 400)};
             if let Some(value) = email_valid(email) { return Response::error(value, 400)};
             if let Some(value) = comment_text_valid(text) { return Response::error(value, 400)};
-            let verify_captcha_future = verify_captcha(response, &hcaptcha_secretkey, &hcaptcha_sitekey);
+            let hcaptcha_secretkey = ctx.var("HCAPTCHA_SECRETKEY")?.to_string();
+                        let hcaptcha_client = HcaptchaClient::new(&hcaptcha_secretkey, &hcaptcha_sitekey, None);
+            let verify_captcha_future = hcaptcha_client.verify(response);
+
             let blog = ctx.var("SITE_URL")?.to_string();
             let akismet_api_key = ctx.var("AKISMET_API_KEY")?.to_string();
             let spam_check_future = spam_check(&blog, email, name, text, req.headers(),&akismet_api_key);
@@ -810,11 +759,15 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
                 Ok(value) => value,
                 Err(_) => return Response::error("Bad request: message", 400),
             };
-            let telegram_message = format!("Contact form message:\n  from: {}\n  email: {}\n  message: {}\n  marked bot: {}\n  marked spam: {}\n",
-                name, email, text, marked_bot, marked_spam);
             let telegram_bot_api_token = ctx.var("TELEGRAM_BOT_API_TOKEN")?.to_string();
             let telegram_bot_chat_id = ctx.var("TELEGRAM_BOT_CHAT_ID")?.to_string();
-            notify_via_telegram(&telegram_message, &telegram_bot_api_token, &telegram_bot_chat_id).await;
+
+            let telegram_client = TelegramClient::new(&telegram_bot_api_token, &telegram_bot_chat_id, None);
+            let telegram_message = format!("Contact form message:\n  from: {}\n  email: {}\n  message: {}\n  marked bot: {}\n  marked spam: {}\n",
+                name, email, text, marked_bot, marked_spam);
+            telegram_client.send_message(&telegram_message).await;
+
+            // notify_via_telegram(&telegram_message, &telegram_bot_api_token, &telegram_bot_chat_id).await;
             Response::ok("Thanks for your message!")
         })
         .options("/post/view", |req, ctx| {
@@ -1044,18 +997,4 @@ fn test_get_count_from_supabase_response_header() {
 //     for element in &invalid_titles {
 //         assert!(!title_valid(element));
 //     }
-// }
-
-// #[test]
-// fn test_verify_captcha() {
-//     let client_response = "10000000-aaaa-bbbb-cccc-000000000001";
-//     let secret = "0x0000000000000000000000000000000000000000";
-//     let sitekey = "10000000-ffff-ffff-ffff-000000000001";
-//     async {
-//         let result = match verify_captcha(&client_response, &secret, &sitekey).await {
-//             Some(res) => res,
-//             None => false,
-//         };
-//         assert!(result);
-//     };
 // }
