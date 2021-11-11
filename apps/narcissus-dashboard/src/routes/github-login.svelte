@@ -1,6 +1,5 @@
 <script lang="ts">
   import { browser } from '$app/env';
-  import { goto, prefetch } from '$app/navigation';
 
   if (browser) {
     const locationHash = new URLSearchParams(window.location.hash.slice(1));
@@ -12,16 +11,15 @@
       try {
         await fetch('/api/github-login', {
           method: 'POST',
-          credentials: 'same-origin',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ accessToken, providerToken, refreshToken }),
         });
-        await prefetch('/dashboard');
-        await goto('/dashboard');
+        window.location.replace('/complete-login');
       } catch (error) {
-        console.log(`Error on /github-login route: ${error}`);
+        console.error(`Error on /github-login route: ${error}`);
       }
     }
     handleLogin();

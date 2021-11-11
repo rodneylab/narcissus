@@ -1,28 +1,17 @@
 <script context="module" lang="ts">
   import type { Load } from '@sveltejs/kit';
 
-  export const load: Load = async ({ fetch, session }) => {
+  export const load: Load = async ({ fetch }) => {
     try {
-      const user = session?.user ?? null;
+      const response = await fetch('/api/posts.json');
 
-      if (user) {
-        const response = await fetch('/api/posts.json');
-
-        if (response.ok) {
-          return {
-            props: { ...(await response.json()) },
-          };
-        }
+      if (response.ok) {
         return {
-          props: {
-            user,
-          },
+          props: { ...(await response.json()) },
         };
       }
-
       return {
-        status: 301,
-        redirect: '/login/',
+        props: {},
       };
     } catch (error) {
       console.error(`Error in load function for route /dashboard: ${error}`);
