@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-  export async function load({ session }) {
+  export function load({ session }) {
     if (session.user) {
       return {
         redirect: '/dashboard',

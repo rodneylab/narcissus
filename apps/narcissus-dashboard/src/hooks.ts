@@ -37,7 +37,6 @@ export async function handle(...[input]: Parameters<Handle>): Promise<ReturnType
 
   // after endpoint call
   const user = loggingOut ? '' : request.locals.user;
-  // const user = 'Hi';
   const cookieObject = loggingOut
     ? {}
     : {
