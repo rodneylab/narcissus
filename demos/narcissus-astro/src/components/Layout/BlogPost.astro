@@ -1,0 +1,20 @@
+---
+const { content } = Astro.props;
+import Layout from './index.jsx';
+
+const {featuredImage, postTitle, seoMetaDescription} = content;
+const slug = featuredImage.split('.')[0];
+---
+
+<html>
+  <head>
+    <title>{postTitle}</title>
+  </head>
+
+  <body>
+	   <Layout:load slug={slug}>
+		 <h1>{postTitle}</h1>
+    <slot />
+		</Layout:load>
+  </body>
+</html>
