@@ -38,7 +38,7 @@ export const content = style({
   paddingBottom: [spacing4],
   paddingLeft: [spacing10],
   selectors: {
-    ['&:hover, &:focus']: {
+    '&:hover, &:focus': {
       borderColor: themeVars.colour.text,
       backgroundColor: themeVars.colour.text,
       boxShadow: `${spacingPx2} ${spacing1} ${spacing1} ${themeVars.colour.shadow}`,
