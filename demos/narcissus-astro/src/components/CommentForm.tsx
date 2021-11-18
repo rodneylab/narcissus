@@ -1,40 +1,32 @@
+import React, { useState } from 'react';
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import website from '../configuration/website';
-import Card from './Card';
 import {
   button,
   buttonContainer,
   container,
   content,
-  disclaimer,
-  form,
   formField,
   formLink,
   heading,
-} from './MessageForm.css';
-import TextArea from './TextArea';
+} from './CommentForm.css';
+import Card from './Card';
 import TextInputField from './TextInputField';
-import React from 'react';
+import TextArea from './TextArea';
 import { useTheme } from '../hooks/themeContext';
 import { ThemeProvider } from '../hooks/themeContext';
+import website from '../configuration/website';
+import { useForm } from 'react-hook-form';
 
 const ssr = import.meta.env.SSR;
 
+interface CommentFormProps {
+  slug: string;
+}
+
 const { hcaptchaSitekey, workerUrl } = website;
 
-const MessageForm: FC<{}> = function MessageForm() {
-  // const [errors, setErrors] = useState(null);
-  const [serverState, setServerState] = useState({ ok: true, message: '' });
-  const [successfulMessageSubmission, setSuccessfulMessageSubmission] = useState<boolean>(false);
-  // const [name, setName] = useState(ssr ? '' : window.sessionStorage.getItem('contact-name') ?? '');
-  // const [email, setEmail] = useState(
-  //   ssr ? '' : window.sessionStorage.getItem('contact-email') ?? '',
-  // );
-  // const [message, setMessage] = useState(
-  //   ssr ? '' : window.sessionStorage.getItem('contact-message') ?? '',
-  // );
+const CommentForm: FC<CommentFormProps> = function CommentForm({ slug }) {
+  const [successfulCommentSubmission, setSuccessfulCommentSubmission] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const {
     register,
@@ -49,97 +41,61 @@ const MessageForm: FC<{}> = function MessageForm() {
     state: { theme },
   } = useTheme();
 
-  // const darkMode = ssr
-  //   ? false
-  //   : window?.matchMedia('(prefers-color-scheme: dark)').matches ?? false;
-
-  useEffect(() => {
-    if (!ssr) {
-      hcaptcha = window.hcaptcha;
-      if (hcaptcha.render) {
-        hcaptchaWidgetID = hcaptcha.render('hcaptcha', {
-          sitekey: hcaptchaSitekey,
-          size: 'invisible',
-          theme,
-        });
-      }
-    }
-
-    return () => {
-      hcaptcha = null;
-    };
-  }, []);
-
   function clearForm() {
-    ['message', 'name', 'email'].forEach((element) =>
-      sessionStorage.removeItem(`comment-${element}`),
+    ['comment', 'name', 'email'].forEach((element) =>
+      sessionStorage.removeItem(`${slug}-${element}`),
     );
-    // setName('');
-    // setEmail('');
-    // setMessage('');
+    name = '';
+    email = '';
+    comment = '';
   }
 
-  function sessionStore(field: string, value: string) {
-    if (!ssr) {
-      window.sessionStorage.setItem(`contact-${field}`, value);
-    }
-  }
-
-  const validateInputs = () => {
-    // setErrors({ ...errors, ...validName(name), ...validEmail(email), ...validMessage(message) });
-  };
-
-  function noErrors() {
-    validateInputs();
-    if (errors == null) {
-      return true;
-    }
-    const { name: nameError, email: emailError, message: messageError } = errors;
-    if (!nameError && !emailError && !messageError) {
-      return true;
-    }
-    return false;
+  function validateInputs() {
+    errors = { ...errors, ...validName(name), ...validEmail(email), ...validComment(comment) };
   }
 
   const onSubmit = async () => {
     try {
       validateInputs();
-      if (noErrors()) {
-        // setSubmitting(true);
+      if (noErrors() && browser) {
+        submitting = true;
         const { response } = await hcaptcha.execute(hcaptchaWidgetID, {
           async: true,
         });
-        const responsePromise = fetch(`${workerUrl}/post/message`, {
+        const responsePromise = fetch(`${workerUrl}/post/comment`, {
           method: 'POST',
           credentials: 'omit',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            // name,
-            // text: message,
-            // email,
+            author: name,
+            text: comment,
+            email,
             response,
+            slug,
           }),
         });
         await responsePromise;
+        submitting = false;
         clearForm();
-        setSuccessfulMessageSubmission(true);
+        successfulCommentSubmission = true;
       }
     } catch (error) {
-      console.error(`Error in MessageForm, handleSubmit: ${error}`);
+      console.error(`Error in CommentForm, handleSubmit: ${error}`);
     }
   };
+
   return (
     <Card containerClass={container} contentClass={content}>
-      <h2 className={heading}>Drop me a message</h2>
-      {successfulMessageSubmission ? (
-        <div>Thanks for your message. I normally respond within one working day.</div>
+      <h2 class={heading}>What's your opinion? Leave a comment.</h2>
+      {successfulCommentSubmission ? (
+        <div>Thanks for your comment. We will review and post it shortly.</div>
       ) : (
-        <form className={form} onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className={formField}>
             <TextInputField
-              id="contact-name"
+              id="comment-name"
               placeholder="Blake Costa"
               title="Name"
               required
@@ -161,51 +117,51 @@ const MessageForm: FC<{}> = function MessageForm() {
           </div>
           <div className={formField}>
             <TextArea
-              id="comment-message"
+              id="comment-comment"
               placeholder="Enter your mesage here"
-              title="Message"
+              title="Comment"
               required
               errors={errors.Message}
               register={register}
             />
           </div>
-          <small className={disclaimer}>
+          <small>
             This site uses Akismet to reduce spam.{' '}
             <a
               aria-label="Learn how Akismet process comment data"
-              className={formLink}
+              class={formLink}
               href="https://akismet.com/privacy/"
             >
-              Learn how your message data is processed
+              Learn how your comment data is processed
             </a>
-            . We pass your message, name, email, IP address and{' '}
+            . We pass your comment, name, email, IP address and{' '}
             <a
               aria-label="Learn more about browser user agent from M D N"
-              className={formLink}
+              class={formLink}
               href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent"
             >
               browser user agent
             </a>{' '}
-            to Akismet for spam detection. Neither your IP address nor user agent is stored in our
-            database. This site is protected by
+            to Akismet for spam detection. Neither your email address, IP address or user agent is
+            stored in our database. This site is protected by
             <a
               aria-label="Learn more about h Captcha"
-              className={formLink}
+              class={formLink}
               href="https://www.hCaptcha.com"
             >
               hCaptcha
             </a>
             and its
             <a
-              aria-label="View h Captcha privacy policy"
-              className={formLink}
+              aria-label="Open h Captcha privacy policy"
+              class={formLink}
               href="https://www.hcaptcha.com/privacy"
             >
               Privacy Policy
             </a>
             and
             <a
-              aria-label="View h Captcha terms of service"
+              aria-label="Open hCaptcha terms of service"
               className={formLink}
               href="https://www.hcaptcha.com/terms"
             >
@@ -215,7 +171,7 @@ const MessageForm: FC<{}> = function MessageForm() {
           </small>
           <div className={buttonContainer}>
             <button type="submit" className={button} disabled={submitting}>
-              Send your message
+              Leave your comment
             </button>
           </div>
           <div
@@ -230,12 +186,11 @@ const MessageForm: FC<{}> = function MessageForm() {
     </Card>
   );
 };
-// export { MessageForm as default };
 
 const ThemeWrapper: FC<{}> = function ThemeWrapper() {
   return (
     <ThemeProvider>
-      <MessageForm />
+      <CommentForm />
     </ThemeProvider>
   );
 };

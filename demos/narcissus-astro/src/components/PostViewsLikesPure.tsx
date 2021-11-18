@@ -223,7 +223,7 @@ const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesP
         {freshCommentCount ?? comments > 0 ? (
           <span className={meta}>
             {interactive ? (
-              <a aria-label="Jump to comments" className={link} href="#comments">
+              <a aria-label="Jump to comments" className={`${link} ${meta}`} href="#comments">
                 <span className={icon}>
                   <CommentIcon label="comments" />
                 </span>
