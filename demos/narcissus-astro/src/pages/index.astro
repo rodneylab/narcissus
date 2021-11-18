@@ -6,20 +6,43 @@ import BlogRoll from '../components/BlogRoll.jsx';
 import fm from 'front-matter';
 import fs from 'node:fs';
 import path from 'node:path';
+import website from '../configuration/website.js';
 
+const { workerUrl} = website;
 const __dirname = path.resolve();
 const BLOG_PATH = path.join(__dirname, 'content/blog');
 const directories = fs.readdirSync(BLOG_PATH).filter((element) => fs.lstatSync(`${BLOG_PATH}/${element}`).isDirectory());
 
-const posts = directories.map((element) => {
+async function getResponse(slug) {
+  try {
+    return fetch(`${workerUrl}/post/data`, {
+      method: 'POST',
+      credentials: 'omit',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        slug,
+      }),
+    });
+  } catch (error) {
+    console.log(`Error in fetch request for ${slug}: ${error}`);
+  }
+}
+
+const postPromises = directories.map(async (element) => {
   const contentPath = `${BLOG_PATH}/${element}/index.md`;
   if (fs.existsSync(contentPath)) {
+    const response = await getResponse(element);
+    const data = await response.json();
+    const {comments, likes, views} = data;
     const content = fs.readFileSync(contentPath, { encoding: 'utf-8'});
     const frontmatter = fm(content);
     const {datePublished, postTitle, seoMetaDescription} = frontmatter.attributes;
-    return {slug: element, datePublished, postTitle, seoMetaDescription, likes: 1, views: 2, comments: 3 };
+    return {slug: element, datePublished, postTitle, seoMetaDescription, likes, views, comments: comments.length };
   }
 })
+const posts = await Promise.all(postPromises);
 
 const slug = "/";
 ---
@@ -44,7 +67,7 @@ const slug = "/";
     <strong>views and likes</strong>.
   </p>
   <p class={extraSummaryText}>
-    This demo <strong>Svelte</strong> site is static and uses Serverless
+    This demo <strong>Astro</strong> site is static and uses Serverless
     <strong>Rust Cloudflare Workers</strong>
     to read and create comments as well as other interactive elements using REST requests, adding spam
     detection and Captchas without the added hassle of adding spam detection and Captchas. The app is
