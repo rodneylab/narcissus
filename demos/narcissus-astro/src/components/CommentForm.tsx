@@ -58,7 +58,7 @@ const CommentForm: FC<CommentFormProps> = function CommentForm({ slug }) {
     try {
       validateInputs();
       if (noErrors() && browser) {
-        submitting = true;
+        setSubmitting(true);
         const { response } = await hcaptcha.execute(hcaptchaWidgetID, {
           async: true,
         });
@@ -77,9 +77,9 @@ const CommentForm: FC<CommentFormProps> = function CommentForm({ slug }) {
           }),
         });
         await responsePromise;
-        submitting = false;
+        setSubmitting(false);
         clearForm();
-        successfulCommentSubmission = true;
+        setSuccessfulCommentSubmission(true);
       }
     } catch (error) {
       console.error(`Error in CommentForm, handleSubmit: ${error}`);
@@ -88,7 +88,7 @@ const CommentForm: FC<CommentFormProps> = function CommentForm({ slug }) {
 
   return (
     <Card containerClass={container} contentClass={content}>
-      <h2 class={heading}>What's your opinion? Leave a comment.</h2>
+      <h2 className={heading}>What&apos;s your opinion? Leave a comment.</h2>
       {successfulCommentSubmission ? (
         <div>Thanks for your comment. We will review and post it shortly.</div>
       ) : (
@@ -137,7 +137,7 @@ const CommentForm: FC<CommentFormProps> = function CommentForm({ slug }) {
             . We pass your comment, name, email, IP address and{' '}
             <a
               aria-label="Learn more about browser user agent from M D N"
-              class={formLink}
+              className={formLink}
               href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent"
             >
               browser user agent
@@ -146,7 +146,7 @@ const CommentForm: FC<CommentFormProps> = function CommentForm({ slug }) {
             stored in our database. This site is protected by
             <a
               aria-label="Learn more about h Captcha"
-              class={formLink}
+              className={formLink}
               href="https://www.hCaptcha.com"
             >
               hCaptcha
@@ -154,7 +154,7 @@ const CommentForm: FC<CommentFormProps> = function CommentForm({ slug }) {
             and its
             <a
               aria-label="Open h Captcha privacy policy"
-              class={formLink}
+              className={formLink}
               href="https://www.hcaptcha.com/privacy"
             >
               Privacy Policy

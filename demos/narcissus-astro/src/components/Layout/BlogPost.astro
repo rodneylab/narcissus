@@ -5,13 +5,14 @@ import PostViewsLikes from '../PostViewsLikes.jsx';
 import website from '../../configuration/website.js';
 import Comments from '../Comments.jsx';
 import CommentForm from '../CommentForm.jsx';
-
+import BannerImage from '../BannerImage.jsx';
 
 const { workerUrl} = website;
 
 const {featuredImage, postTitle, seoMetaDescription} = content;
 const slug = featuredImage.split('.')[0];
 
+const imageData = await import(`../../generated/posts/${slug}.js`);
 const response = await fetch(`${workerUrl}/post/data`, {
   method: 'POST',
   credentials: 'omit',
@@ -30,13 +31,14 @@ const {comments, likes, views} = data;
   </head>
 
   <body>
-	   <Layout:load slug={slug}>
+	   <Layout client:load slug={slug}>
+     <BannerImage client:load imageData={imageData.default}/>
 		 <h1>{postTitle}</h1>
-     <PostViewsLikes likes={likes} views={views} slug={slug} comments={comments.length}/>
+     <PostViewsLikes client:idle likes={likes} views={views} slug={slug} comments={comments.length}/>
     <slot />
-     <PostViewsLikes likes={likes} views={views} slug={slug} comments={comments.length}/>
-    <CommentForm slug={slug}/>
-    <Comments comments={comments}/>
-		</Layout:load>
+     <PostViewsLikes client:visible likes={likes} views={views} slug={slug} comments={comments.length}/>
+    <CommentForm client:visible slug={slug}/>
+    <Comments client:visible  comments={comments}/>
+		</Layout>
   </body>
 </html>

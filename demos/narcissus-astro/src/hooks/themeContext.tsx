@@ -24,7 +24,7 @@ const ThemeProvider: FC<ThemeProviderProps> = function ThemeProvider({ children 
   const [state, dispatch] = useReducer(themeReducer, {
     theme: defaultTheme(),
   });
-  const value = useMemo(() => ({ state, dispatch }), [state]);
+  const value = useMemo(() => ({ state, dispatch }), [dispatch, state]);
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };
 

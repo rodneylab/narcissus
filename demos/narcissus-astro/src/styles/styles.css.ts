@@ -71,6 +71,14 @@ globalStyle('button', {
   },
 });
 
+globalStyle('img', {
+  height: 'auto',
+});
+
+globalStyle('img:not([src]):not([srcset])', {
+  visibility: 'hidden',
+});
+
 globalStyle('button:focus, button:hover', {
   backgroundColor: themeVars.colour.buttonText,
   color: themeVars.colour.buttonBackground,
@@ -92,6 +100,7 @@ globalStyle(':is(input, textarea)::placeholder', {
   opacity: 0.8,
 });
 
+// eslint-disable-next-line import/prefer-default-export
 export const screenReaderText = style({
   border: 0,
   clip: 'rect(1px, 1px, 1px, 1px)',

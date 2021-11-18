@@ -1,11 +1,12 @@
 import type { FC } from 'react';
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import website from '../configuration/website';
 import { container, content, icon, likeButton, link, meta } from './PostViewsLikesPure.css';
 import NotYetLikedIcon from './Icons/HeartOutline';
 import LikedIcon from './Icons/HeartSolid';
 import ViewsIcon from './Icons/View';
 import CommentIcon from './Icons/Comment';
+import { LikedViewedProvider, useLikedViewed } from '../hooks/postLikedViewedContext';
 
 interface PostViewsLikesPureProps {
   likes: number;
@@ -26,30 +27,31 @@ const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesP
   contentClass = undefined,
   interactive = true,
 }) {
+  const {
+    dispatch,
+    state: { liked, viewed },
+  } = useLikedViewed();
+
   const [freshLikeCount, setFreshLikeCount] = useState(null);
   const [freshViewCount, setFreshViewCount] = useState(null);
-  const [freshCommentCount, setFreshCommentCount] = useState(null);
+  const [freshCommentCount] = useState(null);
   const [likeButtonHover, setLikeButtonHover] = useState(false);
 
   const ssr = import.meta.env.SSR;
 
-  const liked = false;
-  // const liked =
-  //   JSON.parse($postLikedViewed).liked.find((element: { slug: string }) => element.slug === slug) !=
-  //   null;
-  const viewed = true;
-  // const viewed = JSON.parse($postLikedViewed).viewed.includes(slug);
+  function postViewed() {
+    return viewed.includes(slug);
+  }
 
   function addViewToStore() {
-    // const { liked: likedArray, viewed: viewedArray } = JSON.parse($postLikedViewed);
-    // postLikedViewed.set(JSON.stringify({ liked: likedArray, viewed: [slug, ...viewedArray] }));
+    dispatch({ type: 'add-view', payload: { slug } });
   }
 
   const { workerUrl } = website;
 
   async function handleView() {
     try {
-      if (!viewed) {
+      if (!postViewed()) {
         const responsePromise = fetch(`${workerUrl}/post/view`, {
           method: 'POST',
           credentials: 'omit',
@@ -93,7 +95,7 @@ const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesP
     return null;
   });
 
-  async function getViewsLikes(): Promise<{ likes: number; views: number }> {
+  async function updateViewsLikes() {
     try {
       const url = `${workerUrl}/post/data`;
       const response = await fetch(url, {
@@ -106,35 +108,35 @@ const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesP
           slug,
         }),
       });
-      return response.json();
+      const { likes: freshLikes, views: freshViews } = await response.json();
+      setFreshLikeCount(freshLikes);
+      setFreshViewCount(freshViews);
     } catch (error) {
       console.error(`Error in getViewsLikes: ${error}`);
-      return null;
     }
   }
 
+  useEffect(() => {
+    (async () => {
+      await updateViewsLikes();
+    })();
+  }, []);
+
+  function postLiked() {
+    return liked.includes(slug);
+  }
+
   function addLikeToStore({ id }) {
-    // const { liked: likedArray, viewed: viewedArray } = JSON.parse($postLikedViewed);
-    // postLikedViewed.set(
-    //   JSON.stringify({ liked: [{ slug, id }, ...likedArray], viewed: viewedArray }),
-    // );
+    dispatch({ type: 'add-like', payload: { slug, id } });
   }
 
   function getLikeIdFromStore() {
-    // const { liked: likedArray } = JSON.parse($postLikedViewed);
-    // const { id } = likedArray.find((element: { slug: string }) => slug === element.slug);
-    // return id ? id : '';
+    const { id } = liked.find((element) => slug === element.slug);
+    return id ?? '';
   }
 
   function removeLikeFromStore() {
-    // const { liked: likedArray, viewed: viewedArray } = JSON.parse($postLikedViewed);
-    // const index = likedArray.findIndex((element: { slug: string }) => slug === element.slug);
-    // postLikedViewed.set(
-    //   JSON.stringify({
-    //     liked: [...likedArray.slice(0, index), ...likedArray.slice(index + 1)],
-    //     viewed: viewedArray,
-    //   }),
-    // );
+    dispatch({ type: 'remove-like', payload: { slug } });
   }
 
   const handleLike = async () => {
@@ -147,9 +149,9 @@ const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesP
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            id: !liked ? '' : getLikeIdFromStore(),
+            id: !postLiked() ? '' : getLikeIdFromStore(),
             slug,
-            unlike: liked,
+            unlike: postLiked(),
           }),
         });
         const responseResult = await responsePromise;
@@ -165,8 +167,6 @@ const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesP
       console.error(`Error in handleLike: ${error}`);
     }
   };
-
-  const likesPromise = getViewsLikes() ?? { likes, views };
 
   const interactiveMeta =
     liked || likeButtonHover ? (
@@ -186,7 +186,7 @@ const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesP
     </div>
   );
 
-  const likeButtonLabel = !liked ? 'Like this blog post' : 'Unlike this blog post';
+  const likeButtonLabel = !postLiked ? 'Like this blog post' : 'Unlike this blog post';
 
   return (
     <aside className={`${container} ${containerClass ?? ''}`}>
@@ -244,4 +244,28 @@ const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesP
   );
 };
 
-export default PostViewsLikesPure;
+const LikedViewedWrapper: FC<PostViewsLikesPureProps> = function LikedViewedWrapper({
+  likes,
+  views,
+  slug,
+  comments,
+  containerClass = undefined,
+  contentClass = undefined,
+  interactive = true,
+}) {
+  return (
+    <LikedViewedProvider>
+      <PostViewsLikesPure
+        likes={likes}
+        views={views}
+        slug={slug}
+        comments={comments}
+        containerClass={containerClass}
+        contentClass={contentClass}
+        interactive={interactive}
+      />
+    </LikedViewedProvider>
+  );
+};
+
+export default LikedViewedWrapper;

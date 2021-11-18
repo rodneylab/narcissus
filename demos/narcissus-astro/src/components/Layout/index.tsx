@@ -12,17 +12,21 @@
 // [normal]
 // import '@fontsource/slabo-27px';
 import React from 'react';
-import type { ReactNode } from 'react';
+import type { FC, ReactElement, ReactNode } from 'react';
 import '../../styles/normalise.css';
 import darkTheme from '../../styles/themes/dark.css';
 import lightTheme from '../../styles/themes/light.css';
 import Footer from './Footer';
 import Header from './Header';
 import { container, main } from './layout.css';
-import { useTheme } from '../../hooks/themeContext';
-import { ThemeProvider } from '../../hooks/themeContext';
+import { useTheme, ThemeProvider } from '../../hooks/themeContext';
 
-function Layout({ children, slug }: { children: ReactNode; slug: string }) {
+interface LayoutProps {
+  children: ReactNode;
+  slug: string;
+}
+
+const Layout: FC<LayoutProps> = function Layout({ children, slug }): ReactElement {
   const {
     state: { theme },
   } = useTheme();
@@ -36,14 +40,14 @@ function Layout({ children, slug }: { children: ReactNode; slug: string }) {
       <Footer />
     </div>
   );
-}
+};
 
-function ThemeWrapper({ children, slug }: { children: ReactNode; slug: string }) {
+const ThemeWrapper: FC<LayoutProps> = function ThemeWrapper({ children, slug }) {
   return (
     <ThemeProvider>
       <Layout slug={slug}>{children}</Layout>
     </ThemeProvider>
   );
-}
+};
 
-export { ThemeWrapper as default };
+export default ThemeWrapper;
