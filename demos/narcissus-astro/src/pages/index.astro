@@ -1,66 +1,57 @@
 ---
-// Component Imports
-import Tour from '../components/Tour.astro';
-import Button from '../components/Button.svelte';
-import ReactButton from '../components/Button.jsx';
-import Characters from '../components/Characters.jsx';
+import {cardContainer,cardContent, extraSummaryText, header, summaryHeading, summaryText} from './index.css';
+import Layout from '../components/Layout/index.tsx';
+import Card from '../components/Card.jsx';
+import BlogRoll from '../components/BlogRoll.jsx';
+import fm from 'front-matter';
+import fs from 'node:fs';
+import path from 'node:path';
 
+const __dirname = path.resolve();
+const BLOG_PATH = path.join(__dirname, 'content/blog');
+const directories = fs.readdirSync(BLOG_PATH).filter((element) => fs.lstatSync(`${BLOG_PATH}/${element}`).isDirectory());
 
-const characters = await fetch('https://finalspaceapi.com/api/v0/character?limit=5').then(response => response.json())
-// You can import components from any supported Framework here!
+const posts = directories.map((element) => {
+  const contentPath = `${BLOG_PATH}/${element}/index.md`;
+  if (fs.existsSync(contentPath)) {
+    const content = fs.readFileSync(contentPath, { encoding: 'utf-8'});
+    const frontmatter = fm(content);
+    const {datePublished, postTitle, seoMetaDescription} = frontmatter.attributes;
+    return {slug: element, datePublished, postTitle, seoMetaDescription, likes: 1, views: 2, comments: 3 };
+  }
+})
 
-
-// Component Script:
-// You can write any JavaScript/TypeScript that you'd like here.
-// It will run during the build, but never in the browser.
-// All variables are available to use in the HTML template below.
-let title = 'My Astro Site';
-
-// Full Astro Component Syntax:
-// https://docs.astro.build/core-concepts/astro-components/
+const slug = "/";
 ---
-<html lang="en">
+
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <title>{title}</title>
-    <Button>Hello</Button>
-    <ReactButton:load >Hello</ReactButton:load >
-    <Characters characters={characters}/>
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    
-    <link rel="stylesheet" href="/style/global.css">
-    <link rel="stylesheet" href="/style/home.css">
-
-    <style>
-        header {
-            display: flex;
-            flex-direction: column;
-            gap: 1em;
-            max-width: min(100%, 68ch);
-        }
-    </style>
 </head>
 <body>
-    <main>
-        <header>
-            <div>
-                <img width="60" height="80" src="/assets/logo.svg" alt="Astro logo">
-                <h1>Welcome to <a href="https://astro.build/">Astro</a></h1>
-            </div>
-        </header>
-
-        <Tour />
-
-        <!--
-           - You can also use imported framework components directly in your markup!
-           -
-           - Note: by default, these components are NOT interactive on the client.
-           - The `:visible` directive tells Astro to make it interactive.
-           -
-           - See https://docs.astro.build/core-concepts/component-hydration/ 
-           -->
-
-    </main>
+    <Layout client:load slug={slug} >
+<header class={header}>
+  <h1>Narcissus: API as a Service / Backendless Blog</h1>
+</header>
+<Card containerClass={cardContainer} contentClass={cardContent}>
+  <h2 class={summaryHeading}><span>About Narcissus</span></h2>
+  <p class={summaryText}>
+    Narcissus is a proof of concept <strong>backend as a service</strong> app which lets you create
+    a blog site quicker by managing important blog features like
+    <strong>comment and message forms</strong>
+    as well as post
+    <strong>views and likes</strong>.
+  </p>
+  <p class={extraSummaryText}>
+    This demo <strong>Svelte</strong> site is static and uses Serverless
+    <strong>Rust Cloudflare Workers</strong>
+    to read and create comments as well as other interactive elements using REST requests, adding spam
+    detection and Captchas without the added hassle of adding spam detection and Captchas. The app is
+    backed by a <strong>Supabase</strong> PostgreSQL database.
+  </p>
+</Card>
+<BlogRoll posts={posts}/>
+    </Layout>
 </body>
 </html>

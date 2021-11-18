@@ -11,6 +11,7 @@ export const spacing4 = createVar();
 export const spacing5 = createVar();
 export const spacing6 = createVar();
 export const spacing8 = createVar();
+export const spacing10 = createVar();
 export const spacing12 = createVar();
 export const spacing16 = createVar();
 export const spacing20 = createVar();
@@ -28,6 +29,7 @@ globalStyle('html, body', {
     [spacing5]: '1.25rem',
     [spacing6]: '1.5rem',
     [spacing8]: '2rem',
+    [spacing10]: '2.5rem',
     [spacing12]: '3rem',
     [spacing16]: '4rem',
     [spacing20]: '5rem',

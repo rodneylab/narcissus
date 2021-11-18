@@ -16,7 +16,11 @@ import {
 } from './Header.css';
 import { useTheme } from '../../hooks/themeContext';
 
-function Header({ slug }: { slug: string }) {
+interface HeaderProps {
+  slug: string;
+}
+
+const Header: FC<HeaderProps> = function Header({ slug }) {
   const {
     state: { theme },
   } = useTheme();
@@ -54,6 +58,6 @@ function Header({ slug }: { slug: string }) {
       </div>
     </header>
   );
-}
+};
 
 export { Header as default };

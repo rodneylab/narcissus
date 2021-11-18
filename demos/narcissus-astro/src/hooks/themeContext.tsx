@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useReducer } from 'react';
-import type { ReactNode } from 'react';
+import React, { createContext, useContext, useMemo, useReducer } from 'react';
+import type { FC, ReactNode } from 'react';
 
 type Dispatch = () => void;
 type State = { theme: string };
@@ -20,13 +20,13 @@ function themeReducer(state: State) {
   return { theme: state.theme === 'light' ? 'dark' : 'light' };
 }
 
-function ThemeProvider({ children }: ThemeProviderProps) {
+const ThemeProvider: FC<ThemeProviderProps> = function ThemeProvider({ children }) {
   const [state, dispatch] = useReducer(themeReducer, {
     theme: defaultTheme(),
   });
-  const value = { state, dispatch };
+  const value = useMemo(() => ({ state, dispatch }), [state]);
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
-}
+};
 
 function useTheme() {
   const context = useContext(ThemeContext);
