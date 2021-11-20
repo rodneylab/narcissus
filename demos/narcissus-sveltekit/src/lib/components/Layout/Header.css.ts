@@ -89,7 +89,7 @@ export const navList = style({
   paddingBottom: [spacing0],
   margin: [spacing0],
   selectors: {
-    [`ul &`]: {
+    'ul &': {
       marginTop: [spacing0],
     },
   },
