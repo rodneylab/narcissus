@@ -16,17 +16,19 @@
   $: lightThemeActive = $theme === 'light';
   $: themeButtonText = `Switch to ${lightThemeActive ? 'dark' : 'light'} theme`;
   import { screenReaderText } from '$lib/styles/styles.css';
+  import { browser } from '$app/env';
+
+  const handleClick = () => {
+    lightThemeActive ? theme.set('dark') : theme.set('light');
+    browser && document.getElementById('theme-button').blur();
+  };
 
   export let slug: string;
 </script>
 
 <header class={container}>
   <div class={themeButtonContainer}>
-    <button
-      class={themeButton}
-      on:click={() => {
-        lightThemeActive ? theme.set('dark') : theme.set('light');
-      }}
+    <button id="theme-button" class={themeButton} on:click={handleClick}
       ><span class={screenReaderText}>{themeButtonText}</span>
       {#if lightThemeActive}
         <MoonIcon label="Switch to dark mode" scale={1.5} />
