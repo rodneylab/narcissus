@@ -18,6 +18,7 @@ module.exports = {
         "narcissus-dashboard",
         "narcissus-sveltekit",
         "root",
+        "services"
       ],
     ],
     "scope-empty": [2, "never"],
