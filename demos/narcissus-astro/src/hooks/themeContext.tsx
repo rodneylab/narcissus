@@ -8,7 +8,7 @@ interface ThemeProviderProps {
 }
 
 function defaultTheme() {
-  if (import.meta.env.SSR) {
+  if (typeof window === 'undefined') {
     return 'light';
   }
   return window?.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';

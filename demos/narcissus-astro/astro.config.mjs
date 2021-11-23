@@ -1,3 +1,6 @@
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
+import { imagetools } from 'vite-imagetools';
+
 export default {
   // projectRoot: '.',     // Where to resolve all URLs relative to. Useful if you have a monorepo project.
   // pages: './src/pages', // Path to Astro components, pages, and data
@@ -13,4 +16,7 @@ export default {
     // tailwindConfig: '',     // Path to tailwind.config.js if used, e.g. './tailwind.config.js'
   },
   renderers: ['@astrojs/renderer-react', '@astrojs/renderer-svelte'],
+  vite: {
+    plugins: [vanillaExtractPlugin(), imagetools({ force: true })],
+  },
 };

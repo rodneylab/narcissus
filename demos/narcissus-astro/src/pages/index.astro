@@ -1,12 +1,12 @@
 ---
 import {cardContainer,cardContent, extraSummaryText, header, summaryHeading, summaryText} from './index.css';
 import Layout from '../components/Layout/index.tsx';
-import Card from '../components/Card.jsx';
-import BlogRoll from '../components/BlogRoll.jsx';
+import Card from '../components/Card.tsx';
+import BlogRoll from '../components/BlogRoll.tsx';
 import fm from 'front-matter';
 import fs from 'node:fs';
 import path from 'node:path';
-import website from '../configuration/website.js';
+import website from '../configuration/website.ts';
 
 const { workerUrl} = website;
 const __dirname = path.resolve();

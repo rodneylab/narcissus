@@ -9,7 +9,7 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "@astrojs/renderer-react": "0.2.2",
+    "@astrojs/renderer-react": "0.3.0",
     "@fontsource/lato": "^4.5.0",
     "@fontsource/roboto-slab": "^4.5.1",
     "@fontsource/slabo-13px": "^4.5.0",
@@ -18,28 +18,27 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.16",
-    "@snowpack/plugin-dotenv": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@vanilla-extract/css-utils": "^0.1.1",
-    "astro": "^0.20.12",
+    "@vanilla-extract/vite-plugin": "^3.0.1",
+    "astro": "^0.21.2",
     "dayjs": "^1.10.7",
-    "eslint": "^8.2.0",
-    "eslint-config-airbnb": "^19.0.0",
+    "eslint": "^8.3.0",
+    "eslint-config-airbnb": "^19.0.1",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.27.0",
+    "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "front-matter": "^4.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-hook-form": "^7.19.5",
+    "react-hook-form": "^7.20.2",
     "react-share": "^4.4.0",
     "react-social-icons": "^5.6.1",
-    "snowpack-plugin-markdown-import": "^0.2.0"
+    "vite-imagetools": "^4.0.1"
   },
   "dependencies": {
-    "@vanilla-extract/css": "^1.6.3",
-    "@vanilla-extract/snowpack-plugin": "^2.0.1"
+    "@vanilla-extract/css": "^1.6.3"
   }
 }
