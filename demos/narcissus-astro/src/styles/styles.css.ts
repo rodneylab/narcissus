@@ -1,6 +1,6 @@
-import { fontSize2, fontWeightBlack, fontWeightNormal, lineHeightNormal } from './vars/font.css';
 import { globalStyle, style } from '@vanilla-extract/css';
 import { themeVars } from './themes/theme.css';
+import { fontSize2, fontWeightBlack, fontWeightNormal, lineHeightNormal } from './vars/font.css';
 import {
   spacing0,
   spacing1,

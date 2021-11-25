@@ -1,25 +1,25 @@
+import React from 'react';
 // Lato
 // [100,300,400,700,900]
 // [italic,normal]
-// import '@fontsource/lato';
-// import '@fontsource/lato';
-// import '@fontsource/roboto-slab';
-// import '@fontsource/roboto-slab/700.css';
-// import '@fontsource/roboto-slab/900.css';
-// import '@fontsource/slabo-13px';
+import '@fontsource/lato';
+import '@fontsource/roboto-slab';
+import '@fontsource/roboto-slab/700.css';
+import '@fontsource/roboto-slab/900.css';
+import '@fontsource/slabo-13px';
 // Slabo 27px
 // [400]
 // [normal]
-// import '@fontsource/slabo-27px';
-import React from 'react';
+import '@fontsource/slabo-27px';
 import type { FC, ReactElement, ReactNode } from 'react';
+import { ThemeProvider, useTheme } from '../../hooks/themeContext';
 import '../../styles/normalise.css';
+import '../../styles/styles.css';
 import darkTheme from '../../styles/themes/dark.css';
 import lightTheme from '../../styles/themes/light.css';
 import Footer from './Footer';
 import Header from './Header';
 import { container, main } from './layout.css';
-import { useTheme, ThemeProvider } from '../../hooks/themeContext';
 
 interface LayoutProps {
   children: ReactNode;

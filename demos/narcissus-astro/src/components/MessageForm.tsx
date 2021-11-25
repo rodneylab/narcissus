@@ -20,7 +20,8 @@ import React from 'react';
 import { useTheme } from '../hooks/themeContext';
 import { ThemeProvider } from '../hooks/themeContext';
 
-const ssr = import.meta.env.SSR;
+// const ssr = import.meta.env.SSR;
+const ssr = typeof window === 'undefined';
 
 const { hcaptchaSitekey, workerUrl } = website;
 
@@ -170,9 +171,9 @@ const MessageForm: FC<{}> = function MessageForm() {
             />
           </div>
           <small className={disclaimer}>
-            This site uses Akismet to reduce spam.{' '}
+            This site uses Akismet to reduce spam.
             <a
-              aria-label="Learn how Akismet process comment data"
+              aria-label="Learn how Akismet process message data"
               className={formLink}
               href="https://akismet.com/privacy/"
             >
