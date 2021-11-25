@@ -22,7 +22,7 @@
     "@typescript-eslint/parser": "^5.4.0",
     "@vanilla-extract/css-utils": "^0.1.1",
     "@vanilla-extract/vite-plugin": "^3.0.1",
-    "astro": "^0.21.2",
+    "astro": "^0.21.4",
     "dayjs": "^1.10.7",
     "eslint": "^8.3.0",
     "eslint-config-airbnb": "^19.0.1",
@@ -39,6 +39,6 @@
     "vite-imagetools": "^4.0.1"
   },
   "dependencies": {
-    "@vanilla-extract/css": "^1.6.3"
+    "@vanilla-extract/css": "^1.6.4"
   }
 }
