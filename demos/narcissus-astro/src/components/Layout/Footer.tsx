@@ -16,8 +16,13 @@ import {
 } from './Footer.css';
 import RodneyLabCredit from './RodneyLabCredit';
 import { ThemeProvider, useTheme } from '../../hooks/themeContext';
+import SocialNetworkIcon from '../../components/Icons/SocialNetwork';
 
-const Footer: FC<{}> = () => {
+interface FooterProps {
+  slug: string;
+}
+
+const Footer: FC<FooterProps> = function Footer({ slug }) {
   const { facebookPage, githubPage, linkedinProfile, tiktokUsername, twitterUsername } = website;
   const {
     state: { theme },
@@ -44,43 +49,38 @@ const Footer: FC<{}> = () => {
         <nav className={footerIcons} aria-label="Navigate to Rodney Lab linked social sites">
           <ul className={footerIconsList}>
             <li className={footerIconsListItem}>
-              <ExternalLink
-                aria-label="Go to the Rodney Lab Tik Tok Page"
+              <SocialNetworkIcon
+                aria-label="Go to the Rodney Lab Tik Tok page"
+                network="tiktok"
                 href={`https://www.tiktok.com/${tiktokUsername}`}
-              >
-                <SocialIcons network="tiktok" fgColor="transparent" bgColor={fgColor} />
-              </ExternalLink>
+              />
             </li>
             <li className={footerIconsListItem}>
-              <SocialIcons
-                url={facebookPage}
+              <SocialNetworkIcon
+                aria-label="Go to the Rodney Lab Facebook page"
                 network="facebook"
-                fgColor={fgColor}
-                bgColor="transparent"
+                href={facebookPage}
               />
             </li>
             <li className={footerIconsListItem}>
-              <SocialIcons
-                url={`https://twitter.com/intent/user?screen_name=${twitterUsername}`}
+              <SocialNetworkIcon
+                aria-label="Go to the Rodney Lab Twitter page"
+                href={`https://twitter.com/intent/user?screen_name=${twitterUsername}`}
                 network="twitter"
-                fgColor={fgColor}
-                bgColor="transparent"
               />
             </li>
             <li className={footerIconsListItem}>
-              <SocialIcons
-                url={`https://uk.linkedin.com/in/${linkedinProfile}`}
+              <SocialNetworkIcon
+                aria-label="Go to the Rodney Lab Linked In page"
+                href={`https://uk.linkedin.com/in/${linkedinProfile}`}
                 network="linkedin"
-                fgColor={fgColor}
-                bgColor="transparent"
               />
             </li>
             <li className={footerIconsListItem}>
-              <SocialIcons
-                url={`https://github.com/${githubPage}`}
+              <SocialNetworkIcon
+                aria-label="Go to the Rodney Lab Git Hub In page"
+                href={`https://github.com/${githubPage}`}
                 network="github"
-                fgColor={fgColor}
-                bgColor="transparent"
               />
             </li>
           </ul>
@@ -91,14 +91,12 @@ const Footer: FC<{}> = () => {
   );
 };
 
-// export { Footer as default };
-
-function ThemeWrapper() {
+const ThemeWrapper: FC<{}> = function ThemeWrapper() {
   return (
     <ThemeProvider>
       <Footer />
     </ThemeProvider>
   );
-}
+};
 
-export { ThemeWrapper as default };
+export default ThemeWrapper;
