@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect } from 'react';
 import type { FC } from 'react';
 import { screenReaderText } from '../../styles/styles.css';
 import { themeButton, themeButtonContainer } from './Header.css.ts';
@@ -22,12 +22,26 @@ interface HeaderProps {
 
 const Header: FC<HeaderProps> = function Header({ slug }) {
   const {
+    dispatch,
     state: { theme },
   } = useTheme();
+
+  const ssr = typeof window === 'undefined';
+
+  // update theme from hook default (light) if the media query does not match default
+  useEffect(() => {
+    if (!ssr) {
+      const userTheme = window?.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light';
+      if (userTheme !== theme) {
+        dispatch();
+      }
+    }
+  }, []);
+
   const lightThemeActive = theme === 'light';
   const themeButtonText = `Switch to ${lightThemeActive ? 'dark' : 'light'} theme`;
-
-  const { dispatch } = useTheme();
 
   return (
     <header className={container}>
@@ -60,4 +74,4 @@ const Header: FC<HeaderProps> = function Header({ slug }) {
   );
 };
 
-export { Header as default };
+export default Header;

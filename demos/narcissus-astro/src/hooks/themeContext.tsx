@@ -7,13 +7,6 @@ interface ThemeProviderProps {
   children: ReactNode;
 }
 
-function defaultTheme() {
-  if (typeof window === 'undefined') {
-    return 'light';
-  }
-  return window?.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
 const ThemeContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
 
 function themeReducer(state: State) {
@@ -22,7 +15,7 @@ function themeReducer(state: State) {
 
 const ThemeProvider: FC<ThemeProviderProps> = function ThemeProvider({ children }) {
   const [state, dispatch] = useReducer(themeReducer, {
-    theme: defaultTheme(),
+    theme: 'light', // default value - there is media query check in Header component to correct
   });
   const value = useMemo(() => ({ state, dispatch }), [dispatch, state]);
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
