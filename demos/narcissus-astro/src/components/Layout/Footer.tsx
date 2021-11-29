@@ -1,10 +1,8 @@
 import React from 'react';
 import type { FC } from 'react';
+import SocialNetworkIcon from '../../components/Icons/SocialNetwork';
 import website from '../../configuration/website';
-
 import { COPYRIGHT_ENTITY } from '../../constants/entities';
-import ExternalLink from '../ExternalLink';
-import SocialIcons from '../SocialIcons';
 import {
   container,
   content,
@@ -15,19 +13,13 @@ import {
   footerLink,
 } from './Footer.css';
 import RodneyLabCredit from './RodneyLabCredit';
-import { ThemeProvider, useTheme } from '../../hooks/themeContext';
-import SocialNetworkIcon from '../../components/Icons/SocialNetwork';
 
 interface FooterProps {
   slug: string;
 }
 
-const Footer: FC<FooterProps> = function Footer({ slug }) {
+const Footer: FC<FooterProps> = function Footer() {
   const { facebookPage, githubPage, linkedinProfile, tiktokUsername, twitterUsername } = website;
-  const {
-    state: { theme },
-  } = useTheme();
-  const fgColor = theme === 'light' ? '#433633' : '#32021f';
 
   return (
     <footer className={container}>
@@ -91,12 +83,4 @@ const Footer: FC<FooterProps> = function Footer({ slug }) {
   );
 };
 
-const ThemeWrapper: FC<{}> = function ThemeWrapper() {
-  return (
-    <ThemeProvider>
-      <Footer />
-    </ThemeProvider>
-  );
-};
-
-export default ThemeWrapper;
+export default Footer;
