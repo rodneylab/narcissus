@@ -1,7 +1,8 @@
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import website from '../configuration/website';
+import { ThemeProvider, useTheme } from '../hooks/themeContext';
 import Card from './Card';
 import {
   button,
@@ -16,26 +17,13 @@ import {
 } from './MessageForm.css';
 import TextArea from './TextArea';
 import TextInputField from './TextInputField';
-import React from 'react';
-import { useTheme } from '../hooks/themeContext';
-import { ThemeProvider } from '../hooks/themeContext';
 
-// const ssr = import.meta.env.SSR;
 const ssr = typeof window === 'undefined';
 
 const { hcaptchaSitekey, workerUrl } = website;
 
 const MessageForm: FC<{}> = function MessageForm() {
-  // const [errors, setErrors] = useState(null);
-  const [serverState, setServerState] = useState({ ok: true, message: '' });
   const [successfulMessageSubmission, setSuccessfulMessageSubmission] = useState<boolean>(false);
-  // const [name, setName] = useState(ssr ? '' : window.sessionStorage.getItem('contact-name') ?? '');
-  // const [email, setEmail] = useState(
-  //   ssr ? '' : window.sessionStorage.getItem('contact-email') ?? '',
-  // );
-  // const [message, setMessage] = useState(
-  //   ssr ? '' : window.sessionStorage.getItem('contact-message') ?? '',
-  // );
   const [submitting, setSubmitting] = useState<boolean>(false);
   const {
     register,
@@ -49,10 +37,6 @@ const MessageForm: FC<{}> = function MessageForm() {
   const {
     state: { theme },
   } = useTheme();
-
-  // const darkMode = ssr
-  //   ? false
-  //   : window?.matchMedia('(prefers-color-scheme: dark)').matches ?? false;
 
   useEffect(() => {
     if (!ssr) {
@@ -72,41 +56,27 @@ const MessageForm: FC<{}> = function MessageForm() {
   }, []);
 
   function clearForm() {
-    ['message', 'name', 'email'].forEach((element) =>
-      sessionStorage.removeItem(`comment-${element}`),
-    );
-    // setName('');
-    // setEmail('');
-    // setMessage('');
-  }
-
-  function sessionStore(field: string, value: string) {
     if (!ssr) {
-      window.sessionStorage.setItem(`contact-${field}`, value);
+      window.sessionStorage.removeItem('contact-email');
+      window.sessionStorage.removeItem('contact-name');
+      window.sessionStorage.removeItem('contact-text');
     }
   }
 
-  const validateInputs = () => {
-    // setErrors({ ...errors, ...validName(name), ...validEmail(email), ...validMessage(message) });
-  };
-
-  function noErrors() {
-    validateInputs();
-    if (errors == null) {
-      return true;
+  function sessionStore({ name, email, text }: { name: string; email: string; text: string }) {
+    if (!ssr) {
+      window.sessionStorage.setItem(`contact-email`, email);
+      window.sessionStorage.setItem(`contact-name`, name);
+      window.sessionStorage.setItem(`contact-text`, text);
     }
-    const { name: nameError, email: emailError, message: messageError } = errors;
-    if (!nameError && !emailError && !messageError) {
-      return true;
-    }
-    return false;
   }
 
-  const onSubmit = async () => {
+  const onSubmit = async (formData, event) => {
     try {
-      validateInputs();
-      if (noErrors()) {
-        // setSubmitting(true);
+      if (!ssr) {
+        const { Name: name, Email: email, Message: text } = formData;
+        sessionStore({ name, email, text });
+        setSubmitting(true);
         const { response } = await hcaptcha.execute(hcaptchaWidgetID, {
           async: true,
         });
@@ -117,15 +87,17 @@ const MessageForm: FC<{}> = function MessageForm() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            // name,
-            // text: message,
-            // email,
+            name,
+            text,
+            email,
             response,
           }),
         });
         await responsePromise;
         clearForm();
+        event.target.reset();
         setSuccessfulMessageSubmission(true);
+        setSubmitting(false);
       }
     } catch (error) {
       console.error(`Error in MessageForm, handleSubmit: ${error}`);
@@ -231,7 +203,6 @@ const MessageForm: FC<{}> = function MessageForm() {
     </Card>
   );
 };
-// export { MessageForm as default };
 
 const ThemeWrapper: FC<{}> = function ThemeWrapper() {
   return (
