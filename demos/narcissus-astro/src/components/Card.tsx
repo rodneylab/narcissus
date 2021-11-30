@@ -4,8 +4,8 @@ import { container, content } from './Card.css';
 
 interface CardProps {
   children: ReactNode;
-  containerClass: string;
-  contentClass: string;
+  containerClass?: string;
+  contentClass?: string;
 }
 
 const Card: FC<CardProps> = function Card({ children, containerClass, contentClass }) {
@@ -14,6 +14,11 @@ const Card: FC<CardProps> = function Card({ children, containerClass, contentCla
       <div className={`${content} ${contentClass ?? ''}`}>{children}</div>
     </section>
   );
+};
+
+Card.defaultProps = {
+  containerClass: '',
+  contentClass: '',
 };
 
 export default Card;

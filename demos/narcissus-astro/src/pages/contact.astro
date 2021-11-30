@@ -1,27 +1,8 @@
 ---
-import {
-  cardContainer,
-  cardContent,
-  contactAddress,
-  contactDetails,
-  contactDetailsList,
-  contactDetailsListItem,
-  summaryText,
-} from './contact.css';
+import { summaryText } from './contact.css';
 import Layout from '../components/Layout/index.tsx';
 import MessageForm from '../components/MessageForm.tsx';
-import Card from '../components/Card.tsx';
-import SocialIcons from '../components/SocialIcons';
-import ExternalLink from '../components/ExternalLink';
-import website from '../configuration/website';
-
-const { contactEmail, facebookPageName, telegramUsername, twitterUserId, twitterUsername } =
-  website;
-
-const theme: string = 'dark';
-const fgColor = theme === 'light' ? '#433633' : '#32021f';
-const width = 36;
-const height = 36;
+import ContactsCard from '../components/ContactsCard.tsx';
 const slug = '/contact';
 ---
 
@@ -29,51 +10,14 @@ const slug = '/contact';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-
-    <script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
+    <script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer hoist></script>
   </head>
   <body>
     <Layout client:load {slug}>
       <h1>Contact me</h1>
       <p class={summaryText}>I would love to hear from you. Please get in touch!</p>
       <MessageForm client:load />
-      <Card containerClass={cardContainer} contentClass={cardContent}>
-        <div class={contactDetails}>
-          <ul class={contactDetailsList}>
-            <li class={contactDetailsListItem}>
-              <SocialIcons network="email" width={36} height={36} {fgColor} bgColor="transparent" />
-              <span class={contactAddress}>{contactEmail}</span>
-            </li>
-            <li class={contactDetailsListItem}>
-              <SocialIcons network="facebook" {width} {height} {fgColor} bgColor="transparent"
-              /><ExternalLink
-                aria-label="D M Rodney Lab on Facebook Messenger"
-                href={`https://m.me.${facebookPageName}`}
-              >
-                <span class={contactAddress}> {facebookPageName}</span>
-              </ExternalLink>
-            </li>
-            <li class={contactDetailsListItem}>
-              <SocialIcons network="twitter" {width} {height} {fgColor} bgColor="transparent"
-              /><ExternalLink
-                aria-label="D M Rodney Lab on Twitter"
-                href={`https://twitter.com/messages/compose?recipient-id=${twitterUserId}`}
-              >
-                <span class={contactAddress}>@{twitterUsername}</span>
-              </ExternalLink>
-            </li>
-            <li class={contactDetailsListItem}>
-              <SocialIcons network="telegram" {width} {height} {fgColor} bgColor="transparent"
-              /><ExternalLink
-                aria-label="Message Rodney Lab on Telegram"
-                href={`https://t.me/${telegramUsername}`}
-              >
-                <span class={contactAddress}>{telegramUsername}</span>
-              </ExternalLink>
-            </li>
-          </ul>
-        </div>
-      </Card>
+      <ContactsCard client:visible />
     </Layout>
   </body>
 </html>
