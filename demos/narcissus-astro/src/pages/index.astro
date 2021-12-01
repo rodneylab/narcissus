@@ -1,17 +1,19 @@
 ---
-import {cardContainer,cardContent, extraSummaryText, header, summaryHeading, summaryText} from './index.css';
+import { header } from './index.css';
 import Layout from '../components/Layout/index.tsx';
-import Card from '../components/Card.tsx';
 import BlogRoll from '../components/BlogRoll.tsx';
 import fm from 'front-matter';
 import fs from 'node:fs';
 import path from 'node:path';
 import website from '../configuration/website.ts';
+import AboutCard from '../components/AboutCard.tsx';
 
-const { workerUrl} = website;
+const { workerUrl } = website;
 const __dirname = path.resolve();
 const BLOG_PATH = path.join(__dirname, 'content/blog');
-const directories = fs.readdirSync(BLOG_PATH).filter((element) => fs.lstatSync(`${BLOG_PATH}/${element}`).isDirectory());
+const directories = fs
+  .readdirSync(BLOG_PATH)
+  .filter((element) => fs.lstatSync(`${BLOG_PATH}/${element}`).isDirectory());
 
 async function getResponse(slug) {
   try {
@@ -35,46 +37,38 @@ const postPromises = directories.map(async (element) => {
   if (fs.existsSync(contentPath)) {
     const response = await getResponse(element);
     const data = await response.json();
-    const {comments, likes, views} = data;
-    const content = fs.readFileSync(contentPath, { encoding: 'utf-8'});
+    const { comments, likes, views } = data;
+    const content = fs.readFileSync(contentPath, { encoding: 'utf-8' });
     const frontmatter = fm(content);
-    const {datePublished, postTitle, seoMetaDescription} = frontmatter.attributes;
-    return {slug: element, datePublished, postTitle, seoMetaDescription, likes, views, comments: comments.length };
+    const { datePublished, postTitle, seoMetaDescription } = frontmatter.attributes;
+    return {
+      slug: element,
+      datePublished,
+      postTitle,
+      seoMetaDescription,
+      likes,
+      views,
+      comments: comments.length,
+    };
   }
-})
+});
 const posts = await Promise.all(postPromises);
 
-const slug = "/";
+const slug = '/';
 ---
 
 <html lang="en-GB">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-</head>
-<body>
-    <Layout client:load slug={slug} >
-<header class={header}>
-  <h1>Narcissus: API as a Service / Backendless Blog</h1>
-</header>
-<Card containerClass={cardContainer} contentClass={cardContent}>
-  <h2 class={summaryHeading}><span>About Narcissus</span></h2>
-  <p class={summaryText}>
-    Narcissus is a proof of concept <strong>backend as a service</strong> app which lets you create
-    a blog site quicker by managing important blog features like
-    <strong>comment and message forms</strong>
-    as well as post
-    <strong>views and likes</strong>.
-  </p>
-  <p class={extraSummaryText}>
-    This demo <strong>Astro</strong> site is static and uses Serverless
-    <strong>Rust Cloudflare Workers</strong>
-    to read and create comments as well as other interactive elements using REST requests, adding spam
-    detection and Captchas without the added hassle of adding spam detection and Captchas. The app is
-    backed by a <strong>Supabase</strong> PostgreSQL database.
-  </p>
-</Card>
-<BlogRoll posts={posts}/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+  </head>
+  <body>
+    <Layout client:load {slug}>
+      <header class={header}>
+        <h1>Narcissus: API as a Service / Backendless Blog</h1>
+      </header>
+      <AboutCard client:load />
+      <BlogRoll client:idle {posts} />
     </Layout>
-</body>
+  </body>
 </html>
