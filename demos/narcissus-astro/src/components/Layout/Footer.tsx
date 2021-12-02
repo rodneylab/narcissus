@@ -1,8 +1,8 @@
 import React from 'react';
 import type { FC } from 'react';
-import SocialNetworkIcon from '../../components/Icons/SocialNetwork';
-import website from '../../configuration/website';
-import { COPYRIGHT_ENTITY } from '../../constants/entities';
+import SocialNetworkIcon from '$components/Icons/SocialNetwork';
+import website from '$configuration/website';
+import { COPYRIGHT_ENTITY } from '$constants/entities';
 import {
   container,
   content,
@@ -11,8 +11,8 @@ import {
   footerIconsList,
   footerIconsListItem,
   footerLink,
-} from './Footer.css';
-import RodneyLabCredit from './RodneyLabCredit';
+} from '$components/Layout/Footer.css';
+import RodneyLabCredit from '$components/Layout/RodneyLabCredit';
 
 interface FooterProps {
   slug: string;

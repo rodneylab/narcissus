@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import React from 'react';
 import type { FC } from 'react';
-import { H_ELLIPSIS_ENTITY } from '../constants/entities';
+import { H_ELLIPSIS_ENTITY } from '$constants/entities';
 import {
   container,
   content,
@@ -12,8 +12,8 @@ import {
   postMeta,
   viewsLikesContainer,
   viewsLikesContent,
-} from './BlogPostSummary.css';
-import PostViewsLikes from './PostViewsLikes';
+} from '$components/BlogPostSummary.css';
+import PostViewsLikes from '$components/PostViewsLikes';
 
 interface BlogPostSummaryProps {
   postTitle: string;

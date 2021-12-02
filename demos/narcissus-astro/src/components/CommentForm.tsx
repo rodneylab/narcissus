@@ -8,16 +8,16 @@ import {
   formField,
   formLink,
   heading,
-} from './CommentForm.css';
-import Card from './Card';
-import TextInputField from './TextInputField';
-import TextArea from './TextArea';
-import { useTheme } from '../hooks/themeContext';
-import { ThemeProvider } from '../hooks/themeContext';
-import website from '../configuration/website';
+} from '$components/CommentForm.css';
+import Card from '$components/Card';
+import TextInputField from '$components/TextInputField';
+import TextArea from '$components/TextArea';
+import { ThemeProvider, useTheme } from '$hooks/themeContext';
+import website from '$configuration/website';
 import { useForm } from 'react-hook-form';
 
-const ssr = import.meta.env.SSR;
+// const ssr = import.meta.env.SSR;
+const ssr = typeof window === 'undefined';
 
 interface CommentFormProps {
   slug: string;
@@ -50,9 +50,9 @@ const CommentForm: FC<CommentFormProps> = function CommentForm({ slug }) {
     comment = '';
   }
 
-  function validateInputs() {
-    errors = { ...errors, ...validName(name), ...validEmail(email), ...validComment(comment) };
-  }
+  // function validateInputs() {
+  //   errors = { ...errors, ...validName(name), ...validEmail(email), ...validComment(comment) };
+  // }
 
   const onSubmit = async () => {
     try {

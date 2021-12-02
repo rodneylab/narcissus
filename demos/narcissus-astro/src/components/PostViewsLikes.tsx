@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import React from 'react';
-import PostViewsLikesPure from './PostViewsLikesPure';
-import website from '../configuration/website';
+import PostViewsLikesPure from '$components/PostViewsLikesPure';
+import website from '$configuration/website';
 
 interface PostViewsLikesProps {
   likes: number;

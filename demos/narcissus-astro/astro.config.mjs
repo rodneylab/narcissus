@@ -1,4 +1,5 @@
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
+import path from 'node:path';
 import { imagetools } from 'vite-imagetools';
 
 export default {
@@ -7,7 +8,7 @@ export default {
   // dist: './dist',       // When running `astro build`, path to final static output
   // public: './public',   // A folder of static files Astro will copy to the root. Useful for favicons, images, and other files that don’t need processing.
   buildOptions: {
-    // site: 'http://example.com',           // Your public domain, e.g.: https://my-site.dev/. Used to generate sitemaps and canonical URLs.
+    site: 'https://narcissus-astro.rodneylab.com', // Your public domain, e.g.: https://my-site.dev/. Used to generate sitemaps and canonical URLs.
     sitemap: true, // Generate sitemap (set to "false" to disable)
   },
   devOptions: {
@@ -17,6 +18,17 @@ export default {
   },
   renderers: ['@astrojs/renderer-react', '@astrojs/renderer-svelte'],
   vite: {
+    resolve: {
+      alias: {
+        $components: path.resolve('./src/components'),
+        $configuration: path.resolve('./src/configuration'),
+        $constants: path.resolve('./src/constants'),
+        $hooks: path.resolve('./src/hooks'),
+        $layouts: path.resolve('./src/layouts'),
+        $pages: path.resolve('./src/pages'),
+        $styles: path.resolve('./src/styles'),
+      },
+    },
     plugins: [vanillaExtractPlugin(), imagetools({ force: true })],
   },
 };

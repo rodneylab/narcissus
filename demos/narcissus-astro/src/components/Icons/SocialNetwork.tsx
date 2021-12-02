@@ -1,7 +1,7 @@
 import React from 'react';
 import type { FC } from 'react';
 import { SocialIcon } from 'react-social-icons';
-import { useTheme } from '../../hooks/themeContext';
+import { useTheme } from '$hooks/themeContext';
 
 const BUTTON_SIZE = 48;
 

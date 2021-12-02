@@ -6,8 +6,8 @@ import {
   extraSummaryText,
   summaryHeading,
   summaryText,
-} from './AboutCard.css';
-import Card from './Card';
+} from '$components/AboutCard.css';
+import Card from '$components/Card';
 
 interface AboutCardProps {}
 

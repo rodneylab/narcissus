@@ -1,13 +1,13 @@
 import React from 'react';
 import type { FC, ReactNode } from 'react';
-import Card from './Card';
+import Card from '$components/Card';
 import {
   authorText,
   commentContainer,
   commentContent,
   commentListItem,
   dateText,
-} from './Comments.css';
+} from '$components/Comments.css';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en-gb.js';
 import localizedFormat from 'dayjs/plugin/localizedFormat.js';

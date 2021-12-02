@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import type { FC } from 'react';
-import { screenReaderText } from '../styles/styles.css';
-import { container, input } from './TextInputField.css';
+import { screenReaderText } from '$styles/styles.css';
+import { container, input } from '$components/TextInputField.css';
 
 interface TextInputFieldProps {
   id: string;

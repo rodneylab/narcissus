@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import type { FC } from 'react';
-import { screenReaderText } from '../../styles/styles.css';
-import { themeButton, themeButtonContainer } from './Header.css.ts';
-import MoonIcon from '../Icons/Moon';
-import SunIcon from '../Icons/Sun';
+import { screenReaderText } from '$styles/styles.css';
+import { themeButton, themeButtonContainer } from '$components/Layout/Header.css.ts';
+import MoonIcon from '$components/Icons/Moon';
+import SunIcon from '$components/Icons/Sun';
 import {
   container,
   content,

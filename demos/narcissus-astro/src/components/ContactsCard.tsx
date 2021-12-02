@@ -1,6 +1,6 @@
 import React from 'react';
 import type { FC } from 'react';
-import SocialIcons from './SocialIcons';
+import SocialIcons from '$components/SocialIcons';
 import {
   cardContainer,
   cardContent,
@@ -8,11 +8,11 @@ import {
   contactDetails,
   contactDetailsList,
   contactDetailsListItem,
-} from './ContactsCard.css';
-import website from '../configuration/website';
-import { ThemeProvider, useTheme } from '../hooks/themeContext';
-import Card from './Card';
-import ExternalLink from './ExternalLink';
+} from '$components/ContactsCard.css';
+import website from '$configuration/website';
+import { ThemeProvider, useTheme } from '$hooks/themeContext';
+import Card from '$components/Card';
+import ExternalLink from '$components/ExternalLink';
 
 const width = 36;
 const height = 36;
@@ -91,11 +91,6 @@ const ContactsCard: FC<ContactsCardProps> = function ContactsCard() {
       </div>
     </Card>
   );
-};
-
-Card.defaultProps = {
-  containerClass: '',
-  contentClass: '',
 };
 
 const ThemeWrapper: FC<{}> = function ThemeWrapper() {

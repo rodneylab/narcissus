@@ -1,12 +1,19 @@
 import type { FC } from 'react';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import website from '../configuration/website';
-import { container, content, icon, likeButton, link, meta } from './PostViewsLikesPure.css';
-import NotYetLikedIcon from './Icons/HeartOutline';
-import LikedIcon from './Icons/HeartSolid';
-import ViewsIcon from './Icons/View';
-import CommentIcon from './Icons/Comment';
-import { LikedViewedProvider, useLikedViewed } from '../hooks/postLikedViewedContext';
+import website from '$configuration/website';
+import {
+  container,
+  content,
+  icon,
+  likeButton,
+  link,
+  meta,
+} from '$components/PostViewsLikesPure.css';
+import NotYetLikedIcon from '$components/Icons/HeartOutline';
+import LikedIcon from '$components/Icons/HeartSolid';
+import ViewsIcon from '$components/Icons/View';
+import CommentIcon from '$components/Icons/Comment';
+import { LikedViewedProvider, useLikedViewed } from '$hooks/postLikedViewedContext';
 
 interface PostViewsLikesPureProps {
   likes: number;
@@ -37,7 +44,8 @@ const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesP
   const [freshCommentCount] = useState(null);
   const [likeButtonHover, setLikeButtonHover] = useState(false);
 
-  const ssr = import.meta.env.SSR;
+  // const ssr = import.meta.env.SSR;
+  const ssr = typeof window === 'undefined';
 
   function postViewed() {
     return viewed.includes(slug);

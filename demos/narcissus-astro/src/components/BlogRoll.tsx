@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import React, { useState } from 'react';
-import { postSummary } from './BlogRoll.css';
-import { H_ELLIPSIS_ENTITY } from '../constants/entities';
-import BlogPostSummary from './BlogPostSummary';
+import { postSummary } from '$components/BlogRoll.css';
+import { H_ELLIPSIS_ENTITY } from '$constants/entities';
+import BlogPostSummary from '$components/BlogPostSummary';
 
 interface BlogRollProps {
   initialPosts?: number;

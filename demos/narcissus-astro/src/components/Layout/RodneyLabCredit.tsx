@@ -1,6 +1,6 @@
 import React from 'react';
 import type { FC } from 'react';
-import { container, link, logo, rodneyLabText } from './RodneyLabCredit.css';
+import { container, link, logo, rodneyLabText } from '$components/Layout/RodneyLabCredit.css';
 
 const RodneyLabCredit: FC<{}> = () => (
   <div className={container}>

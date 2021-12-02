@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import website from '../configuration/website';
-import { ThemeProvider, useTheme } from '../hooks/themeContext';
-import Card from './Card';
+import website from '$configuration/website';
+import { ThemeProvider, useTheme } from '$hooks/themeContext';
+import Card from '$components/Card';
 import {
   button,
   buttonContainer,
@@ -14,9 +14,9 @@ import {
   formField,
   formLink,
   heading,
-} from './MessageForm.css';
-import TextArea from './TextArea';
-import TextInputField from './TextInputField';
+} from '$components/MessageForm.css';
+import TextArea from '$components/TextArea';
+import TextInputField from '$components/TextInputField';
 
 const ssr = typeof window === 'undefined';
 
