@@ -1,7 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@astrojs/renderer-react': 0.3.0
+  '@astrojs/renderer-react': 0.3.1
   '@fontsource/lato': ^4.5.0
   '@fontsource/roboto-slab': ^4.5.1
   '@fontsource/slabo-13px': ^4.5.0
@@ -15,12 +15,13 @@ specifiers:
   '@vanilla-extract/css': ^1.6.8
   '@vanilla-extract/css-utils': ^0.1.2
   '@vanilla-extract/vite-plugin': ^3.1.0
-  astro: ^0.21.6
+  astro: ^0.21.8
   autoprefixer: ^10.4.0
   dayjs: ^1.10.7
   eslint: ^8.3.0
-  eslint-config-airbnb: ^19.0.1
+  eslint-config-airbnb: ^19.0.2
   eslint-config-prettier: ^8.3.0
+  eslint-import-resolver-typescript: ^2.5.0
   eslint-plugin-import: ^2.25.3
   eslint-plugin-jsx-a11y: ^6.5.1
   eslint-plugin-prettier: ^4.0.0
@@ -37,7 +38,7 @@ specifiers:
   vite-imagetools: ^4.0.1
 
 devDependencies:
-  '@astrojs/renderer-react': 0.3.0
+  '@astrojs/renderer-react': 0.3.1
   '@fontsource/lato': 4.5.0
   '@fontsource/roboto-slab': 4.5.1
   '@fontsource/slabo-13px': 4.5.0
@@ -51,12 +52,13 @@ devDependencies:
   '@vanilla-extract/css': 1.6.8
   '@vanilla-extract/css-utils': 0.1.2
   '@vanilla-extract/vite-plugin': 3.1.0
-  astro: 0.21.6
+  astro: 0.21.8
   autoprefixer: 10.4.0
   dayjs: 1.10.7
   eslint: 8.3.0
-  eslint-config-airbnb: 19.0.1_ea5cabb8f170e6410bd6f44cb743d65d
+  eslint-config-airbnb: 19.0.2_ea5cabb8f170e6410bd6f44cb743d65d
   eslint-config-prettier: 8.3.0_eslint@8.3.0
+  eslint-import-resolver-typescript: 2.5.0_a32f4f7b9ceb1e357b5ea9f682f0210a
   eslint-plugin-import: 2.25.3_eslint@8.3.0
   eslint-plugin-jsx-a11y: 6.5.1_eslint@8.3.0
   eslint-plugin-prettier: 4.0.0_d8c6a2a4ba8850181fffb74d8e835cec
@@ -74,14 +76,14 @@ devDependencies:
 
 packages:
 
-  /@astrojs/compiler/0.3.9:
-    resolution: {integrity: sha512-TzmIzpB6bpGD3vghcj+cXPckXkRCf6zHcVupf6F2b9WpFkMAvrXoafkKJIids2Mq9aU4p7ooVcIDGZ9tpqZpyw==}
+  /@astrojs/compiler/0.5.6:
+    resolution: {integrity: sha512-lyUt5YEb8SutMjERYtJjExUqDAo4/HrRtfFlDmba1RxeE3A2AdK4BZq5R2n3JKp8JWFkqso9cJaVPZ463P3htA==}
     dependencies:
       typescript: 4.5.2
     dev: true
 
-  /@astrojs/language-server/0.7.19:
-    resolution: {integrity: sha512-6ZZtId4NGvMyXILbOdsAE6gllCxd7tpFL6zrMdtQcVvd1XZAABq7hmUDAD1BIfG0HHVz7cHxe5Wxq+cLWIYyVw==}
+  /@astrojs/language-server/0.8.2:
+    resolution: {integrity: sha512-AD2KDWM5CJMyhvD+ME8yJNvppliLizY34zRO+sFJ0xZ0YDIcIW9+Q0Y2gdYGoPLsr0xCu5SLpF0EmlHmTtfYEw==}
     hasBin: true
     dependencies:
       lodash: 4.17.21
@@ -94,6 +96,8 @@ packages:
       vscode-languageserver: 6.1.1
       vscode-languageserver-protocol: 3.16.0
       vscode-languageserver-textdocument: 1.0.3
+      vscode-languageserver-types: 3.16.0
+      vscode-uri: 3.0.2
     dev: true
 
   /@astrojs/markdown-remark/0.5.0:
@@ -113,7 +117,7 @@ packages:
       rehype-stringify: 9.0.2
       remark-gfm: 3.0.1
       remark-parse: 10.0.1
-      remark-rehype: 10.0.1
+      remark-rehype: 10.1.0
       remark-smartypants: 2.0.0
       unified: 10.1.1
       unist-util-map: 3.0.0
@@ -136,8 +140,8 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
 
-  /@astrojs/renderer-preact/0.3.0_@babel+core@7.16.0:
-    resolution: {integrity: sha512-gw+LpSdJXeSXdMTc9aIvVHiOyBs9w37D1yGogE/cleStIN9nTM6TVeU06gtZkIHOViOGAsMXTCrM7enr6VBMKQ==}
+  /@astrojs/renderer-preact/0.3.1_@babel+core@7.16.0:
+    resolution: {integrity: sha512-NEcUEtir2H0g4bV4/GwBxqE6bJpOH4WV/FfFRAO6yxqVx3VCdRJ7163fLmMqqznczoqg9w64uEGejx+NdHAFIg==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       '@babel/plugin-transform-react-jsx': 7.16.0_@babel+core@7.16.0
@@ -147,8 +151,8 @@ packages:
       - '@babel/core'
     dev: true
 
-  /@astrojs/renderer-react/0.3.0:
-    resolution: {integrity: sha512-pb9gKVHJwtFNoYrtSnBfOPm/0IerEGe6MCDrgys5lwVPWiZ9Di+7uK+C2/UdBuHDM8NEKw+zXA+6qZi/endy+g==}
+  /@astrojs/renderer-react/0.3.1:
+    resolution: {integrity: sha512-TqwQyVHhzbFKuF8+jMOlrxM767nubzZzCKuKTAzmrCRLa8vMXPqcPS7JXWD7Q6s6gXln3yhat6+3iodwgurwlw==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       '@babel/plugin-transform-react-jsx': 7.16.0
@@ -158,8 +162,8 @@ packages:
       - '@babel/core'
     dev: true
 
-  /@astrojs/renderer-react/0.3.0_@babel+core@7.16.0:
-    resolution: {integrity: sha512-pb9gKVHJwtFNoYrtSnBfOPm/0IerEGe6MCDrgys5lwVPWiZ9Di+7uK+C2/UdBuHDM8NEKw+zXA+6qZi/endy+g==}
+  /@astrojs/renderer-react/0.3.1_@babel+core@7.16.0:
+    resolution: {integrity: sha512-TqwQyVHhzbFKuF8+jMOlrxM767nubzZzCKuKTAzmrCRLa8vMXPqcPS7JXWD7Q6s6gXln3yhat6+3iodwgurwlw==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       '@babel/plugin-transform-react-jsx': 7.16.0_@babel+core@7.16.0
@@ -169,8 +173,8 @@ packages:
       - '@babel/core'
     dev: true
 
-  /@astrojs/renderer-svelte/0.2.1_a168e5dc7280058822a0f466cbbbe733:
-    resolution: {integrity: sha512-0pifE/w+K6eLrDT0urBYPOBJzF7e4sL3+td7o1p4a3yGXPQsr5eKKQ66lyIKl7sgg5bXOVQhVMQbnm6rGqHxVA==}
+  /@astrojs/renderer-svelte/0.2.2_a168e5dc7280058822a0f466cbbbe733:
+    resolution: {integrity: sha512-6fs/skQURDvn2K/TVAgOmqcMUaGuocV7EwAzthHTJzlfRQUbNEWmyLtuvjcSCZnY+28vupKjEarWl3IsyqJh6Q==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       '@sveltejs/vite-plugin-svelte': 1.0.0-next.30_svelte@3.44.2+vite@2.6.14
@@ -193,8 +197,8 @@ packages:
       - vite
     dev: true
 
-  /@astrojs/renderer-vue/0.2.0_vite@2.6.14:
-    resolution: {integrity: sha512-YfQwghT0/n/tNbi/93wWsqNUwUxRCi76CdNvBRNyP01JVTZisQyqtT8yOJYGgMgqxQEscpPmD467dK89knd5gQ==}
+  /@astrojs/renderer-vue/0.2.1_vite@2.6.14:
+    resolution: {integrity: sha512-nawWIzwL40M8ran4zQaYckAdHwn1HeD6zTRH3LKCENeAjn3bJ4wxJ2KD9dZw4twACP+yBZm3y2N7iX+6CyueIQ==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       '@vitejs/plugin-vue': 1.10.1_vite@2.6.14
@@ -1234,19 +1238,19 @@ packages:
     hasBin: true
     dev: true
 
-  /astro/0.21.6:
-    resolution: {integrity: sha512-GDW79Lseomo0YmYAdvIhj6H1yKx4Ww/jY/r7ovjV3SmxjSpHqi5ZhDS5CuKLqdjmwlp7HnzekPsin7Ydanq2KQ==}
+  /astro/0.21.8:
+    resolution: {integrity: sha512-HVT2t/arLvcE+sJgA/x8/e3xEm0OfGlAuHuTjUBYV10poBTsMcfAvGmevQb7qjDzI4yoSqlivJ3Bsq960By9rg==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0, npm: '>=6.14.0'}
     hasBin: true
     dependencies:
-      '@astrojs/compiler': 0.3.9
-      '@astrojs/language-server': 0.7.19
+      '@astrojs/compiler': 0.5.6
+      '@astrojs/language-server': 0.8.2
       '@astrojs/markdown-remark': 0.5.0
       '@astrojs/prism': 0.3.0
-      '@astrojs/renderer-preact': 0.3.0_@babel+core@7.16.0
-      '@astrojs/renderer-react': 0.3.0_@babel+core@7.16.0
-      '@astrojs/renderer-svelte': 0.2.1_a168e5dc7280058822a0f466cbbbe733
-      '@astrojs/renderer-vue': 0.2.0_vite@2.6.14
+      '@astrojs/renderer-preact': 0.3.1_@babel+core@7.16.0
+      '@astrojs/renderer-react': 0.3.1_@babel+core@7.16.0
+      '@astrojs/renderer-svelte': 0.2.2_a168e5dc7280058822a0f466cbbbe733
+      '@astrojs/renderer-vue': 0.2.1_vite@2.6.14
       '@babel/core': 7.16.0
       '@babel/traverse': 7.16.3
       '@proload/core': 0.2.2
@@ -1279,7 +1283,7 @@ packages:
       sass: 1.44.0
       semver: 7.3.5
       send: 0.17.1
-      shiki: 0.9.13
+      shiki: 0.9.14
       shorthash: 0.0.2
       slash: 4.0.0
       sourcemap-codec: 1.4.8
@@ -1312,7 +1316,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.18.1
-      caniuse-lite: 1.0.30001283
+      caniuse-lite: 1.0.30001284
       fraction.js: 4.1.2
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -1377,8 +1381,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001283
-      electron-to-chromium: 1.4.8
+      caniuse-lite: 1.0.30001284
+      electron-to-chromium: 1.4.10
       escalade: 3.1.1
       node-releases: 2.0.1
       picocolors: 1.0.0
@@ -1421,8 +1425,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite/1.0.30001283:
-    resolution: {integrity: sha512-9RoKo841j1GQFSJz/nCXOj0sD7tHBtlowjYlrqIUS812x9/emfBLBt6IyMz1zIaYc/eRL8Cs6HPUVi2Hzq4sIg==}
+  /caniuse-lite/1.0.30001284:
+    resolution: {integrity: sha512-t28SKa7g6kiIQi6NHeOcKrOrGMzCRrXvlasPwWC26TH2QNdglgzQIRUuJ0cR3NeQPH+5jpuveeeSFDLm2zbkEw==}
     dev: true
 
   /ccount/2.0.1:
@@ -1804,8 +1808,8 @@ packages:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
     dev: true
 
-  /electron-to-chromium/1.4.8:
-    resolution: {integrity: sha512-Cu5+dbg55+1E3ohlsa8HT0s4b8D0gBewXEGG8s5wBl8ynWv60VuvYW25GpsOeTVXpulhyU/U8JYZH+yxASSJBQ==}
+  /electron-to-chromium/1.4.10:
+    resolution: {integrity: sha512-tFgA40Iq2oy4k2PnZrLJowbgpij+lD6ZLxkw8Ht1NKTYyN8dvSvC5xlo8X0WW2jqhKSzITrbr5mpB4/AZ/8OUA==}
     dev: true
 
   /emmet/2.3.4:
@@ -2268,8 +2272,8 @@ packages:
       semver: 6.3.0
     dev: true
 
-  /eslint-config-airbnb/19.0.1_ea5cabb8f170e6410bd6f44cb743d65d:
-    resolution: {integrity: sha512-ooV8Vdt3gmV6hCSJutRw5beArd56Cd++vvy7j0Y7DBhUKqcTyI7cWNcJpCJlcftGPRLtzdU0hNMtquOUSSm8nA==}
+  /eslint-config-airbnb/19.0.2_ea5cabb8f170e6410bd6f44cb743d65d:
+    resolution: {integrity: sha512-4v5DEMVSl043LaCT+gsxPcoiIk0iYG5zxJKKjIy80H/D//2E0vtuOBWkb0CBDxjF+y26yQzspIXYuY6wMmt9Cw==}
     engines: {node: ^10.12.0 || ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^7.32.0 || ^8.2.0
@@ -2302,6 +2306,24 @@ packages:
     dependencies:
       debug: 3.2.7
       resolve: 1.20.0
+    dev: true
+
+  /eslint-import-resolver-typescript/2.5.0_a32f4f7b9ceb1e357b5ea9f682f0210a:
+    resolution: {integrity: sha512-qZ6e5CFr+I7K4VVhQu3M/9xGv9/YmwsEXrsm3nimw8vWaVHRDrQRp26BgCypTxBp3vUp4o5aVEJRiy0F2DFddQ==}
+    engines: {node: '>=4'}
+    peerDependencies:
+      eslint: '*'
+      eslint-plugin-import: '*'
+    dependencies:
+      debug: 4.3.3
+      eslint: 8.3.0
+      eslint-plugin-import: 2.25.3_eslint@8.3.0
+      glob: 7.2.0
+      is-glob: 4.0.3
+      resolve: 1.20.0
+      tsconfig-paths: 3.12.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /eslint-module-utils/2.7.1:
@@ -2943,8 +2965,8 @@ packages:
       '@types/hast': 2.3.4
     dev: true
 
-  /hast-util-is-element/2.1.1:
-    resolution: {integrity: sha512-ag0fiZfRWsPiR1udvnSbaazJLGv8qd8E+/e3rW8rUZhbKG4HNJmFL4QkEceN+22BgE+uozXY30z/s+2dL6Z++g==}
+  /hast-util-is-element/2.1.2:
+    resolution: {integrity: sha512-thjnlGAnwP8ef/GSO1Q8BfVk2gundnc2peGQqEg2kUt/IqesiGg/5mSwN2fE7nLzy61pg88NG6xV+UrGOrx9EA==}
     dependencies:
       '@types/hast': 2.3.4
       '@types/unist': 2.0.6
@@ -2978,7 +3000,7 @@ packages:
       '@types/hast': 2.3.4
       ccount: 2.0.1
       comma-separated-tokens: 2.0.2
-      hast-util-is-element: 2.1.1
+      hast-util-is-element: 2.1.2
       hast-util-whitespace: 2.0.0
       html-void-elements: 2.0.1
       property-information: 6.1.1
@@ -3641,8 +3663,8 @@ packages:
       vfile-message: 3.0.2
     dev: true
 
-  /mdast-util-to-hast/12.0.0:
-    resolution: {integrity: sha512-BCeq0Bz103NJvmhB7gN0TDmKRT7x3auJmEp7NcYX1xpqZsQeA3JNLazLhFx6VQPqw30e2zes/coKPAiEqxxUuQ==}
+  /mdast-util-to-hast/12.1.0:
+    resolution: {integrity: sha512-dHfCt9Yh05AXEeghoziB3DjJV8oCIKdQmBJOPoAT1NlgMDBy+/MQn7Pxfq0jI8YRO1IfzcnmA/OU3FVVn/E5Sg==}
     dependencies:
       '@types/hast': 2.3.4
       '@types/mdast': 3.0.10
@@ -4744,12 +4766,12 @@ packages:
       - supports-color
     dev: true
 
-  /remark-rehype/10.0.1:
-    resolution: {integrity: sha512-9itJLLOrbjrAi0qO5Rh0Wzi1d3eqvRvDWSsfif6W/BInVgCvzqSnB7BSfQRtb6MLfQiufXYG3NbbUqfE0p7nTA==}
+  /remark-rehype/10.1.0:
+    resolution: {integrity: sha512-EFmR5zppdBp0WQeDVZ/b66CWJipB2q2VLNFMabzDSGR66Z2fQii83G5gTBbgGEnEEA0QRussvrFHxk1HWGJskw==}
     dependencies:
       '@types/hast': 2.3.4
       '@types/mdast': 3.0.10
-      mdast-util-to-hast: 12.0.0
+      mdast-util-to-hast: 12.1.0
       unified: 10.1.1
     dev: true
 
@@ -4993,8 +5015,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /shiki/0.9.13:
-    resolution: {integrity: sha512-WATIHzLg91SpTj6mLq5i/0NJ94/Rg1t3n9ylC8vgiJ2f5LVandqBi2vS/410SnEd6sNgPdrHLmdcCHML27pTMg==}
+  /shiki/0.9.14:
+    resolution: {integrity: sha512-uLHjjyJdNsMzF9GOF8vlOuZ8BwigiYPraMN5yjC826k8K7Xu90JQcC5GUNrzRibLgT2EOk9597I1IX+jRdA8nw==}
     dependencies:
       jsonc-parser: 3.0.0
       vscode-oniguruma: 1.6.1
