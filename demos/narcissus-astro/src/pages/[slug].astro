@@ -1,0 +1,32 @@
+---
+import Layout from '$components/Layout/index.tsx';
+import { lstatSync, readdirSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { Markdown } from 'astro/components';
+
+export async function getStaticPaths() {
+  const __dirname = resolve();
+  const BLOG_PATH = join(__dirname, 'content/blog');
+  const directories = readdirSync(BLOG_PATH).filter((element) =>
+    lstatSync(`${BLOG_PATH}/${element}`).isDirectory(),
+  );
+  return directories.map((element) => ({ params: { slug: element } }));
+}
+const { slug } = Astro.request.params;
+const Content = (await import(`../../content/blog/${slug}/index.md`)).default;
+---
+
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer hoist></script>
+  </head>
+  <body>
+    <Layout client:load {slug}>
+      <Markdown>
+        <Content />
+      </Markdown>
+    </Layout>
+  </body>
+</html>
