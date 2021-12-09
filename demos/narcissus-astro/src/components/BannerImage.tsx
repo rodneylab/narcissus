@@ -1,6 +1,5 @@
-import React from 'react';
-import type { FC } from 'react';
-import { container } from './BannerImage.css';
+import { container } from '$components/BannerImage.css';
+import type { JSX } from 'react';
 
 interface BannerImageProps {
   imageData: {
@@ -13,10 +12,9 @@ interface BannerImageProps {
   };
 }
 
-const BannerImage: FC<BannerImageProps> = function BannerImage({ imageData }) {
+const BannerImage = function BannerImage({ imageData }: BannerImageProps): JSX.Element {
   const { alt, width, height, src, sources, placeholder } = imageData;
   const sizes = '(max-width: 672px) calc(100vw - 32px), 672px';
-  console.log('src: ', src);
   return (
     <div className={container}>
       <picture>

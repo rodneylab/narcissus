@@ -1,4 +1,3 @@
-import React from 'react';
 // Lato
 // [100,300,400,700,900]
 // [italic,normal]
@@ -11,7 +10,7 @@ import '@fontsource/slabo-13px';
 // [400]
 // [normal]
 import '@fontsource/slabo-27px';
-import type { FC, ReactElement, ReactNode } from 'react';
+import type { FC } from 'react';
 import { ThemeProvider, useTheme } from '$hooks/themeContext';
 import '$styles/normalise.css';
 import '$styles/styles.css';
@@ -22,11 +21,10 @@ import Header from '$components/Layout/Header';
 import { container, main } from '$components/Layout/layout.css';
 
 interface LayoutProps {
-  children: ReactNode;
   slug: string;
 }
 
-const Layout: FC<LayoutProps> = function Layout({ children, slug }): ReactElement {
+const Layout: FC<LayoutProps> = function Layout({ children, slug }) {
   const {
     state: { theme },
   } = useTheme();
@@ -45,7 +43,7 @@ const Layout: FC<LayoutProps> = function Layout({ children, slug }): ReactElemen
 const ThemeWrapper: FC<LayoutProps> = function ThemeWrapper({ children, slug }) {
   return (
     <ThemeProvider>
-      <Layout slug={slug}>{children}</Layout>
+      <Layout slug={slug}> {children} </Layout>
     </ThemeProvider>
   );
 };

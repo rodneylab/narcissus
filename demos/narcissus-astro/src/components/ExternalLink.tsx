@@ -1,9 +1,7 @@
-import React from 'react';
-import type { FC, ReactNode } from 'react';
+import type { FC } from 'react';
 
 interface ExternalLinkProps {
   'aria-label': string;
-  children: ReactNode;
   href: string;
 }
 

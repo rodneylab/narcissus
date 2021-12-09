@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import type { FC } from 'react';
+import { useEffect } from 'react';
+import type { JSX } from 'react';
 import { screenReaderText } from '$styles/styles.css';
-import { themeButton, themeButtonContainer } from '$components/Layout/Header.css.ts';
+import { themeButton, themeButtonContainer } from '$components/Layout/Header.css';
 import MoonIcon from '$components/Icons/Moon';
 import SunIcon from '$components/Icons/Sun';
 import {
@@ -20,7 +20,7 @@ interface HeaderProps {
   slug: string;
 }
 
-const Header: FC<HeaderProps> = function Header({ slug }) {
+const Header = function Header({ slug }: HeaderProps): JSX.Element {
   const {
     dispatch,
     state: { theme },

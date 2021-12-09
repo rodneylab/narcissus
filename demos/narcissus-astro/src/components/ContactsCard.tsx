@@ -1,5 +1,4 @@
-import React from 'react';
-import type { FC } from 'react';
+import type { JSX } from 'react';
 import SocialIcons from '$components/SocialIcons';
 import {
   cardContainer,
@@ -20,9 +19,7 @@ const height = 36;
 const { contactEmail, facebookPageName, telegramUsername, twitterUserId, twitterUsername } =
   website;
 
-interface ContactsCardProps {}
-
-const ContactsCard: FC<ContactsCardProps> = function ContactsCard() {
+const ContactsCard = function ContactsCard(): JSX.Element {
   const {
     state: { theme },
   } = useTheme();
@@ -93,7 +90,7 @@ const ContactsCard: FC<ContactsCardProps> = function ContactsCard() {
   );
 };
 
-const ThemeWrapper: FC<{}> = function ThemeWrapper() {
+const ThemeWrapper = function ThemeWrapper(): JSX.Element {
   return (
     <ThemeProvider>
       <ContactsCard />

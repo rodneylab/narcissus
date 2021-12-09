@@ -1,9 +1,8 @@
 import React from 'react';
-import type { FC, ReactNode } from 'react';
-import { container, content } from './Card.css';
+import type { FC } from 'react';
+import { container, content } from '$components/Card.css';
 
 interface CardProps {
-  children: ReactNode;
   containerClass?: string;
   contentClass?: string;
 }

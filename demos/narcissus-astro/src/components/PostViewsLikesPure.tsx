@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import type { JSX } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import website from '$configuration/website';
 import {
   container,
@@ -25,7 +25,7 @@ interface PostViewsLikesPureProps {
   interactive: boolean;
 }
 
-const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesPure({
+const PostViewsLikesPure = function PostViewsLikesPure({
   likes,
   views,
   slug,
@@ -33,7 +33,7 @@ const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesP
   containerClass = undefined,
   contentClass = undefined,
   interactive = true,
-}) {
+}: PostViewsLikesPureProps): JSX.Element {
   const {
     dispatch,
     state: { liked, viewed },
@@ -252,7 +252,7 @@ const PostViewsLikesPure: FC<PostViewsLikesPureProps> = function PostViewsLikesP
   );
 };
 
-const LikedViewedWrapper: FC<PostViewsLikesPureProps> = function LikedViewedWrapper({
+const LikedViewedWrapper = function LikedViewedWrapper({
   likes,
   views,
   slug,
@@ -260,7 +260,7 @@ const LikedViewedWrapper: FC<PostViewsLikesPureProps> = function LikedViewedWrap
   containerClass = undefined,
   contentClass = undefined,
   interactive = true,
-}) {
+}: PostViewsLikesPureProps) {
   return (
     <LikedViewedProvider>
       <PostViewsLikesPure

@@ -1,8 +1,4 @@
-import React from 'react';
-import type { FC } from 'react';
 import SocialNetworkIcon from '$components/Icons/SocialNetwork';
-import website from '$configuration/website';
-import { COPYRIGHT_ENTITY } from '$constants/entities';
 import {
   container,
   content,
@@ -13,12 +9,11 @@ import {
   footerLink,
 } from '$components/Layout/Footer.css';
 import RodneyLabCredit from '$components/Layout/RodneyLabCredit';
+import website from '$configuration/website';
+import { COPYRIGHT_ENTITY } from '$constants/entities';
+import type { JSX } from 'react';
 
-interface FooterProps {
-  slug: string;
-}
-
-const Footer: FC<FooterProps> = function Footer() {
+const Footer = function Footer(): JSX.Element {
   const { facebookPage, githubPage, linkedinProfile, tiktokUsername, twitterUsername } = website;
 
   return (

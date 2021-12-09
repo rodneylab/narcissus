@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import React, { useState } from 'react';
+import type { JSX } from 'react';
+import { useState } from 'react';
 import { postSummary } from '$components/BlogRoll.css';
 import { H_ELLIPSIS_ENTITY } from '$constants/entities';
 import BlogPostSummary from '$components/BlogPostSummary';
@@ -17,7 +17,7 @@ interface BlogRollProps {
   }[];
 }
 
-const BlogRoll: FC<BlogRollProps> = function BlogRoll({ initialPosts, posts }) {
+const BlogRoll = function BlogRoll({ initialPosts, posts }: BlogRollProps): JSX.Element {
   const [showPosts, setShowPosts] = useState(initialPosts);
   const displayPosts = useState(posts.slice(0, showPosts));
 

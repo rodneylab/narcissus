@@ -1,8 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import type { FC } from 'react';
-import { screenReaderText } from '$styles/styles.css';
 import { container, input } from '$components/TextInputField.css';
+import { screenReaderText } from '$styles/styles.css';
+import type { JSX } from 'react';
 
 interface TextInputFieldProps {
   id: string;
@@ -16,9 +14,9 @@ interface TextInputFieldProps {
   title: string;
 }
 
-const TextInputField: FC<TextInputFieldProps> = function TextInputField({
+const TextInputField = function TextInputField({
   id,
-  maxLength = 64,
+  maxLength,
   pattern,
   placeholder,
   register,
@@ -26,7 +24,7 @@ const TextInputField: FC<TextInputFieldProps> = function TextInputField({
   errors,
   type,
   title,
-}) {
+}: TextInputFieldProps): JSX.Element {
   return (
     <div className={container}>
       <label htmlFor={id} className={screenReaderText}>
@@ -53,7 +51,7 @@ const TextInputField: FC<TextInputFieldProps> = function TextInputField({
 };
 
 TextInputField.defaultProps = {
-  maxLength: 1024,
+  maxLength: 64,
   pattern: null,
   required: false,
 };

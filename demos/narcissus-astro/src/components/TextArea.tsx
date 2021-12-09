@@ -1,12 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import type { FC } from 'react';
-import { screenReaderText } from '$styles/styles.css';
 import { container, input } from '$components/TextArea.css';
+import { screenReaderText } from '$styles/styles.css';
+import type { JSX } from 'react';
 
 interface TextAreaProps {
   id: string;
-  rows: number;
+  rows?: number;
   maxLength?: number;
   pattern?: RegExp;
   register: () => {};
@@ -17,17 +15,17 @@ interface TextAreaProps {
   title: string;
 }
 
-const TextArea: FC<TextAreaProps> = function TextArea({
+const TextArea = function TextArea({
   id,
-  rows = 5,
-  maxLength = 64,
+  rows,
+  maxLength,
   pattern,
   placeholder,
   register,
   required,
   errors,
   title,
-}) {
+}: TextAreaProps): JSX.Element {
   return (
     <div className={container}>
       <label htmlFor={id} className={screenReaderText}>
@@ -54,6 +52,7 @@ const TextArea: FC<TextAreaProps> = function TextArea({
 };
 
 TextArea.defaultProps = {
+  rows: 5,
   maxLength: 1024,
   pattern: null,
   required: false,

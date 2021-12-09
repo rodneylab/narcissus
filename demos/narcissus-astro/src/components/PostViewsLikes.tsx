@@ -1,7 +1,6 @@
-import type { FC } from 'react';
-import React from 'react';
 import PostViewsLikesPure from '$components/PostViewsLikesPure';
 import website from '$configuration/website';
+import type { JSX } from 'react';
 
 interface PostViewsLikesProps {
   likes: number;
@@ -13,7 +12,7 @@ interface PostViewsLikesProps {
   interactive: boolean;
 }
 
-const PostViewsLikes: FC<PostViewsLikesProps> = function PostViewsLikes({
+const PostViewsLikes = function PostViewsLikes({
   likes,
   views,
   slug,
@@ -21,7 +20,7 @@ const PostViewsLikes: FC<PostViewsLikesProps> = function PostViewsLikes({
   containerClass = undefined,
   contentClass = undefined,
   interactive = true,
-}) {
+}: PostViewsLikesProps): JSX.Element {
   const { workerUrl } = website;
 
   async function getViewsLikes(): Promise<{ likes: number; views: number }> {

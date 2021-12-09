@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import type { FC } from 'react';
+import Card from '$components/Card';
 import {
   button,
   buttonContainer,
@@ -9,15 +8,13 @@ import {
   formLink,
   heading,
 } from '$components/CommentForm.css';
-import Card from '$components/Card';
-import TextInputField from '$components/TextInputField';
 import TextArea from '$components/TextArea';
-import { ThemeProvider, useTheme } from '$hooks/themeContext';
+import TextInputField from '$components/TextInputField';
 import website from '$configuration/website';
+import { ThemeProvider, useTheme } from '$hooks/themeContext';
+import type { JSX } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-
-// const ssr = import.meta.env.SSR;
-const ssr = typeof window === 'undefined';
 
 interface CommentFormProps {
   slug: string;
@@ -25,7 +22,7 @@ interface CommentFormProps {
 
 const { hcaptchaSitekey, workerUrl } = website;
 
-const CommentForm: FC<CommentFormProps> = function CommentForm({ slug }) {
+const CommentForm = function CommentForm({ slug }: CommentFormProps): JSX.Element {
   const [successfulCommentSubmission, setSuccessfulCommentSubmission] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const {
@@ -187,10 +184,10 @@ const CommentForm: FC<CommentFormProps> = function CommentForm({ slug }) {
   );
 };
 
-const ThemeWrapper: FC<{}> = function ThemeWrapper() {
+const ThemeWrapper = function ThemeWrapper({ slug }: CommentFormProps): JSX.Element {
   return (
     <ThemeProvider>
-      <CommentForm />
+      <CommentForm slug={slug} />
     </ThemeProvider>
   );
 };

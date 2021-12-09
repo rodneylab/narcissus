@@ -1,22 +1,35 @@
-import React from 'react';
+import type { JSX } from 'react';
 import { SocialIcon } from 'react-social-icons';
-import type { FC } from 'react';
 
-const SocialIcons: FC<{
+interface SocialIconsProps {
   network: string;
   width: number;
   height: number;
-  fgColor: string;
+  fgColor?: string;
   bgColor: string;
   url: string;
-}> = ({ network, width, height, fgColor = 'transparent', bgColor, url }) => (
-  <SocialIcon
-    network={network}
-    url={url}
-    fgColor={fgColor}
-    bgColor={bgColor}
-    style={{ width, height }}
-  />
-);
+}
+const SocialIcons = function SocialIcons({
+  network,
+  width,
+  height,
+  fgColor,
+  bgColor,
+  url,
+}: SocialIconsProps): JSX.Element {
+  return (
+    <SocialIcon
+      network={network}
+      url={url}
+      fgColor={fgColor}
+      bgColor={bgColor}
+      style={{ width, height }}
+    />
+  );
+};
 
-export { SocialIcons as default };
+SocialIcons.defaultProps = {
+  fgColor: 'transparent',
+};
+
+export default SocialIcons;

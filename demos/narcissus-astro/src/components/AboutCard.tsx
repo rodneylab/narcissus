@@ -1,5 +1,4 @@
-import React from 'react';
-import type { FC } from 'react';
+import type { JSX } from 'react';
 import {
   cardContainer,
   cardContent,
@@ -9,9 +8,7 @@ import {
 } from '$components/AboutCard.css';
 import Card from '$components/Card';
 
-interface AboutCardProps {}
-
-const AboutCard: FC<AboutCardProps> = function AboutCard() {
+const AboutCard = function AboutCard(): JSX.Element {
   return (
     <Card containerClass={cardContainer} contentClass={cardContent}>
       <h2 className={summaryHeading}>

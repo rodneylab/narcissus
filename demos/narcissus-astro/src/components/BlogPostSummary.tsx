@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
-import React from 'react';
-import type { FC } from 'react';
+import type { JSX } from 'react';
 import { H_ELLIPSIS_ENTITY } from '$constants/entities';
 import {
   container,
@@ -25,7 +24,7 @@ interface BlogPostSummaryProps {
   comments: number;
 }
 
-const BlogPostSummary: FC<BlogPostSummaryProps> = function BlogPostSummary({
+const BlogPostSummary = function BlogPostSummary({
   postTitle,
   datePublished,
   seoMetaDescription,
@@ -33,7 +32,7 @@ const BlogPostSummary: FC<BlogPostSummaryProps> = function BlogPostSummary({
   likes,
   views,
   comments,
-}) {
+}: BlogPostSummaryProps): JSX.Element {
   const handleMouseEnter = (event: MouseEvent) => {
     (event.target as HTMLElement).style.cursor = 'pointer';
   };

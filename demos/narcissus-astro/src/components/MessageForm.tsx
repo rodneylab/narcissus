@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import React, { useEffect, useState } from 'react';
+import type { JSX } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import website from '$configuration/website';
 import { ThemeProvider, useTheme } from '$hooks/themeContext';
@@ -22,7 +22,7 @@ const ssr = typeof window === 'undefined';
 
 const { hcaptchaSitekey, workerUrl } = website;
 
-const MessageForm: FC<{}> = function MessageForm() {
+const MessageForm = function MessageForm(): JSX.Element {
   const [successfulMessageSubmission, setSuccessfulMessageSubmission] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const {
@@ -204,7 +204,7 @@ const MessageForm: FC<{}> = function MessageForm() {
   );
 };
 
-const ThemeWrapper: FC<{}> = function ThemeWrapper() {
+const ThemeWrapper = function ThemeWrapper(): JSX.Element {
   return (
     <ThemeProvider>
       <MessageForm />

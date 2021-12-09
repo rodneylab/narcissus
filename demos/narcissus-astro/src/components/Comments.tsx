@@ -1,5 +1,4 @@
-import React from 'react';
-import type { FC, ReactNode } from 'react';
+import type { JSX } from 'react';
 import Card from '$components/Card';
 import {
   authorText,
@@ -21,7 +20,7 @@ interface CommentsProps {
   comments: { created_at: string; author: string; text: string }[];
 }
 
-const Comments: FC<CommentsProps> = function Comments({ comments }) {
+const Comments = function Comments({ comments }: CommentsProps): JSX.Element {
   return (
     <section>
       <h2 id="comments">Visitor Comments</h2>
