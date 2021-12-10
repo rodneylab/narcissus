@@ -1,8 +1,10 @@
 ---
 import Layout from '$components/Layout/index.tsx';
-import { lstatSync, readdirSync } from 'node:fs';
+import { lstatSync, readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { Markdown } from 'astro/components';
+import fm from 'front-matter';
+import BannerImage from '$components/BannerImage.tsx';
 
 export async function getStaticPaths() {
   const __dirname = resolve();
@@ -10,10 +12,20 @@ export async function getStaticPaths() {
   const directories = readdirSync(BLOG_PATH).filter((element) =>
     lstatSync(`${BLOG_PATH}/${element}`).isDirectory(),
   );
-  return directories.map((element) => ({ params: { slug: element } }));
+
+  return directories.map((element) => {
+    const contentPath = `${BLOG_PATH}/${element}/index.md`;
+    const content = readFileSync(contentPath, { encoding: 'utf-8' });
+    const frontmatter = fm(content);
+    const { postTitle } = frontmatter.attributes;
+    return { params: { slug: element }, props: { title: postTitle } };
+  });
 }
+
 const { slug } = Astro.request.params;
+const { title } = Astro.props;
 const Content = (await import(`../../content/blog/${slug}/index.md`)).default;
+const imageData = (await import(`../generated/posts/${slug}.js`)).default;
 ---
 
 <html lang="en-GB">
@@ -24,6 +36,8 @@ const Content = (await import(`../../content/blog/${slug}/index.md`)).default;
   </head>
   <body>
     <Layout client:load {slug}>
+      <BannerImage client:load {imageData} />
+      <h1>{title}</h1>
       <Markdown>
         <Content />
       </Markdown>
