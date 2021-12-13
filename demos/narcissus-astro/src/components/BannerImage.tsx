@@ -32,7 +32,7 @@ const BannerImage = function BannerImage({ imageData }: BannerImageProps): JSX.E
   }, [placeholder, sources, src, ssr]);
 
   return (
-    <div className={container}>
+    <div>
       <picture>
         {sources.map((element) => {
           const { srcset, type } = element;
@@ -48,7 +48,7 @@ const BannerImage = function BannerImage({ imageData }: BannerImageProps): JSX.E
           );
         })}
         <img
-          className="lazy"
+          className={`${container} lazy`}
           alt={alt}
           importance="high"
           loading="eager"
@@ -57,8 +57,7 @@ const BannerImage = function BannerImage({ imageData }: BannerImageProps): JSX.E
           height={height}
           data-src={src}
           src={placeholder}
-          objectFit="contain"
-          style={{ maxWidth: '100%' }}
+          objectfit="contain"
         />
       </picture>
     </div>
