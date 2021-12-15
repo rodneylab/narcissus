@@ -6,6 +6,9 @@ import { Markdown } from 'astro/components';
 import fm from 'front-matter';
 import BannerImage from '$components/BannerImage.tsx';
 import PostViewsLikes from '$components/PostViewsLikes.tsx';
+import CommentForm from '$components/CommentForm.tsx';
+import Comments from '$components/Comments.tsx';
+import website from '$configuration/website.ts';
 
 export async function getStaticPaths() {
   const __dirname = resolve();
@@ -23,7 +26,24 @@ export async function getStaticPaths() {
   });
 }
 
+
+const { workerUrl } = website;
 const { slug } = Astro.request.params;
+
+const response = await fetch(`${workerUrl}/post/data`, {
+      method: 'POST',
+      credentials: 'omit',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        slug,
+      }),
+    });
+
+    const data = await response.json();
+    const { comments, likes, views} = data;
+
 const { title } = Astro.props;
 const Content = (await import(`../../content/blog/${slug}/index.md`)).default;
 const imageData = (await import(`../generated/posts/${slug}.js`)).default;
@@ -39,10 +59,13 @@ const imageData = (await import(`../generated/posts/${slug}.js`)).default;
     <Layout client:load {slug}>
       <BannerImage client:load {imageData} />
       <h1>{title}</h1>
-      <PostViewsLikes likes={1} views={2} comments={3} />
-      <Markdown>
+      <PostViewsLikes client:load {likes} {views} comments={comments.length} />
+      <Markdown client:load>
         <Content />
       </Markdown>
+      <PostViewsLikes client:visible {likes} {views} comments={comments.length} />
+      <CommentForm client:visible />
+      <Comments client:visible {comments}/>
     </Layout>
   </body>
 </html>
