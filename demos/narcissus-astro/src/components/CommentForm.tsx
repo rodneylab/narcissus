@@ -126,7 +126,7 @@ const CommentForm = function CommentForm({ slug }: CommentFormProps): JSX.Elemen
             This site uses Akismet to reduce spam.{' '}
             <a
               aria-label="Learn how Akismet process comment data"
-              class={formLink}
+              className={formLink}
               href="https://akismet.com/privacy/"
             >
               Learn how your comment data is processed

@@ -47,6 +47,7 @@ const PostViewsLikesPure = function PostViewsLikesPure({
   const ssr = typeof window === 'undefined';
 
   function postViewed() {
+    console.log('Viewed: ', viewed.includes(slug));
     return viewed.includes(slug);
   }
 
@@ -94,7 +95,7 @@ const PostViewsLikesPure = function PostViewsLikesPure({
       };
       const options = { threshold: 1, rootMargin: '100% 0% -100%' };
       const observer = new IntersectionObserver(handleIntersect, options);
-      const element = window.document.querySelector('main').firstElementChild;
+      const element = window.document.querySelector('#post-title');
       observer.observe(element);
 
       return () => observer.disconnect();

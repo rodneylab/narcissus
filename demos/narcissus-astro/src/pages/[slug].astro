@@ -58,12 +58,12 @@ const imageData = (await import(`../generated/posts/${slug}.js`)).default;
   <body>
     <Layout client:load {slug}>
       <BannerImage client:load {imageData} />
-      <h1>{title}</h1>
-      <PostViewsLikes client:load {likes} {views} comments={comments.length} />
+      <h1 id="post-title">{title}</h1>
+      <PostViewsLikes client:load {likes} {views} comments={comments.length} {slug}/>
       <Markdown client:load>
         <Content />
       </Markdown>
-      <PostViewsLikes client:visible {likes} {views} comments={comments.length} />
+      <PostViewsLikes client:visible {likes} {views} comments={comments.length} {slug} />
       <CommentForm client:visible />
       <Comments client:visible {comments}/>
     </Layout>

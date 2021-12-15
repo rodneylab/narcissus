@@ -1,4 +1,3 @@
-import type { JSX } from 'react';
 import Card from '$components/Card';
 import {
   authorText,
@@ -11,6 +10,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/en-gb.js';
 import localizedFormat from 'dayjs/plugin/localizedFormat.js';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
+import type { JSX } from 'react';
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
