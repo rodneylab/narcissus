@@ -1,7 +1,6 @@
-import React from 'react';
-import type { FC } from 'react';
-import { SocialIcon } from 'react-social-icons';
 import { useTheme } from '$hooks/themeContext';
+import type { JSX } from 'react';
+import { SocialIcon } from 'react-social-icons';
 
 const BUTTON_SIZE = 48;
 
@@ -13,13 +12,13 @@ interface SocialMediaIconProps {
   href: string;
 }
 
-const SocialMediaIcon: FC<SocialMediaIconProps> = function SocialMediaIcon({
+const SocialMediaIcon = function SocialMediaIcon({
   label,
   network,
   rel,
   target,
   href,
-}) {
+}: SocialMediaIconProps): JSX.Element {
   const {
     state: { theme },
   } = useTheme();

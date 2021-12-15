@@ -14,11 +14,15 @@ import type { FC } from 'react';
 import { ThemeProvider, useTheme } from '$hooks/themeContext';
 import '$styles/normalise.css';
 import '$styles/styles.css';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import { config } from '@fortawesome/fontawesome-svg-core';
 import darkTheme from '$styles/themes/dark.css';
 import lightTheme from '$styles/themes/light.css';
 import Footer from '$components/Layout/Footer';
 import Header from '$components/Layout/Header';
 import { container, main } from '$components/Layout/layout.css';
+
+config.autoAddCss = false;
 
 interface LayoutProps {
   slug: string;

@@ -1,12 +1,12 @@
 ---
-import { header } from './index.css';
-import Layout from '../components/Layout/index.tsx';
-import BlogRoll from '../components/BlogRoll.tsx';
+import { header } from '$pages/index.css';
+import Layout from '$components/Layout/index.tsx';
+import BlogRoll from '$components/BlogRoll.tsx';
 import fm from 'front-matter';
 import fs from 'node:fs';
 import path from 'node:path';
-import website from '../configuration/website.ts';
-import AboutCard from '../components/AboutCard.tsx';
+import website from '$configuration/website.ts';
+import AboutCard from '$components/AboutCard.tsx';
 
 const { workerUrl } = website;
 const __dirname = path.resolve();

@@ -1,12 +1,8 @@
-import React from 'react';
-import { config } from '@fortawesome/fontawesome-svg-core';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { FC } from 'react';
+import type { JSX } from 'react';
 
-config.autoAddCss = false;
-
-const View: FC<{}> = function View() {
+const View = function View(): JSX.Element {
   return <FontAwesomeIcon icon={faEye} />;
 };
 

@@ -1,7 +1,7 @@
+import { style } from '@vanilla-extract/css';
 import { themeVars } from '../../styles/themes/theme.css';
 import { spacing0, spacing6 } from '../../styles/vars/spacing.css';
 import { maxWidthFull, maxWidthWrapper } from '../../styles/vars/widths.css';
-import { style } from '@vanilla-extract/css';
 
 export const container = style({
   display: 'flex',

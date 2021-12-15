@@ -1,5 +1,5 @@
 import { themeVars } from '../styles/themes/theme.css';
-import { fontSize1, fontWeightBold } from '../styles/vars/font.css';
+import { fontWeightBold } from '../styles/vars/font.css';
 import {
   spacing1,
   spacing12,
@@ -30,14 +30,11 @@ export const content = style({
 });
 
 export const icon = style({
-  width: [spacing4],
-  height: [spacing4],
   paddingRight: [spacing2],
   verticalAlign: 'middle',
 });
 
 export const meta = style({
-  display: 'flex',
   flexDirection: 'row',
   selectors: {
     [`${container} &:not(:last-child)`]: {

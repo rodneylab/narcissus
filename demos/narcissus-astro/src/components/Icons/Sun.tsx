@@ -1,11 +1,9 @@
-import React from 'react';
-import { config } from '@fortawesome/fontawesome-svg-core';
 import { faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { FC } from 'react';
+import type { JSX } from 'react';
 
-config.autoAddCss = false;
+const Sun = function Sun(): JSX.Element {
+  return <FontAwesomeIcon icon={faSun} size="1x" />;
+};
 
-export const Sun: FC<{}> = () => <FontAwesomeIcon icon={faSun} size="1x" />;
-
-export { Sun as default };
+export default Sun;

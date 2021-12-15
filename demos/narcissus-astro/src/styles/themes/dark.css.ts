@@ -17,4 +17,4 @@ export const darkTheme = createTheme(themeVars, {
   },
 });
 
-export { darkTheme as default };
+export default darkTheme;

@@ -1,5 +1,7 @@
+import { style } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 import { themeVars } from '../../styles/themes/theme.css';
-import { fontFamilyHeading, fontSize1, fontSize5 } from '../../styles/vars/font.css';
+import { fontFamilyHeading, fontSize5 } from '../../styles/vars/font.css';
 import {
   spacing0,
   spacing1,
@@ -10,8 +12,6 @@ import {
   spacing6,
 } from '../../styles/vars/spacing.css';
 import { maxWidthFull, maxWidthWrapper } from '../../styles/vars/widths.css';
-import { style } from '@vanilla-extract/css';
-import { calc } from '@vanilla-extract/css-utils';
 
 export const container = style({
   display: 'flex',

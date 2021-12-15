@@ -1,6 +1,6 @@
+import { style } from '@vanilla-extract/css';
 import { themeVars } from '../../styles/themes/theme.css';
 import { spacing1, spacing2 } from '../../styles/vars/spacing.css';
-import { style } from '@vanilla-extract/css';
 
 export const container = style({
   display: 'flex',

@@ -20,9 +20,9 @@ interface PostViewsLikesPureProps {
   views: number;
   slug: string;
   comments: number;
-  containerClass: string;
-  contentClass: string;
-  interactive: boolean;
+  containerClass?: string;
+  contentClass?: string;
+  interactive?: boolean;
 }
 
 const PostViewsLikesPure = function PostViewsLikesPure({
@@ -30,9 +30,9 @@ const PostViewsLikesPure = function PostViewsLikesPure({
   views,
   slug,
   comments,
-  containerClass = undefined,
-  contentClass = undefined,
-  interactive = true,
+  containerClass,
+  contentClass,
+  interactive,
 }: PostViewsLikesPureProps): JSX.Element {
   const {
     dispatch,
@@ -44,7 +44,6 @@ const PostViewsLikesPure = function PostViewsLikesPure({
   const [freshCommentCount] = useState(null);
   const [likeButtonHover, setLikeButtonHover] = useState(false);
 
-  // const ssr = import.meta.env.SSR;
   const ssr = typeof window === 'undefined';
 
   function postViewed() {
@@ -103,32 +102,32 @@ const PostViewsLikesPure = function PostViewsLikesPure({
     return null;
   });
 
-  async function updateViewsLikes() {
-    try {
-      const url = `${workerUrl}/post/data`;
-      const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          slug,
-        }),
-      });
-      const { likes: freshLikes, views: freshViews } = await response.json();
-      setFreshLikeCount(freshLikes);
-      setFreshViewCount(freshViews);
-    } catch (error) {
-      console.error(`Error in getViewsLikes: ${error}`);
-    }
-  }
-
   useEffect(() => {
+    async function updateViewsLikes() {
+      try {
+        const url = `${workerUrl}/post/data`;
+        const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            slug,
+          }),
+        });
+        const { likes: freshLikes, views: freshViews } = await response.json();
+        setFreshLikeCount(freshLikes);
+        setFreshViewCount(freshViews);
+      } catch (error) {
+        console.error(`Error in getViewsLikes: ${error}`);
+      }
+    }
+
     (async () => {
       await updateViewsLikes();
     })();
-  }, []);
+  }, [slug, workerUrl]);
 
   function postLiked() {
     return liked.includes(slug);
@@ -178,20 +177,15 @@ const PostViewsLikesPure = function PostViewsLikesPure({
 
   const interactiveMeta =
     liked || likeButtonHover ? (
-      <span className={icon}>
-        <LikedIcon label="likes - already liked by you" />
-      </span>
+      <LikedIcon label="likes - already liked by you" />
     ) : (
       <NotYetLikedIcon label="likes - not yet liked by you" />
     );
+
   const staticMeta = liked ? (
-    <div className={icon}>
-      <LikedIcon label="likes - already liked by you" />
-    </div>
+    <LikedIcon label="likes - already liked by you" />
   ) : (
-    <div className={icon}>
-      <NotYetLikedIcon label="likes - not yet liked by you" />
-    </div>
+    <NotYetLikedIcon label="likes - not yet liked by you" />
   );
 
   const likeButtonLabel = !postLiked ? 'Like this blog post' : 'Unlike this blog post';
@@ -231,7 +225,7 @@ const PostViewsLikesPure = function PostViewsLikesPure({
         {freshCommentCount ?? comments > 0 ? (
           <span className={meta}>
             {interactive ? (
-              <a aria-label="Jump to comments" className={`${link} ${meta}`} href="#comments">
+              <a aria-label="Jump to comments" className={link} href="#comments">
                 <span className={icon}>
                   <CommentIcon label="comments" />
                 </span>
@@ -250,6 +244,12 @@ const PostViewsLikesPure = function PostViewsLikesPure({
       </div>
     </aside>
   );
+};
+
+PostViewsLikesPure.defaultProps = {
+  containerClass: undefined,
+  contentClass: undefined,
+  interactive: true,
 };
 
 const LikedViewedWrapper = function LikedViewedWrapper({
@@ -274,6 +274,12 @@ const LikedViewedWrapper = function LikedViewedWrapper({
       />
     </LikedViewedProvider>
   );
+};
+
+LikedViewedWrapper.defaultProps = {
+  containerClass: undefined,
+  contentClass: undefined,
+  interactive: true,
 };
 
 export default LikedViewedWrapper;

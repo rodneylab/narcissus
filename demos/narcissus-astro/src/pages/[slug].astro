@@ -5,6 +5,7 @@ import { join, resolve } from 'node:path';
 import { Markdown } from 'astro/components';
 import fm from 'front-matter';
 import BannerImage from '$components/BannerImage.tsx';
+import PostViewsLikes from '$components/PostViewsLikes.tsx';
 
 export async function getStaticPaths() {
   const __dirname = resolve();
@@ -38,6 +39,7 @@ const imageData = (await import(`../generated/posts/${slug}.js`)).default;
     <Layout client:load {slug}>
       <BannerImage client:load {imageData} />
       <h1>{title}</h1>
+      <PostViewsLikes likes={1} views={2} comments={3} />
       <Markdown>
         <Content />
       </Markdown>

@@ -1,11 +1,9 @@
-import React from 'react';
-import { config } from '@fortawesome/fontawesome-svg-core';
 import { faMoon } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { FC } from 'react';
+import type { JSX } from 'react';
 
-config.autoAddCss = false;
+const Moon = function Moon(): JSX.Element {
+  return <FontAwesomeIcon icon={faMoon} size="1x" />;
+};
 
-export const Moon: FC<{}> = () => <FontAwesomeIcon icon={faMoon} />;
-
-export { Moon as default };
+export default Moon;

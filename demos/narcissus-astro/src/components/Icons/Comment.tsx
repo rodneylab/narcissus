@@ -1,12 +1,8 @@
-import React from 'react';
-import { config } from '@fortawesome/fontawesome-svg-core';
 import { faCommentAlt } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { FC } from 'react';
+import type { JSX } from 'react';
 
-config.autoAddCss = false;
-
-const Comment: FC<{}> = function Comment() {
+const Comment = function Comment(): JSX.Element {
   return <FontAwesomeIcon icon={faCommentAlt} />;
 };
 
