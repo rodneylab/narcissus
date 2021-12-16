@@ -13,6 +13,7 @@ import {
   viewsLikesContent,
 } from '$components/BlogPostSummary.css';
 import PostViewsLikes from '$components/PostViewsLikes';
+import { useEffect, useRef } from 'react';
 
 interface BlogPostSummaryProps {
   postTitle: string;
@@ -33,30 +34,33 @@ const BlogPostSummary = function BlogPostSummary({
   views,
   comments,
 }: BlogPostSummaryProps): JSX.Element {
-  const handleMouseEnter = (event: MouseEvent) => {
-    (event.target as HTMLElement).style.cursor = 'pointer';
-  };
+  const containerNode = useRef();
 
-  const handleMouseLeave = (event: MouseEvent) => {
-    (event.target as HTMLElement).style.cursor = 'default';
-  };
+  useEffect(() => {
+    const { current } = containerNode ?? {};
 
-  const handleMouseDown = async () => {
-    // await prefetch(`/${slug}`);
-    // goto(`/${slug}`);
-  };
+    if (current) {
+      current.style.cursor = 'pointer';
+    }
+
+    const listener = () => {
+      window.location.replace(`/${slug}/`);
+    };
+    current.addEventListener('mousedown', listener);
+
+    return () => {
+      if (current) {
+        current.removeEventListener('mousedown', listener);
+      }
+    };
+  }, [containerNode, slug]);
 
   const date = dayjs(datePublished);
   const dateString = `${date.format('D')} ${date.format('MMM')}`;
   const idString = `blog-post-summary-${slug}`;
 
   return (
-    <div
-      className={container}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onMouseDown={handleMouseDown}
-    >
+    <div className={container} ref={containerNode}>
       <div className={content}>
         <h3 className={contentHeadingContainer}>
           <a
