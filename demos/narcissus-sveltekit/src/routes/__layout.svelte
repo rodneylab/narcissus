@@ -2,13 +2,13 @@
   /**
    * @type {import('@sveltejs/kit').Load}
    */
-  export async function load({ page, fetch }) {
-    const { path } = page;
+  export async function load({ params, fetch, url }) {
+    const { pathname } = url;
 
     // make sure this is not a blog post
-    if (path === '/') {
-      const url = './index.json';
-      const response = await fetch(url);
+    if (pathname === '/') {
+      const endpoint = './index.json';
+      const response = await fetch(endpoint);
 
       if (response.ok) {
         return {
@@ -17,19 +17,19 @@
       }
 
       return {};
-    } else if (path === '/contact') {
+    } else if (pathname === '/contact') {
       return { props: { post: null, slug: '/contact' } };
     }
 
-    const { slug } = page.params;
-    const url =
-      page.path[page.path.length - 1] === '/'
-        ? `${page.path.slice(0, -1)}.json`
-        : `${page.path}.json`;
-    const res = await fetch(url);
+    const { slug } = params;
+    const endpoint =
+      pathname[pathname.length - 1] === '/'
+        ? `${pathname.slice(0, -1)}.json`
+        : `${pathname.path}.json`;
+    const res = await fetch(endpoint);
 
     if (res.ok) {
-      const imageData = await import(`../lib/generated/posts/${path.slice(1)}.js`);
+      const imageData = await import(`../lib/generated/posts/${pathname.slice(1)}.js`);
       return {
         props: { ...(await res.json()), slug, imageData: { ...imageData.default } },
       };

@@ -27,7 +27,15 @@ export async function get({ params }) {
 
       if (post) {
         return {
-          body: JSON.stringify({ post: { ...post, slug, likes, views, comments } }),
+          body: JSON.stringify({
+            post: {
+              ...post,
+              slug,
+              likes,
+              views,
+              comments,
+            },
+          }),
         };
       }
       return {
@@ -43,3 +51,5 @@ export async function get({ params }) {
     };
   }
 }
+
+export default get;
