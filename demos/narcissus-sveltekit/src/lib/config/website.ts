@@ -5,6 +5,7 @@ const facebookAuthorPageName = import.meta.env
 
 const website = {
   author: 'Rodney Johnson',
+  copyrightYear: '2021–2022',
   entity: 'Rodney Lab',
   ogLanguage: 'en_GB',
   siteLanguage: 'en-GB',
@@ -30,4 +31,4 @@ const website = {
   workerUrl: import.meta.env ? (import.meta.env.VITE_WORKER_URL as string) : '',
 };
 
-export { website as default };
+export default website;

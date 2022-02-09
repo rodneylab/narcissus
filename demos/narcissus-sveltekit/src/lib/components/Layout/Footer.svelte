@@ -1,10 +1,5 @@
 <script>
-  import { COPYRIGHT_ENTITY } from '$lib/constants/entities';
   import ExternalLink from '$lib/components/ExternalLink.svelte';
-  const { facebookPage, githubPage, linkedinProfile, tiktokUsername, twitterUsername } = website;
-  import RodneyLabCredit from '$lib/components/Layout/RodneyLabCredit.svelte';
-  import website from '$lib/config/website';
-  import SocialIcons from '@rodneylab/svelte-social-icons';
   import {
     container,
     content,
@@ -14,7 +9,21 @@
     footerIconsListItem,
     footerLink,
   } from '$lib/components/Layout/Footer.css';
+  import RodneyLabCredit from '$lib/components/Layout/RodneyLabCredit.svelte';
+  import website from '$lib/config/website';
+  import { COPYRIGHT_ENTITY } from '$lib/constants/entities';
   import theme from '$lib/shared/stores/theme';
+  import SocialIcons from '@rodneylab/svelte-social-icons';
+
+  const {
+    copyrightYear,
+    facebookPage,
+    githubPage,
+    linkedinProfile,
+    tiktokUsername,
+    twitterUsername,
+  } = website;
+
   $: fgColor = $theme === 'light' ? '#f1faee' : '#1d3557';
 </script>
 
@@ -27,7 +36,8 @@
         href="https://rodneylab.com/"
         target="_blank"
         rel="noopener noreferrer">Rodney Lab</a
-      >. Copyright {COPYRIGHT_ENTITY} 2021.
+      >. Copyright {COPYRIGHT_ENTITY}
+      {copyrightYear}.
     </div>
     <nav class={footerIcons} aria-label="Navigate to Rodney Lab linked social sites">
       <ul class={footerIconsList}>
