@@ -26,7 +26,7 @@
     "@vanilla-extract/css": "^1.6.8",
     "@vanilla-extract/css-utils": "^0.1.2",
     "@vanilla-extract/vite-plugin": "^3.1.1",
-    "astro": "^0.21.12",
+    "astro": "^0.21.13",
     "autoprefixer": "^10.4.0",
     "dayjs": "^1.10.7",
     "eslint": "^8.4.1",
@@ -50,7 +50,7 @@
     "rehype-urls": "^1.1.1",
     "typescript": "^4.5.4",
     "vanilla-lazyload": "^17.5.0",
-    "vite": "^2.7.2",
+    "vite": "^2.7.3",
     "vite-imagetools": "^4.0.2"
   }
 }
