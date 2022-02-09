@@ -1,11 +1,12 @@
+import type { GetSession, Handle, RequestEvent } from '@sveltejs/kit';
 import cookie from 'cookie';
-import type { GetSession, Handle } from '@sveltejs/kit';
 const COOKIE_NAME = process.env['USER_COOKIE_NAME'];
 
-export async function getSession(
-  ...[request]: Parameters<GetSession>
-): Promise<ReturnType<GetSession>> {
-  const user = request?.locals?.user;
+export async function getSession({
+  locals,
+  request,
+}: RequestEvent & { locals: { user: string } }): Promise<ReturnType<GetSession>> {
+  const user = locals?.user;
   if (user) {
     return { user };
   }
@@ -14,35 +15,39 @@ export async function getSession(
 }
 
 export async function handle(...[input]: Parameters<Handle>): Promise<ReturnType<Handle>> {
-  const { request, resolve } = input;
-
-  const loggingOut = request.path === '/api/logout';
-  const cookies = cookie.parse(request.headers.cookie || '');
+  const { event, resolve } = input;
+  const { locals, request, url } = event as RequestEvent & {
+    locals: { user: string; refreshToken: string };
+  };
+  const { pathname } = url;
+  const { headers } = request;
+  const loggingOut = pathname === '/api/logout';
+  const cookies = cookie.parse(headers.get('cookie') || '');
 
   // before endpoint call
   try {
     const receivedCookieValue = cookies[COOKIE_NAME] ? JSON.parse(cookies[COOKIE_NAME]) : '';
     if (receivedCookieValue) {
-      request.locals.user = receivedCookieValue.user;
-      request.locals.refreshToken = receivedCookieValue.refreshToken;
-      request.locals.accessToken = receivedCookieValue.accessToken;
+      locals.user = receivedCookieValue.user;
+      locals.refreshToken = receivedCookieValue.refreshToken;
+      // request.locals.accessToken = receivedCookieValue.accessToken;
     }
   } catch (error) {
     // set no user if the JSON in the cookie is not valid
-    request.locals.user = '';
+    locals.user = '';
   }
 
   // endpoint call
-  const response = await resolve(request);
+  const response = await resolve(event);
 
   // after endpoint call
-  const user = loggingOut ? '' : request.locals.user;
+  const user = loggingOut ? '' : locals.user;
   const cookieObject = loggingOut
     ? {}
     : {
         user,
-        refreshToken: request.locals.refreshToken,
-        accessToken: request.locals.accessToken,
+        refreshToken: locals.refreshToken,
+        // accessToken: request.locals.accessToken,
       };
 
   const secure = process.env.NODE_ENV === 'production';
@@ -54,11 +59,8 @@ export async function handle(...[input]: Parameters<Handle>): Promise<ReturnType
     secure ? ' Secure;' : ''
   } HttpOnly; SameSite=${sameSite}`;
 
-  return {
-    ...response,
-    headers: {
-      ...response.headers,
-      ...(user || loggingOut ? { 'Set-Cookie': cookieHeader } : {}),
-    },
-  };
+  if (user || loggingOut) {
+    response.headers.set('Set-Cookie', cookieHeader);
+  }
+  return response;
 }

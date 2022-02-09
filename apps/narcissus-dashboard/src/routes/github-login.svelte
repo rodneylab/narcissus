@@ -3,7 +3,7 @@
 
   if (browser) {
     const locationHash = new URLSearchParams(window.location.hash.slice(1));
-    const accessToken = locationHash.get('access_token');
+    // const accessToken = locationHash.get('access_token');
     const refreshToken = locationHash.get('refresh_token');
     const providerToken = locationHash.get('provider_token');
 
@@ -15,7 +15,8 @@
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ accessToken, providerToken, refreshToken }),
+          // body: JSON.stringify({ accessToken, providerToken, refreshToken }),
+          body: JSON.stringify({ providerToken, refreshToken }),
         });
         window.location.replace('/complete-login');
       } catch (error) {
